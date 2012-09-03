@@ -10,6 +10,14 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9782
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
 # GNU General Public License for more details. 
 
+# CHANGES
+# -------
+# If you want to compare this code to old versions, the old
+# versions are being kept on SourceForge's E-GuideDog SVN repository
+# http://e-guidedog.svn.sourceforge.net/viewvc/e-guidedog/ssb22/css-generator/
+# as of v0.9782.  Versions prior to that were not kept, but
+# you might be able to find some on Internet Archive.
+
 # INSTRUCTIONS
 # ------------
 
