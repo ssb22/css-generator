@@ -25,6 +25,8 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9782
 # colour_schemes_to_generate below - the format of the
 # latter is [("description","filename-prefix",{...}),...]
 # see the existing ones for example.
+# There are also a few advanced options you can change if
+# you want, after the sizes and colour schemes.
 
 # Size 0 means "unchanged" - it will disable the size
 # changes, and the layout changes that are meant for large
