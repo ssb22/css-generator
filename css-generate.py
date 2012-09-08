@@ -404,7 +404,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
    "div", # messes up textarea when enter multiple paragraphs
   "input","select","option","textarea","table","img", # probably best to avoid these
   "a", # causes problems in IE
-  "address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","table","th","tr","td","dl","dt","dd","b","blockquote" # causes text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
+  "label","address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","table","th","tr","td","dl","dt","dd","b","blockquote" # causes text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   ]
   # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
   # TODO Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size (harmless if have default size set similarly anyway)
