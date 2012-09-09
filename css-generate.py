@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9782"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9783"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
