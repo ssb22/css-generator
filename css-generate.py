@@ -397,17 +397,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Avoid style overrides from :first-letter, :first-line,
   # :before and :after in author's CSS.  However be careful
-  # which elements you do this because of various bugs in
-  # many versions of Mozilla's Gecko (used in Firefox etc)
-  # that create havoc when you type into certain forms.
+  # which elements you do this because of browser bugs.
   firstLetterBugs=[
-   "div", # messes up textarea when enter multiple paragraphs
+   "div", # Gecko messes up textarea when enter multiple paragraphs
   "input","select","option","textarea","table","img", # probably best to avoid these
   "a", # causes problems in IE
-  "label","address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","table","th","tr","td","dl","dt","dd","b","blockquote" # causes text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
+  # the following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
+  # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
+  "label","address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","table","th","tr","td","dl","dt","dd","b","blockquote"
   ]
   # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
-  # TODO Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size (harmless if have default size set similarly anyway)
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
   "input","select","option","textarea","table","img",
@@ -415,8 +414,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   "a", # causes problems in IE
   "span", # sometimes causes crashes in Opera 12
   "li", # sometimes causes crashes in Opera 12 (note this might be sacrificing some control, if someone does try a li:first-line override)
-  # To be safe, could add other inline tags mentioned in mostElements:
-  "abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup"
+  # To be safe, could add other inline-etc tags mentioned in mostElements:
+  "label","nobr","tr","ol","ul","abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup"
   ]
   inheritDic={"color":"inherit","background":"inherit","*letter-spacing":"inherit","*font-size":"inherit","*font-family":"inherit"}
   # (NB must say inherit, because consider things like p:first-line / A HREF... - the first-line may have higher specificity.
