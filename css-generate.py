@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9783"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9784"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -467,6 +467,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['td:nth-child(odd),div:nth-child(odd)'] = {"background":colour["alt-backgrounds"][0]}
     if len(colour["alt-backgrounds"])>1:
       css['td:nth-child(even),div:nth-child(even)'] = {"background":colour["alt-backgrounds"][1]}
+    for k in css.keys():
+      if css[k].get("background","")==colour["background"] and not k in ["html","body"]: css[k]["background"]="inherit"
   
   # Text for the beginning of the CSS file:
   
@@ -580,6 +582,8 @@ div.result > div.document span.mk,div.result > div.document span.mk b, div.par p
 """)
   # if pixelSize: outfile.write(":not(:empty) input#rsconf + div#wrapper > div#header > div#menuFrame > ul.menu > li:before { content: attr(id); text-transform: none; display: inline !important; }\n")
   outfile.write(".menu li a span.label { display:inline !important; text-transform: none !important;}\n") # not just 'if pixelSize', we need this anyway due to background overrides
+  # some site JS adds modal boxes to the end of the document, try:
+  outfile.write("body.yesJS > div.fancybox-wrap[style] { position: absolute !important; border: blue solid !important; } body.yesJS > div.fancybox-wrap[style] div.fancybox-close:after { content: \"Close\"; }\n")
   # hack for sites that embed YouTube videos (NASA etc) when using the YouTube5 Safari extension on a Mac
   outfile.write("div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls { background-color:transparent!important;background:transparent!important;}\n")
   # End site-specific hacks
