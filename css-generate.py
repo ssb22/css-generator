@@ -404,6 +404,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   "a", # causes problems in IE
   # the following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
+  # TODO: allow them in Gecko via a Gecko-specific rule?  especially (e.g.) "p"
   "label","address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote"
   ]
   # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
@@ -417,7 +418,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # To be safe, could add other inline-etc tags mentioned in mostElements:
   "label","nobr","tr","ol","ul","abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup","blink","button","command","dir","embed","object","fieldset","iframe","marquee","basefont","bdi","canvas","time",
   "form", # form:first-line sometimes trips up Google searches in Opera 12
-  # TODO: p:first-line can also crash Opera 12 on some sites, but omitting it could result in colour clashes
+  # TODO: other :first-line overrides (even "p") can crash Opera 12 too; is there any way to omit :first-line only in Presto? (or make it Webkit+Gecko+IE specific)
   ]
   inheritDic={"color":"inherit","background":"inherit","*letter-spacing":"inherit","*font-size":"inherit","*font-family":"inherit"}
   # (NB must say inherit, because consider things like p:first-line / A HREF... - the first-line may have higher specificity.
