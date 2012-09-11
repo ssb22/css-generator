@@ -417,8 +417,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   "li", # sometimes causes crashes in Opera 12 (note this might be sacrificing some control, if someone does try a li:first-line override)
   # To be safe, could add other inline-etc tags mentioned in mostElements:
   "label","nobr","tr","ol","ul","abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup","blink","button","command","dir","embed","object","fieldset","iframe","marquee","basefont","bdi","canvas","time",
-  "form", # form:first-line sometimes trips up Google searches in Opera 12
-  # TODO: other :first-line overrides (even "p") can crash Opera 12 too; is there any way to omit :first-line only in Presto? (or make it Webkit+Gecko+IE specific)
+  # TODO: other :first-line, :first-letter and :hover overrides can still crash Opera 12 on some sites.  Have suggested in index.html that the user replaces :first with :girst and :hover with :gover when installing one of these CSS files to Opera.
   ]
   inheritDic={"color":"inherit","background":"inherit","*letter-spacing":"inherit","*font-size":"inherit","*font-family":"inherit"}
   # (NB must say inherit, because consider things like p:first-line / A HREF... - the first-line may have higher specificity.
