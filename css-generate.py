@@ -400,22 +400,24 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # which elements you do this because of browser bugs.
   firstLetterBugs=[
    "div", # Gecko messes up textarea when enter multiple paragraphs
-  "input","select","option","textarea","table","img", # probably best to avoid these
+  "input","select","option","textarea","table","colgroup","col","img", # probably best to avoid these
   "a", # causes problems in IE
   # the following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
-  "label","address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","table","th","tr","td","dl","dt","dd","b","blockquote"
+  "label","address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote"
   ]
   # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
-  "input","select","option","textarea","table","img",
+  "input","select","option","textarea","table","colgroup","col","img",
   "td","th", # causes problems on Firefox 2 if there's a form inside
   "a", # causes problems in IE
   "span", # sometimes causes crashes in Opera 12
   "li", # sometimes causes crashes in Opera 12 (note this might be sacrificing some control, if someone does try a li:first-line override)
   # To be safe, could add other inline-etc tags mentioned in mostElements:
-  "label","nobr","tr","ol","ul","abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup","blink","button","command","dir","embed","object","fieldset","iframe","marquee"
+  "label","nobr","tr","ol","ul","abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup","blink","button","command","dir","embed","object","fieldset","iframe","marquee","basefont","bdi","canvas","time",
+  "form", # form:first-line sometimes trips up Google searches in Opera 12
+  # TODO: p:first-line can also crash Opera 12 on some sites, but omitting it could result in colour clashes
   ]
   inheritDic={"color":"inherit","background":"inherit","*letter-spacing":"inherit","*font-size":"inherit","*font-family":"inherit"}
   # (NB must say inherit, because consider things like p:first-line / A HREF... - the first-line may have higher specificity.
