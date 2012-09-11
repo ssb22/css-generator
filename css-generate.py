@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9784"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9785"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -415,7 +415,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   "span", # sometimes causes crashes in Opera 12
   "li", # sometimes causes crashes in Opera 12 (note this might be sacrificing some control, if someone does try a li:first-line override)
   # To be safe, could add other inline-etc tags mentioned in mostElements:
-  "label","nobr","tr","ol","ul","abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup"
+  "label","nobr","tr","ol","ul","abbr","acronym","dfn","em","strong","code","samp","kbd","var","b","i","u","small","s","big","strike","tt","font","cite","q","sub","sup","blink","button","command","dir","embed","object","fieldset","iframe","marquee"
   ]
   inheritDic={"color":"inherit","background":"inherit","*letter-spacing":"inherit","*font-size":"inherit","*font-family":"inherit"}
   # (NB must say inherit, because consider things like p:first-line / A HREF... - the first-line may have higher specificity.
