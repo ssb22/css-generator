@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9785"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9786"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -90,9 +90,9 @@ colour_schemes_to_generate = [
   ("soft greys","soft", # c.f. Nightshift etc; thanks to Liviu Andronic for testing
    {"text":"#C0C0C0","background":"#383838",
     "alt-backgrounds":["#333333","#2E2E2E"], # optional
-    "headings":"#40C090","link":"#B6AA7B",
-    "hover":"#453436","visited":"#BDB76B",
-    "bold":"D7EFCF","italic":"#EFEFCF",
+    "headings":"#40C090","link":"#BDB76B",
+    "hover":"#453436","visited":"#B6AA7B",
+    "bold":"#CD853F","italic":"#EFEFCF",
     "button":"#553030",
     "selectbox":"#603440",                              
     "coloured":"#E0E040",
@@ -300,6 +300,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for t in "pre,code,tt,kbd,var".split(","): css[t]["*font-family"]="monospace"
   
   css["spacer"]={"*display":"none"} # no point in keeping the spacers now we've changed the layout so much
+  css["a"]={"*display":"inline"} # some sites override it to block, which might have worked OK in their CSS's context but it's not so good in ours
 
   # max-width (if supported, i.e. not IE6) can reduce left/right scrolling -
   # if one line's linebox needs to expand (e.g. due to a long word), then we
