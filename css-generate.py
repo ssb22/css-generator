@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9786"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9787"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -300,7 +300,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for t in "pre,code,tt,kbd,var".split(","): css[t]["*font-family"]="monospace"
   
   css["spacer"]={"*display":"none"} # no point in keeping the spacers now we've changed the layout so much
-  css["a"]={"*display":"inline"} # some sites override it to block, which might have worked OK in their CSS's context but it's not so good in ours
+  css["a"]["*display"] = "inline" # some sites override it to block, which might have worked OK in their CSS's context but it's not so good in ours
 
   # max-width (if supported, i.e. not IE6) can reduce left/right scrolling -
   # if one line's linebox needs to expand (e.g. due to a long word), then we
