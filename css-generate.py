@@ -449,7 +449,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["iframe"]["*width"]="100%"
     # The following may help a little as well: make iframes 50% transparent so at least we can see what's under them if they do overprint
     # (the overprinting does still happen on some sites; apparently the IFRAME's height is treated as close to 0 when it's not)
-    css["iframe"].update({"*filter":"alpha(opacity=50)","opacity":"0.5","-moz-opacity":"0.5"})
+    css["iframe"].update({"*filter":"alpha(opacity=50)","*opacity":"0.5","*-moz-opacity":"0.5"})
 
   # Selection (CSS3)
   if colour.has_key("selection"):
