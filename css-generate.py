@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9787"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9788"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -514,7 +514,7 @@ interacting with author-supplied stylesheets. */""")
 .placebo - we want line-height normal
 anyway - and should validate */
 
-@media print { * { color: black ! important; } } /* in browsers that do not support @media, this will be overridden by the items below */
+@media print { * { color: black !important; } } /* in browsers that do not support @media, this will be overridden by the items below */
 
 @media screen,projection,tv {
 
@@ -523,7 +523,7 @@ anyway - and should validate */
 /* Repeat ALT tags after images (problematic; see Mozilla bug 292116)
 (2005: commenting this out for now because more trouble than it's worth;
 only Mozilla 1.0 does it properly; later versions and Firefox don't)
-img[alt]:after { content: attr(alt) ! important; color: #FF00FF ! important; }
+img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */\n""")
 
   ret = printCss(css,outfile,debugStopAfter)
@@ -663,7 +663,7 @@ def printCss(css,outfile,debugStopAfter=0):
         outfile.write(e+" {\n")
         l=style.items() ; l.sort()
         for k,v in l:
-          outfile.write("   %s: %s ! important;\n" % (k,v))
+          outfile.write("   %s: %s !important;\n" % (k,v))
           debugStopAfter -= 1
           if not debugStopAfter: break
         outfile.write("}\n")
@@ -673,7 +673,7 @@ def printCss(css,outfile,debugStopAfter=0):
     outfile.write(fill(", ".join(elemList).replace("-","#@#"),break_long_words=False).replace("#@#","-")) # (don't let 'fill' break on the hyphens)
     outfile.write(" {\n")
     l=style.items() ; l.sort()
-    for k,v in l: outfile.write("   %s: %s ! important;\n" % (k,v))
+    for k,v in l: outfile.write("   %s: %s !important;\n" % (k,v))
     outfile.write("}\n")
   return debugStopAfter
 
