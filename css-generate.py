@@ -571,6 +571,7 @@ div#container div#result tt > b, div#container div#result tt > acronym { display
   outfile.write(jumpjsTooltip+" {border:thin solid "+colour["italic"]+"!important;}")
   if pixelSize: outfile.write(jumpjsTooltip+""" {position:absolute !important;z-index:9!important;}
 """+jumpjsTooltip+""" p,"""+jumpjsTooltip+""" div.par { margin: 0px !important; padding: 0px !important; }
+div.document > div.par > p { margin: 0px !important; padding: 0px !important; }
 body > input#rsconf + div#wrapper > div#header { height:40%!important/*no more or scroll-JS is too far wrong*/;position:fixed !important;top:0px!important;right/*not left or overflow problems, + right helps w. tooltips*/:0px!important;width:30%!important/*not fixed+100% or PgDn will go wrong*/;overflow:auto!important;border:blue solid!important;z-index:1!important;}
 """+jumpjsContent+"""{margin-right:30%!important;z-index:0!important;}
 """ + jjSN + """{ position:fixed !important;/*or double-scroll JS fails*/bottom:0px;right/*not left,see below*/:0px;width:30%!important;height:60%!important;border:blue solid!important;overflow:auto!important;z-index:2!important;}""")
