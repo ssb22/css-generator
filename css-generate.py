@@ -376,7 +376,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Images and buttons:
   css["img"]["background"]=colour["image_transparency_compromise"]
-  css["img"]["background-color"]=colour["image_transparency_compromise"]
+  # Exception needed for MediaWiki TeX images
+  # (they tend to be transparent but with antialiasing that
+  # assumes the background will be white)
+  css["body.mediawiki img.tex"]={"background":"white"}
   if "image_opacity" in colour:
     del css["img"]["*opacity"],css["img"]["*-moz-opacity"],css["img"]["*filter"]
     css["img"]["opacity"]=css["img"]["-moz-opacity"]="%g" % colour["image_opacity"]
