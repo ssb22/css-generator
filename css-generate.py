@@ -538,6 +538,8 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_)
   outfile.write(".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert { color: "+colour["italic"]+" !important;}\n")
   outfile.write(".wDiffHtmlDelete { text-decoration: line-through !important; }\n")
+  # Hack for jqMath:
+  outfile.write("td.fm-num-frac,td.fm-den-frac { text-align: center !important; }\n")
   # Hack for WP/MediaWiki unedited links:
   outfile.write("a.new { color: "+colour["coloured"]+" !important; }\n") # (TODO use a different colour?)
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
