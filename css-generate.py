@@ -260,7 +260,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["textarea"]["*width"]="100%" # not "auto", as that can cause Firefox to sometimes indent the textarea's contents off-screen
 
   css["frame"]={}
-  for e in ["frame","iframe"]: css[e]["*overflow"]="auto /* overrides 'scrolling=no' which can go wrong in large print */ "
+  for e in ["frame","iframe"]: css[e]["*overflow"]="auto" # to override 'scrolling=no' which can go wrong in large print (but this override doesn't always work in Safari)
 
   css["sup"]["*vertical-align"] = "super /* in case authors try to do it with font size instead */"
   css["sub"]["*vertical-align"] = "sub"
