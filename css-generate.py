@@ -547,7 +547,7 @@ div.MathJax_Display span.mfrac > span > span,span.MathJax span.mfrac > span > sp
 div.MathJax_Display span.mfrac > span > span:first-child,span.MathJax span.mfrac > span > span:first-child { display: table-cell !important; border-bottom: thin solid !important; }
 div.MathJax_Display span.mfrac > span > span + span + span,span.MathJax span.mfrac > span > span + span + span { display: none !important; }
 div.MathJax_Display span.msqrt > span > span + span,span.MathJax span.msqrt > span > span + span { display: none !important; }
-div.MathJax_Display span.msqrt:before,span.MathJax span.msqrt:before { content: "\221A("; }
+div.MathJax_Display span.msqrt:before,span.MathJax span.msqrt:before { content: "\\221A("; }
 div.MathJax_Display span.msqrt:after,span.MathJax span.msqrt:after { content: ")"; }
 div.MathJax_Display span.mtable,span.MathJax span.mtable { display: inline-table !important; }
 div.MathJax_Display span.mtable span.mtd,span.MathJax span.mtable span.mtd { display: table-row-group !important; text-align: center !important; }
