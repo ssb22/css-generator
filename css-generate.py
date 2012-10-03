@@ -542,7 +542,16 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   if pixelSize: outfile.write("td.fm-num-frac,td.fm-den-frac { text-align: center !important; }\n")
   # Partial hack for MathJax:  (I wish webmasters would use
   # jqMath, which is easier on user CSS, instead)
-  if pixelSize: outfile.write('div.MathJax_Display span.mfrac { display: inline-table !important; vertical-align: middle !important; padding: 0.5ex !important; } div.MathJax_Display span.mfrac > span > span { display: table-row-group !important; text-align: center !important; } div.MathJax_Display span.mfrac > span > span:first-child { display: table-cell !important; border-bottom: thin solid !important; } div.MathJax_Display span.mfrac > span > span + span + span { display: none !important; } div.MathJax_Display span.msqrt > span > span + span { display: none !important; } div.MathJax_Display span.msqrt:before { content: "\\221A("; } div.MathJax_Display span.msqrt:after { content: ")"; } div.MathJax_Display span.mtable { display: inline-table !important; } div.MathJax_Display span.mtable span.mtd { display: table-row-group !important; text-align: center !important; }\n')
+  if pixelSize: outfile.write("""div.MathJax_Display span.mfrac,span.MathJax span.mfrac { display: inline-table !important; vertical-align: middle !important; padding: 0.5ex !important; }
+div.MathJax_Display span.mfrac > span > span,span.MathJax span.mfrac > span > span { display: table-row-group !important; text-align: center !important; }
+div.MathJax_Display span.mfrac > span > span:first-child,span.MathJax span.mfrac > span > span:first-child { display: table-cell !important; border-bottom: thin solid !important; }
+div.MathJax_Display span.mfrac > span > span + span + span,span.MathJax span.mfrac > span > span + span + span { display: none !important; }
+div.MathJax_Display span.msqrt > span > span + span,span.MathJax span.msqrt > span > span + span { display: none !important; }
+div.MathJax_Display span.msqrt:before,span.MathJax span.msqrt:before { content: "\221A("; }
+div.MathJax_Display span.msqrt:after,span.MathJax span.msqrt:after { content: ")"; }
+div.MathJax_Display span.mtable,span.MathJax span.mtable { display: inline-table !important; }
+div.MathJax_Display span.mtable span.mtd,span.MathJax span.mtable span.mtd { display: table-row-group !important; text-align: center !important; }
+""")
   # Hack for WP/MediaWiki unedited links:
   outfile.write("a.new { color: "+colour["coloured"]+" !important; }\n") # (TODO use a different colour?)
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
