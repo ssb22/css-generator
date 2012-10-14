@@ -586,8 +586,8 @@ div#container div#result tt > b, div#container div#result tt > acronym { display
   # hack for sites that use jump.js with nav boxes
   jjc = "body > input#rsconf + div#wrapper > div#header + div#container > div#spacer + "
   # wrapper might or might not be .dropShadow50
-  jjSN = jjc + "div#secondaryNav"
-  jumpjsContent = jjc+"div#content," +jjSN+" + div#content"
+  jjSN = jjc + "div#secondaryNav,"+jjc+"div#message + div#secondaryNav"
+  jumpjsContent = jjc+"div#content," +jjc + "div#secondaryNav + div#content,"+jjc+"div#message + div#secondaryNav + div#content,"+jjc+"div#message"
   jumpjsTooltip = "div.tooltip.dropShadow20"
   outfile.write(jumpjsTooltip+" {border:thin solid "+colour["italic"]+"!important;}")
   if pixelSize: outfile.write(jumpjsTooltip+""" {position:absolute !important;z-index:9!important;}
