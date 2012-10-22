@@ -553,7 +553,7 @@ div.MathJax_Display span.mtable,span.MathJax span.mtable { display: inline-table
 div.MathJax_Display span.mtable span.mtd,span.MathJax span.mtable span.mtd { display: table-row-group !important; text-align: center !important; }
 """)
   # Hack for WP/MediaWiki unedited links:
-  outfile.write("a.new { color: "+colour["coloured"]+" !important; }\n") # (TODO use a different colour?)
+  outfile.write("a.new, a.new i,a.new b { color: "+colour["coloured"]+" !important; }\n") # (TODO use a different colour?)
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
   outfile.write("body.mediawiki > div.navpopup,body.mediawiki .referencetooltip, ul.ui-autocomplete{position:absolute!important;border:blue solid !important;}")
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
@@ -589,7 +589,7 @@ div#container div#result tt > b, div#container div#result tt > acronym { display
   jjSN = jjc + "div#secondaryNav,"+jjc+"div#message + div#secondaryNav"
   jumpjsContent = jjc+"div#content," +jjc + "div#secondaryNav + div#content,"+jjc+"div#message + div#secondaryNav + div#content,"+jjc+"div#message"
   jumpjsTooltip = "div.tooltip.dropShadow20"
-  outfile.write(jumpjsTooltip+" {border:thin solid "+colour["italic"]+"!important;}")
+  outfile.write(jumpjsTooltip+","+jjc+"div#message {border:thin solid "+colour["italic"]+"!important;}")
   if pixelSize: outfile.write(jumpjsTooltip+""" {position:absolute !important;z-index:9!important;}
 """+jumpjsTooltip+""" p,"""+jumpjsTooltip+""" div.par { margin: 0px !important; padding: 0px !important; }
 div.document > div.par > p.sl,div.document > div.par > p.sz { margin: 0px !important; padding: 0px !important; }
