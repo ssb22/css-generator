@@ -234,7 +234,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # be overridden by author stylesheets resulting in poor
   # combinations.  NB however we don't list ALL elements in
   # mostElements (see code later).
-  mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas".split(",")
+  mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas".split(",")
   html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,mark,meter,nav,progress,section,time".split(",") # (and ruby/rt/rp/rb)
   mostElements += html5Elements
   
@@ -301,6 +301,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   # Monospaced elements
   for t in "pre,code,tt,kbd,var".split(","): css[t]["*font-family"]="monospace"
+  # and 'samp' let's have sans-serif
+  for t in "samp".split(","): css[t]["*font-family"]="helvetica, arial, verdana"
   
   css["spacer"]={"*display":"none"} # no point in keeping the spacers now we've changed the layout so much
   css["a"]["*display"] = "inline" # some sites override it to block, which might have worked OK in their CSS's context but it's not so good in ours
@@ -350,7 +352,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
   # Links stuff:
-  for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(","):
+  for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(","):
     for type in [":link",":visited","[onclick]"]:
       css["a"+type+" "+linkInside]={"color":colour["link"],"text-decoration":"underline","cursor":"pointer"}
       css["a"+type+":hover "+linkInside]={"background":colour["hover"]}
@@ -416,7 +418,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # the following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
   # TODO: allow them in Gecko via a Gecko-specific rule?  especially (e.g.) "p"
-  "label","address","p","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center"
+  "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center"
   ]
   # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
   firstLineBugs=[
