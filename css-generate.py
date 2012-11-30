@@ -418,7 +418,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # the following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
   # TODO: allow them in Gecko via a Gecko-specific rule?  especially (e.g.) "p"
-  "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center"
+  "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center","article"
   ]
   # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
   firstLineBugs=[
