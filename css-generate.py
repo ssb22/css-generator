@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.9789"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.979"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -369,11 +369,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Italic and bold:
   for i in "i,em,cite,address,dfn,u".split(","):
-    css[i]["*font-family"]="helvetica, arial, verdana"
-    css[i]["color"]=colour["italic"]
+    css[i+" span"]={
+      "*font-family":"helvetica, arial, verdana",
+      "color":colour["italic"]}
+    css[i].update(css[i+" span"])
   for i in "b,strong".split(","):
-    css[i]["*font-weight"]="bold"
-    css[i]["color"]=colour["bold"]
+    css[i+" span"]={
+      "*font-weight":"bold",
+      "color":colour["bold"]}
+    css[i].update(css[i+" span"])
   css["acronym"]["color"]=colour["bold"]
 
   # Images and buttons:
