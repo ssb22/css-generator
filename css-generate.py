@@ -606,8 +606,8 @@ body > input#rsconf + div#wrapper > div#header { height:40%!important/*no more o
   outfile.write(""":not(:empty) li#menuNavigation.iconOnly > a > span.icon:after { content: "Navigation"; text-transform: none; }
 :not(:empty) li#menuSearchHitNext.iconOnly > a > span.icon:after { content: "Next hit"; text-transform: none !important; }
 :not(:empty) li#menuToolsPreferences.iconOnly > a > span.icon:after { content: "Preferences"; text-transform: none; }
-:not(:empty) div.resultNavControls > ul > li.resultNavLeft > a > span:after { content: "<- Prev"; text-transform: none; }
-:not(:empty) div.resultNavControls > ul > li.resultNavRight > a > span:after { content: "Next ->"; text-transform: none; }
+:not(:empty) div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after { content: "<- Prev"; text-transform: none; }
+:not(:empty) div.resultNavControls > ul > li.resultNavRight > a > span:after, div.jcarousel-container + div#slidePrevButton:empty + div#slideNextButton:empty:after { content: "Next ->"; text-transform: none; }
 :not(:empty) div.resultNavControls > ul > li.resultNavDoubleLeft > a > span:after { content: "<<- Backwd"; text-transform: none; }
 :not(:empty) div.resultNavControls > ul > li.resultNavDoubleRight > a > span:after { content: "Fwd ->>"; text-transform: none; }
 """)
