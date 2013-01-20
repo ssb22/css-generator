@@ -618,7 +618,7 @@ div.result > div.document span.mk,div.result > div.document span.mk b, div.par p
   outfile.write(".menu li a span.label { display:inline !important; text-transform: none !important;}\n") # not just 'if pixelSize', we need this anyway due to background overrides
   # some site JS adds modal boxes to the end of the document, try:
   outfile.write("body.yesJS > div.fancybox-wrap[style] { position: absolute !important; border: blue solid !important; } body.yesJS > div.fancybox-wrap[style] div.fancybox-close:after { content: \"Close\"; }\n")
-  # hack for sites that embed YouTube videos (NASA etc) when using the YouTube5 Safari extension on a Mac
+  # hack for sites that embed YouTube videos (NASA etc) when using the YouTube5 Safari extension on a Mac (TODO: Safari 6 needs sorting out)
   outfile.write("div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls { background-color:transparent!important;background:transparent!important;}\n")
   # End site-specific hacks
   outfile.write("input[type=text],input[type=password],input[type=search] { border: 1px solid grey !important; }") # TODO what if background is close to grey?
