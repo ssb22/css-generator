@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2012.  Version 0.979"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2013.  Version 0.9791"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -527,10 +527,6 @@ interacting with author-supplied stylesheets. */""")
 .placebo - we want line-height normal
 anyway - and should validate */
 
-@media print { * { color: black !important; } } /* in browsers that do not support @media, this will be overridden by the items below */
-
-@media screen,projection,tv {
-
 /* :not(:empty) stops IE5+6 from misinterpreting things it can't understand */
 
 /* Repeat ALT tags after images (problematic; see Mozilla bug 292116)
@@ -629,7 +625,18 @@ div.result > div.document span.mk,div.result > div.document span.mk b, div.par p
   # help Opera 12 and other browsers that don't show keyboard focus -
   outfile.write(":focus { outline: "+colour.get("focusOutlineStyle","thin dotted")+"; }\n")
 
-  outfile.write("} /* end of @media block */\n")
+  if pixelSize: printFontSize="font-size: 12pt !important;" # TODO: option?
+  else: printFontSize=""
+  outfile.write("""
+@media print { * { color: black !important; background-color: white !important; background: white !important; %s } }
+  """ % printFontSize)
+  # old IE (including IE6 on Windows Mobile 5/6) completely ignores the entire contents of @media, so we need to make screen the default case and put this here to override.
+  # I *hope* that if any old browsers don't understand @media but still read the inside, they also won't understand the * selector.
+  # However, making screen the default case and overriding here means original sizes and layouts are NOT preserved for printing
+  # (which might or might not be wanted).
+  # Note: if introducing any other @media lines, need to change the mention of "@media line" in index.html (Midori instructions).
+  # (This comment is in Python rather than in CSS o/p so Midori users don't have to remove it; TODO: test if the string '@media' really hurts the affected versions of Midori even if it's in a comment)
+
   return ret
 
 def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
@@ -653,7 +660,7 @@ def printCss(css,outfile,debugStopAfter=0):
     # end of adding aliases
     for i in attribValDict.items():
       if not rDic.has_key(i): rDic[i]=[]
-      rDic[i].append(elem)
+      rDic[i].append(elem.strip())
   attrib_val_elemList = rDic.items()
   # Browser debugging by binary chop:
   attrib_val_elemList.sort() # (makes it easier to think about)
