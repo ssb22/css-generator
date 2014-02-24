@@ -14,9 +14,11 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9817
 # -------
 # If you want to compare this code to old versions, the old
 # versions are being kept on SourceForge's E-GuideDog SVN repository
-# http://e-guidedog.svn.sourceforge.net/viewvc/e-guidedog/ssb22/css-generator/
+# http://sourceforge.net/p/e-guidedog/code/HEAD/tree/ssb22/css-generator/
 # as of v0.9782.  Versions prior to that were not kept, but
 # you might be able to find some on Internet Archive.
+# To check out the repository, you can do:
+# svn co http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
 
 # INSTRUCTIONS
 # ------------
@@ -547,9 +549,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hack for Google search results:
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   
-  # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_)
-  css[".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert"] = {"color":colour["italic"]}
-  printOverride[".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert"] = {"color":"black"} # TODO: shade of grey?
+  # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi)
+  k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg"
+  css[k] = {"color":colour["italic"]}
+  printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
   # and media players:
   css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":'"\21E8 Play"'}
