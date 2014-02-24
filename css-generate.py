@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2013.  Version 0.9791"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9817"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -38,7 +38,7 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2013.  Version 0.9791
 
 # Size 0 means "unchanged" - it will disable the size
 # changes, and the layout changes that are meant for large
-# sizes.  This is for people who only need new colours.
+# sizes.  This is for people who need only colour changes.
 
 pixel_sizes_to_generate = [0,18,20,25,30,35,40,45,50,60,75,100]
 colour_schemes_to_generate = [
@@ -104,7 +104,7 @@ colour_schemes_to_generate = [
     "image_opacity":0.8,
     "image_transparency_compromise":"#2e3436"
   }),
-                                                     
+
   ("black on linen","BonL", # LyX's background colour is "linen", 240/230/220
    {"text":"black","background":"#faf0e6",
     "headings":"#404040","link":"#0000FF",
@@ -203,6 +203,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*border-radius":"0.05em",
     "*-moz-border-radius":"0.05em",
     "*-webkit-border-radius":"0.05em",
+    "*-webkit-font-smoothing":"none",
+    "*-webkit-text-stroke":"0",
     "*position":"static",
     "*visibility":"visible /* because we're forcing position to static, we must also force visibility to visible otherwise will get large gaps.  Unfortunately some authors use visibility:hidden when they should be using display:none, and CSS does not provide a way of saying '[visibility=hidden] {display:none}' */",
     "*float":"none","*clear":"none",
@@ -227,6 +229,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-appearance":"none",
     "*-moz-transform":"none",
     "*-webkit-transform":"none",
+
+    "*-webkit-hyphens":"manual", # auto hyphenation doesn't always work very well with our fonts (TODO: manual or none?  manual might be needed if devs put breakpoints into very long words)
+    "*-moz-hyphens":"manual",
+    "*-ms-hyphens":"manual",
+    "hyphens":"manual",
     }
 
   # have to explicitly set for every type of element,
@@ -234,12 +241,22 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # be overridden by author stylesheets resulting in poor
   # combinations.  NB however we don't list ALL elements in
   # mostElements (see code later).
-  mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas".split(",")
-  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,mark,meter,nav,progress,section,time".split(",") # (and ruby/rt/rp/rb)
+  mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas,video".split(",")
+  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time".split(",") # (and ruby/rt/rp/rb)
   mostElements += html5Elements
+
+  # Selector prefixes to exclude certain browsers from trying to implement a rule:
+  exclude_ie_below_7 = "html > "
+  exclude_ie_below_8 = "html >/**/ body "
+  exclude_ie_below_9 = ":not(:empty) " # IE8 (and non-CSS3 browsers) don't support :not
   
-  css={}
-  for e in mostElements: css[e]=defaultStyle.copy()
+  css={} ; printOverride = {}
+  webkitScreenOverride = {} ; geckoScreenOverride = {}
+  webkitGeckoScreenOverride = {}
+  for e in mostElements:
+    css[e]=defaultStyle.copy()
+    printOverride[e] = {"color":"black","background":"white"}.copy()
+    if pixelSize: printOverride[e]["font-size"] = "12pt" # TODO: option?
 
   # but there are some exceptions:
 
@@ -272,6 +289,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   for s in ['s','strike']: css[s]["*text-decoration"]="line-through"
   # TODO: not sure if really want this for the 's' alias of 'strike', since some sites e.g. http://www.elgin.free-online.co.uk/qp_intro.htm (2007-10) use CSS to override its presentation into something other than strikeout
+  css['span[style="text-decoration:line-through"],span[style="text-decoration:line-through;"]']={"*text-decoration":"line-through"} # used on some sites
 
   # Margin exceptions:
 
@@ -279,14 +297,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   for i in "p,multicol,listing,plaintext,xmp,pre".split(","): css[i]["*margin"]="1em 0"
   
-  listStuff="ul,ol,dir,menu,dl,li".split(",")
+  listStuff="ul,dir,menu,dl,li".split(",") # not ol, leave that as margin 0px - see ol > li below
   for l in listStuff:
     css[l]["*margin"]="0 1em 0 %.1fpx" % (pixelSize*10/18.0)
   listStuff.remove("li")
   for l in listStuff:
     for l2 in listStuff:
       css[l+" "+l2]={"*margin":"0px"}
-  
+  css["ol > li"] = {"*list-style-position":"inside","*margin":"0px","*padding-left":"1em","*text-indent":"-1em"} # helps when numbers get very large
   css["blockquote"]["*margin"]="1em 4em"
   css["blockquote[type=cite]"]={"*margin":"1em 0px","*padding":"1em 0px 0px 0px"}
   css["dd"]["*margin"]="0em 2em"
@@ -337,6 +355,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for h in range(6):
     el="h%d" % (h+1)
     css[el]["color"]=colour["headings"]
+    printOverride[el]={"color":"black"}
     css[el]["*font-weight"]="bold"
     css[el]["*font-family"]="helvetica, arial, verdana"
     size = (largestHeadingSize-h*(largestHeadingSize-smallestHeadingSize)/(6-1.0))
@@ -348,6 +367,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el+" abbr"]=css[el].copy() ; del css[el+" abbr"]["*text-decoration"]
     css[el+" span"]=css[el].copy()
     css[el+" a b"]=css[el].copy()
+    printOverride[el+" center"]=printOverride[el].copy()
+    printOverride[el+" a"]=printOverride[el].copy()
+    printOverride[el+" abbr"]=printOverride[el].copy()
+    printOverride[el+" span"]=printOverride[el].copy()
+    printOverride[el+" a b"]=printOverride[el].copy()
     # and now (AFTER the above) set margins on headings
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
@@ -355,6 +379,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(","):
     for type in [":link",":visited","[onclick]"]:
       css["a"+type+" "+linkInside]={"color":colour["link"],"text-decoration":"underline","cursor":"pointer"}
+      printOverride["a"+type+" "+linkInside]={"color":"#101010"} # (dark grey, TODO: option?)
       css["a"+type+":hover "+linkInside]={"background":colour["hover"]}
       css["a"+type+":active "+linkInside]={"color":"red","text-decoration":"underline","cursor":"pointer"}
       if linkInside in ["b","i","em","u","strong"] and not css[linkInside]["color"]==colour["text"]: css["a"+type+" "+linkInside]["color"]=css[linkInside]["color"]
@@ -372,13 +397,19 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[i+" span"]={
       "*font-family":"helvetica, arial, verdana",
       "color":colour["italic"]}
+    printOverride[i+" span"]={"color":"black"}
     css[i].update(css[i+" span"])
   for i in "b,strong".split(","):
     css[i+" span"]={
       "*font-weight":"bold",
       "color":colour["bold"]}
+    printOverride[i+" span"]={"color":"black"}
     css[i].update(css[i+" span"])
   css["acronym"]["color"]=colour["bold"]
+  css["abbr"]["color"]=colour["bold"]
+  # Some browsers might start styling abbr by default but not acronym.  Some older browsers might understand acronym title= but not abbr title=, so some sites might try to use acronym= for backward compatibility, but given that this must be for nonessential information anyway (as many simpler browsers don't support either) it probably makes sense to prefer abbr now (if it might be displayed by default on a greater number of modern browsers) unless the webmaster wants to emulate the browser in CSS.
+  css["acronym"]["border-bottom"]="1px dotted"
+  css["abbr"]["border-bottom"]="1px dotted"
 
   # Images and buttons:
   css["img"]["background"]=colour["image_transparency_compromise"]
@@ -389,6 +420,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.mediawiki img.tex"]={"background":"white"}
   # (note however it might be possible to set the wiki to
   # display maths as real TeX or something instead)
+  if not colour["background"]=="white": css["body.mediawiki img.tex"]["border"]="white solid 3px" # to make sure letters near the edge are readable if the rest of the page has a dark background
   
   if "image_opacity" in colour:
     del css["img"]["*opacity"],css["img"]["*-moz-opacity"],css["img"]["*filter"]
@@ -397,21 +429,36 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if colour["image_opacity"]<0.9: css["img:hover"] = css["a:hover img"]={"opacity":"0.9","-moz-opacity":"0.9","filter":"alpha(opacity=90)"}
   
   css["button"]["background"]=colour["button"]
+  printButtonBackground = "#e0e0e0" # light grey, TODO: option
+  printOverride["button"]["background"]=printButtonBackground
   css['div[role="button"]']={"background":colour["button"]} # for Gmail 2012-07 on "standard" view (rather than "basic HTML" view).  "Standard" view might work for people who want the "unchanged" size.
-  if "alt-backgrounds" in colour: css['html body div[role="button"]'] = css['div[role="button"]'] # override specificity of alt-backgrounds div:nth-child
+  printOverride['div[role="button"]']={"background":printButtonBackground}
+  if "alt-backgrounds" in colour:
+    # override specificity of alt-backgrounds div:nth-child
+    css['html body div[role="button"]'] = css['div[role="button"]']
+    printOverride['html body div[role="button"]'] = {"background":printButtonBackground}
   css["input[type=submit]"]={"background":colour["button"]}
   css["input[type=button]"]={"background":colour["button"]}
   css["input[type=reset]"]={"background":colour["reset_button"]}
-  for dType in ['[disabled="disabled"]','.disabled']:
-    for f in ["select","input","textarea","button"]:
-      css[f+dType]={"background":colour["form_disabled"]}
+  printOverride["input[type=submit]"]={"background":printButtonBackground}
+  printOverride["input[type=button]"]={"background":printButtonBackground}
+  printOverride["input[type=reset]"]={"background":printButtonBackground}
+  for f in ["select","input","textarea","button"]:
+    k = "html "+f+'[disabled]' # must include 'html' so more specific than above (TODO: or :not(:empty) if got enough CSS?)
+    css[k]={"background":colour["form_disabled"]}
+    printOverride[k]={"background":printButtonBackground} # TODO: or something else?
   
   # Separate adjacent links (CSS2+)
   if (pixelSize and separate_adjacent_links_at_other_sizes) or (not pixelSize and separate_adjacent_links_at_size_0):
     for l in [":link",":visited","[onclick]"]:
-      css[":not(:empty) a"+l+":before"]={"content":'"["',"color":colour["text"],"text-decoration":"none","white-space":"nowrap"}
-      css[":not(:empty) a"+l+":after"]={"content":'"]"',"color":colour["text"],"text-decoration":"none","white-space":"nowrap"}
-
+      css[exclude_ie_below_9+"a"+l+":before"]={"content":'"["',"color":colour["text"],"text-decoration":"none","white-space":"nowrap"}
+      css[exclude_ie_below_9+"a"+l+":after"]={"content":'"]"',"color":colour["text"],"text-decoration":"none","white-space":"nowrap"}
+      # make sure the hover colour includes :before and :after - this is needed if the :before/:after text is changed by site-specific hacks etc (to cope with empty links)
+      css[exclude_ie_below_9+"a"+l+":hover:before"]={"background":colour["hover"]}
+      css[exclude_ie_below_9+"a"+l+":hover:after"]={"background":colour["hover"]}
+      printOverride[exclude_ie_below_9+"a"+l+":before"]={"color":"black"} # TODO: option to delete the "[" "]" content also?
+      printOverride[exclude_ie_below_9+"a"+l+":after"]={"color":"black"}
+      
   # Avoid style overrides from :first-letter, :first-line,
   # :before and :after in author's CSS.  However be careful
   # which elements you do this because of browser bugs.
@@ -419,10 +466,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
    "div", # Gecko messes up textarea when enter multiple paragraphs
   "input","select","option","textarea","table","colgroup","col","img", # probably best to avoid these
   "a", # causes problems in IE
-  # the following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
+  # The following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
   # TODO: allow them in Gecko via a Gecko-specific rule?  especially (e.g.) "p"
-  "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center","article"
+  "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center","article","span","aside"
   ]
   # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
   firstLineBugs=[
@@ -442,11 +489,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for e in mostElements:
     if not e in firstLetterBugs: css[e+":first-letter"]=inheritDic.copy()
     if not e in firstLineBugs: css[e+":first-line"]=inheritDic.copy()
-    for i in map(lambda x:":not(:empty) "+e+x,[":before",":after"]):
+    for i in map(lambda x:exclude_ie_below_9+e+x,[":before",":after"]):
       css[i]=defaultStyle.copy()
-      del css[i]["*margin"]
-      del css[i]["*padding"]
-  
+      for mp in ["*margin","*padding"]:
+        if not css.get(e,{}).get(mp,"")==css[i][mp]:
+          del css[i][mp] # as not sure how browsers would treat a different margin/padding in :before/:after.  But DO keep these settings for the 0px elements, because we DON'T want sites overriding this and causing overprinting.
+  # and also do this:
+  for i in map(lambda x:exclude_ie_below_9+x,[":before",":after"]): css[i]=defaultStyle.copy() # (especially margin and padding)
+
   # CSS 2+ markup for viewing XML+CSS pages that don't use HTML.  Not perfect but should be better than nothing.
   xmlKey=":root:not(HTML), :root:not(HTML) :not(:empty)"
   # Careful not to use the universal selector, because it can mess up Mozilla's UI
@@ -464,6 +514,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # (the overprinting does still happen on some sites; apparently the IFRAME's height is treated as close to 0 when it's not)
     css["iframe"].update({"*filter":"alpha(opacity=50)","*opacity":"0.5","*-moz-opacity":"0.5"})
 
+  # float exceptions for img align=left and align=right (might as well)
+  css["img[align=left]"]={"*float":"left"}
+  css["img[align=right]"]={"*float":"right"}
+    
   # Selection (CSS3)
   if colour.has_key("selection"):
     css["::selection"] = {"background":colour["selection"]}
@@ -473,25 +527,221 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   css['select']['-webkit-appearance']='listbox' # workaround for Midori Ubuntu bug 1024783
   css['select']['background']=colour['selectbox']
+  printOverride['select']['background']=printButtonBackground # TODO: or something else?
 
-  # Remove '*' as necessary:
+  if "alt-backgrounds" in colour:
+    css['td:nth-child(odd),div:nth-child(odd)'] = {"background":colour["alt-backgrounds"][0]}
+    printOverride['td:nth-child(odd),div:nth-child(odd)'] = {"background":"white"} # TODO: or a very light grey?
+    if len(colour["alt-backgrounds"])>1:
+      css['td:nth-child(even),div:nth-child(even)'] = {"background":colour["alt-backgrounds"][1]}
+      printOverride['td:nth-child(even),div:nth-child(even)'] = {"background":"white"} # TODO: or another very light grey?
+    for k in css.keys():
+      if css[k].get("background","")==colour["background"] and not k in ["html","body"]: css[k]["background"]="inherit"
+
+  # Make definition lists a bit more legible, including when there is more than one definition for one term
+  css['dd+dd']={'*padding-top':'0.5ex','*margin-top':'1ex','*border-top':'thin dotted grey'}
+  css['dt'].update({'*padding':'0.5ex 0px 0px 0px','*margin':'1ex 0px 0px 0px','border-top':'thin solid grey'})
+
+  # Begin site-specific hacks
+
+  # Hack for Google search results:
+  css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
+  
+  # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_)
+  css[".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert"] = {"color":colour["italic"]}
+  printOverride[".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert"] = {"color":"black"} # TODO: shade of grey?
+  css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
+  # and media players:
+  css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":'"\21E8 Play"'}
+  css["div.mwPlayerContainer div.play-btn span.ui-icon-pause:empty:after"]={"content":'"Pause"'}
+  # Hack for jqMath:
+  if pixelSize: css["td.fm-num-frac,td.fm-den-frac"] = {"text-align":"center"}
+  # Partial hack for MathJax:  (I wish webmasters would use
+  # jqMath, which is easier on user CSS, instead)
+  # NB we use div.MathJax_Display here but it's expanded to inline MathJax in printCss
+  if pixelSize:
+    css["div.MathJax_Display span.mfrac,span.MathJax span.mfrac"]={"display":"inline-table","vertical-align":"middle","padding":"0.5ex"}
+    css["div.MathJax_Display span.mfrac > span > span,span.MathJax span.mfrac > span > span"]={"display":"table-row-group","text-align":"center"}
+    css["div.MathJax_Display span.mfrac > span > span:first-child,span.MathJax span.mfrac > span > span:first-child"]={"display":"table-cell","border-bottom":"thin solid"}
+    css["div.MathJax_Display span.mfrac > span > span + span + span,span.MathJax span.mfrac > span > span + span + span"]={"display":"none"}
+    css["div.MathJax_Display span.msqrt > span > span + span,span.MathJax span.msqrt > span > span + span"] = {"display":"none"}
+    css["div.MathJax_Display span.msqrt:before,span.MathJax span.msqrt:before"]={"content":r'"\221A("'}
+    css["div.MathJax_Display span.msqrt:after,span.MathJax span.msqrt:after"]={"content":'")"'}
+    css["div.MathJax_Display span.mtable,span.MathJax span.mtable"]={"display":"inline-table"}
+    css["div.MathJax_Display span.mtable span.mtd,span.MathJax span.mtable span.mtd"]={"display":"table-row-group","text-align":"center"}
+    for el in [""," span"," img:after"]: css["div.MathJax_Display span.msubsup > span:only-child > span:first-child + span:last-child"+el]={"color":colour["italic"]} # for now, because we don't know if the span:last-child's "vertical-align" should be "sub" or "super" in this context
+    css["div.MathJax_Display span.msubsup > span:only-child > span:first-child + span:not(:last-child)"]={"vertical-align":"super"} # TODO: can we do superscript + subscript as an inline-table? (but need a containing element?)
+    css["div.MathJax_Display span.msubsup > span:only-child > span:first-child + span + span"]={"vertical-align":"sub"}
+  # Following workaround is for MathJax scripts which insist on images when we have fonts (TODO: check for Unicode support?)  It doesn't work in IE9 or below (and possibly some other browsers) because it relies on setting img's content="" to enable the :before/:after; to be safe I'm doing this in only Webkit and Gecko for now.
+  for asc in range(0x20,0x7f)+[0xa0,0xd7]+range(0x2200,0x2294): # TODO: others?
+    if asc in [ord('"'),ord('\\')]: continue
+    k = 'div.MathJax_Display img[src="http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/png/Main/Regular/476/%04X.png"]' % asc
+    webkitGeckoScreenOverride[k]={"width":"0px",'content':'""',"vertical-align":"0px"} # (don't say display=none or that'll hide the :after as well)
+    if asc <= 0x7f: c = chr(asc)
+    else: c = r'\%04X' % asc
+    webkitGeckoScreenOverride[k+":after"]={"content":'"'+c+'"'}
+  # Hack for WP/MediaWiki unedited links:
+  css["a:link.new, a:link.new i,a:link.new b"]={"color":colour["coloured"] } # (TODO use a different colour?)
+  printOverride["a:link.new, a:link.new i,a:link.new b"]={"color":"black" } # TODO: shade of grey?
+  # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
+  css["body.mediawiki > div.navpopup,body.mediawiki .referencetooltip, ul.ui-autocomplete"]={"*position":"absolute","border":"blue solid"}
+  # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
+  css["ul#MUmyAccountOptions"]={"*display":"block"}
+  # Hack for some authoring tools that use <FONT COLOR=..> to indicate special emphasis
+  css["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"]"]={"color":colour["coloured"]}
+  printOverride["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"]"]={"color":"black"} # TODO: shade of grey?
+  # and others that use span class="Apple-style-span"
+  css["span.Apple-style-span"]={"color":colour["coloured"]}
+  printOverride["span.Apple-style-span"]={"color":"black"} # TODO: shade of grey?
+  # Hack for pinyinannotator
+  if pixelSize:
+    css["div.interlinear tt"]={"display":"inline-table","line-height":"1.02","text-align":"center","padding":"0.3em"}
+    css["div.interlinear tt i"]={"display":"table-row-group","text-align":"center"}
+    css["div.interlinear tt i.line1"]={"display":"table-header-group","text-align":"center","color":colour["headings"]}
+    printOverride["div.interlinear tt i.line1"]={"color":"black"}
+    css["div#container div#result tt"]={"display":"inline-table","line-height":"1.02","text-align":"center","padding":"0.3em"}
+    css["div#container div#result tt > i"]={"display":"table-header-group","text-align":"center"}
+    css["div#container div#result tt > b, div#container div#result tt > acronym"]={"display":"table-row-group","text-align":"center"}
+  # hack for messages on some sites
+  css["tr.new td"]={"border":"thick solid "+colour["coloured"]}
+  # hack for (some versions of) phpBB
+  css["ul.profile-icons li span"]={"*display":"inline"}
+  # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
+  css["body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map, div.googlemaps > div.mapsbord"]={"*display":"none"}
+  
+  # hack for MHonarc and similar setups that put full-sized images into clickable links
+  # (see comments on max-width above; doesn't seem to be a problem in this instance)
+  # if pixelSize: css["a:link img,a:visited img"]={"max-width":"100%","max-height":"100%"}
+  # -> DON'T do this - if one dimension is greater than 100% viewport but other is less, result can be bad aspect ratio
+
+  # More autocomplete stuff
+  css['body > div.jsAutoCompleteSelector[style~="relative;"]'] = {'*position':'relative','border':'blue solid'}
+  
+  # hack for sites that use jump.js with nav boxes
+  jjc = "body > input#site + div#band + div#wrapper > div#header + div#container > "
+  # wrapper might or might not be .dropShadow50
+  jjSN = jjc + "div#secondaryNav,"+jjc+"div#message + div#secondaryNav"
+  jumpjsContent = jjc+"div#content," +jjc + "div#secondaryNav + div#content,"+jjc+"div#message + div#secondaryNav + div#content,"+jjc+"div#message"
+  jumpjsTooltip = 'div > div.tooltip.dropShadowTooltip[dir="ltr"]'
+  css[jumpjsTooltip+","+jjc+"div#message"]={"border":"thin solid "+colour["italic"]}
+  for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
+  if pixelSize:
+      css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
+      css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
+      css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
+      css["body > input#site + div#band + div#wrapper > div#header"]={
+        "height":"40%", # no more or scroll-JS is too far wrong
+        "position":"fixed","top":"0px","left":"auto",
+        "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
+        "width":"30%", # not fixed+100% or PgDn will go wrong
+        "overflow":"auto","border":"blue solid","z-index":"1"}
+      css[jumpjsContent]={"margin-right":"31%","z-index":"0"}
+      css[jjSN]={"position":"fixed", # or double-scroll JS fails
+                 "bottom":"0px","left":"auto",
+                 "right":"0px", # not left,see above
+                 "width":"30%","height":"60%","bottom":"0%","top":"auto","border":"blue solid","overflow":"auto","z-index":"2"}
+      css["body.HomePage > div#regionMain > div.wrapper > div.wrapperShadow > div#slider > div#slideMain"]={"width":"1px","height":"1px","overflow":"hidden"} # can't get those kind of JS image+caption sliders to work well in large print so might be better off cutting them out (TODO somehow relocate to end of page?) (anyway, do height=width=1 because display:none or height=width=0 seems to get some versions of WebKit in a loop and visibility:hidden doesn't always work)
+  # and not just if pixelSize (because these icons aren't necessarily visible with our colour changes) -
+  css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon:after"]={"content":'"Navigation"',"text-transform":"none"}
+  css[exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a > span.icon:after"]={"content":'"Next hit"',"text-transform":"none"}
+  css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:before"]={"content":'"Sync"',"text-transform":"none"}
+  css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]={"content":'"Preferences"',"text-transform":"none"}
+  css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after"]={"content":'"<- Prev"',"text-transform":"none"}
+  css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavRight > a > span:after, div.jcarousel-container + div#slidePrevButton:empty + div#slideNextButton:empty:after"]={"content":'"Next ->"',"text-transform":"none"}
+  css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavDoubleLeft > a > span:after"]={'content':'"<<- Backwd"','text-transform':'none'}
+  css[exclude_ie_below_9+'div.resultNavControls > ul > li.resultNavDoubleRight > a > span:after']={'content':'"Fwd ->>"','text-transform':'none'}
+  css[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":colour['highlight']}
+  printOverride[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":'white'} # TODO: shade of grey?
+  css["div.result > div.document span.mk,div.result > div.document span.mk b, div.par p.sb span.mk, div.par p.ss span.mk b"]={"background":colour["reset_button"]}
+  printOverride["div.result > div.document span.mk,div.result > div.document span.mk b, div.par p.sb span.mk, div.par p.ss span.mk b"]={"background":"white"}
+  # if pixelSize: css[exclude_ie_below_9+"input#site + div#band + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
+  css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
+  # some site JS adds modal boxes to the end of the document, try:
+  if pixelSize:
+    css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
+    css["body.yesJS > div.fancybox-wrap[style] div.fancybox-close:after"]={"content":"\"Close\""}
+    # hack for sites that embed YouTube videos (NASA etc) when using the YouTube5 Safari extension on a Mac (TODO: Safari 6 needs sorting out)
+    css["div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls"]={"background-color":"transparent","background":"transparent"}
+  # hack for MusOpen:
+  css["a.download-icon span.icon-down:empty:after"]={"content":'"Download"',"color":colour["link"]}
+  printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
+  if pixelSize: css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"display":"none"}
+  # Hack for some other sites that put nothing inside software download links:
+  def emptyLink(lType,content,css,printOverride):
+    # Fill in the text of an empty link according to
+    # context (making up for the fact that we're not
+    # displaying whatever CSS-oriented graphical thing
+    # the site is showing).  lType is the link in context
+    # and 'content' is our guess of what it should say.
+    key = lType+":link:empty"
+    css[key+":after"]={
+      "content":'"'+content+']"', # overriding "]"
+      "color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
+    printOverride[key+":after"]={"color":"black"}
+    css[key+":before"]={"color":colour["link"]}
+    printOverride[key+":before"]={"color":"black"}
+    key = key.replace(":link",":visited")
+    css[key+":after"]={"color":colour["visited"]}
+    printOverride[key+":after"]={"color":"black"}
+    css[key+":before"]={"color":colour["visited"]}
+    printOverride[key+":before"]={"color":"black"}
+  emptyLink("a[title~=download]","Download",css,printOverride)
+  # and more for audio players:
+  emptyLink("div.audioFormat > a.stream","Stream",css,printOverride)
+  emptyLink("a.jsTrackPlay",r"\21E8 Play",css,printOverride) # (sometimes but not always within div.playBtn)
+  emptyLink("a.jsTrackPause","Pause",css,printOverride)
+  css["div.jsAudioPlayer div.ui-slider > a.ui-slider-handle:link:empty"] = { "*position": "relative", "text-decoration":"none" }
+  for jsPlayElem in ['div','a']:
+    css["div.jsAudioPlayer > div.jsAudioPlayerInterface > "+jsPlayElem+".jsPlay.controlElem:empty:after"] = { "content": r'"\21E8 Play"', "color":colour["link"]}
+    css["div.jsAudioPlayer > div.jsAudioPlayerInterface > "+jsPlayElem+".jsPlay.jsActive.controlElem:empty:after"] = { "content": r'"Playing"', "color":colour["link"]}
+  css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.jsMute.controlElem:empty:after"] = { "content": '"Mute"', "color":colour["link"]}
+  printOverride["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem:empty:after"] = { "color":"black" } # (TODO: but do we want to print those controls at all?)
+  css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem:empty"] = { "cursor":"pointer" }
+  css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem"] = { "*display":"inline" }
+  css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem.ui-slider"] = { "*display":"block" }
+  css['div.mejs-playpause-button button[title="Play/Pause"]:empty:after'] = {"content":'"Play/pause"'}
+  # and more:
+  emptyLink("div.digitalPubFormat > a.fileFormatIcon","Pub format",css,printOverride) # digital publication or whatever
+  emptyLink("div.audioFormat > a.fileFormatIcon.audio","Audio format",css,printOverride)
+  emptyLink('a[target="itunes_store"]',"iTunes shop",css,printOverride)
+  emptyLink('a[href^="https://play.google.com/store/apps/"]',"Android shop",css,printOverride)
+  emptyLink('a[href^="http://apps.microsoft.com/"]',"Microsoft shop",css,printOverride)
+  css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
+  css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
+  css["nav p#showHideMenu > a#goToMenu > span.icon:empty:after"]={"content":'"goToMenu"'}
+  # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
+  if pixelSize:
+    css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"}
+    css["div.slider-body div"]={"display":"block","-webkit-box-orient":"inline-axis","-moz-box-orient":"inline-axis","box-orient":"inline-axis" } # not webkit-box
+    css['iframe[title^="Facebook Cross Domain"]']={'display':'none'}
+    css['iframe[height="90"][scrolling="no"]']={'display':'none'}
+    # + for many sites with large transparent.png images:
+    css['img[src*="/transparent.png"]']={'*display':'none'}
+
+  # End site-specific hacks
+  css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
+  # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
+  css["html:not(:empty)"]={"*overflow":"visible"}
+  # speed up scrolling on Midori (from their FAQ) -
+  css["*"]={"-webkit-box-shadow":"none"}
+  # help Opera 12 and other browsers that don't show keyboard focus -
+  css[":focus"]={"outline":colour.get("focusOutlineStyle","thin dotted")}
+
+  # Remove '*' as necessary (in css, not needed in printOverride):
   for el in css.keys()[:]:
     for prop,value in css[el].items()[:]:
-      if prop[0]=='*':
+      if len(prop)>1 and prop[0]=='*':
         del css[el][prop]
         if pixelSize: css[el][prop[1:]] = value
     if css[el] == {}: del css[el]
 
-  if "alt-backgrounds" in colour:
-    css['td:nth-child(odd),div:nth-child(odd)'] = {"background":colour["alt-backgrounds"][0]}
-    if len(colour["alt-backgrounds"])>1:
-      css['td:nth-child(even),div:nth-child(even)'] = {"background":colour["alt-backgrounds"][1]}
-    for k in css.keys():
-      if css[k].get("background","")==colour["background"] and not k in ["html","body"]: css[k]["background"]="inherit"
-  
   # Text for the beginning of the CSS file:
   
-  outfile.write("@import url(chrome://flashblock/content/flashblock.css);\n") # Needs to be on first line for Firefox + flashblock plugin (ignored if not present)
+  # outfile.write("@import url(chrome://flashblock/content/flashblock.css);\n")
+  # That needs to be on first line for old Firefox + flashblock plugin (ignored if not present).
+  # However, old IE (including IE6 on Windows Mobile 5/6) rejects the entire stylesheet if it sees it.
+  # I think most users who want to block Flash either do different things or can install the line themselves
+  # so perhaps now keeping it causes more trouble than it's worth.  Commenting out.
 
   outfile.write("/* %s generated by %s */\n" % (filename,prog))
   # (useful to have the original filename for when it's renamed userContent.css etc)
@@ -536,106 +786,35 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */\n""")
 
   ret = printCss(css,outfile,debugStopAfter)
-  # Begin site-specific hacks - at end of CSS
-  # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_)
-  outfile.write(".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert { color: "+colour["italic"]+" !important;}\n")
-  outfile.write(".wDiffHtmlDelete { text-decoration: line-through !important; }\n")
-  # Hack for jqMath:
-  if pixelSize: outfile.write("td.fm-num-frac,td.fm-den-frac { text-align: center !important; }\n")
-  # Partial hack for MathJax:  (I wish webmasters would use
-  # jqMath, which is easier on user CSS, instead)
-  if pixelSize: outfile.write("""div.MathJax_Display span.mfrac,span.MathJax span.mfrac { display: inline-table !important; vertical-align: middle !important; padding: 0.5ex !important; }
-div.MathJax_Display span.mfrac > span > span,span.MathJax span.mfrac > span > span { display: table-row-group !important; text-align: center !important; }
-div.MathJax_Display span.mfrac > span > span:first-child,span.MathJax span.mfrac > span > span:first-child { display: table-cell !important; border-bottom: thin solid !important; }
-div.MathJax_Display span.mfrac > span > span + span + span,span.MathJax span.mfrac > span > span + span + span { display: none !important; }
-div.MathJax_Display span.msqrt > span > span + span,span.MathJax span.msqrt > span > span + span { display: none !important; }
-div.MathJax_Display span.msqrt:before,span.MathJax span.msqrt:before { content: "\\221A("; }
-div.MathJax_Display span.msqrt:after,span.MathJax span.msqrt:after { content: ")"; }
-div.MathJax_Display span.mtable,span.MathJax span.mtable { display: inline-table !important; }
-div.MathJax_Display span.mtable span.mtd,span.MathJax span.mtable span.mtd { display: table-row-group !important; text-align: center !important; }
-""")
-  # Hack for WP/MediaWiki unedited links:
-  outfile.write("a.new, a.new i,a.new b { color: "+colour["coloured"]+" !important; }\n") # (TODO use a different colour?)
-  # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
-  outfile.write("body.mediawiki > div.navpopup,body.mediawiki .referencetooltip, ul.ui-autocomplete{position:absolute!important;border:blue solid !important;}")
-  # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
-  if pixelSize: outfile.write("ul#MUmyAccountOptions { display: block !important; }")
-  # Hack for some authoring tools that use <FONT COLOR=..> to indicate special emphasis
-  outfile.write("font[color] { color: "+colour["coloured"]+" !important;}\n")
-  # and others that use span class="Apple-style-span"
-  outfile.write("span.Apple-style-span { color: "+colour["coloured"]+" !important;}\n")
-  # Hack for pinyinannotator
-  if pixelSize: outfile.write("""
-div.interlinear tt { display: inline-table !important; line-height: 1.02 !important; text-align: center !important; padding: 0.3em !important; }
-div.interlinear tt i { display: table-row-group !important; text-align: center !important; }
-div.interlinear tt i.line1 { display: table-header-group !important; text-align: center !important; color: """+colour["headings"]+""" !important; }
-div#container div#result tt { display: inline-table !important; line-height: 1.02 !important; text-align: center !important; padding: 0.3em !important; }
-div#container div#result tt > i { display: table-header-group !important; text-align: center !important; }
-div#container div#result tt > b, div#container div#result tt > acronym { display: table-row-group !important; text-align: center !important; }
-""")
-  # hack for messages on some sites
-  outfile.write("tr.new td { border: thick solid "+colour["coloured"]+" !important;}\n")
-  # hack for (some versions of) phpBB
-  outfile.write("ul.profile-icons li span {display:inline !important;}")
-  # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
-  if pixelSize: outfile.write("body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map { display: none !important; }")
-  
-  # hack for MHonarc and similar setups that put full-sized images into clickable links
-  # (see comments on max-width above; doesn't seem to be a problem in this instance)
-  # if pixelSize: outfile.write("a:link img,a:visited img { max-width:100% !important;max-height:100% !important;}")
-  # -> DON'T do this - if one dimension is greater than 100% viewport but other is less, result can be bad aspect ratio
-  
-  # hack for sites that use jump.js with nav boxes
-  jjc = "body > input#rsconf + div#wrapper > div#header + div#container > div#spacer + "
-  # wrapper might or might not be .dropShadow50
-  jjSN = jjc + "div#secondaryNav,"+jjc+"div#message + div#secondaryNav"
-  jumpjsContent = jjc+"div#content," +jjc + "div#secondaryNav + div#content,"+jjc+"div#message + div#secondaryNav + div#content,"+jjc+"div#message"
-  jumpjsTooltip = "div.tooltip.dropShadow20"
-  outfile.write(jumpjsTooltip+","+jjc+"div#message {border:thin solid "+colour["italic"]+"!important;}")
-  if pixelSize: outfile.write(jumpjsTooltip+""" {position:absolute !important;z-index:9!important;}
-"""+jumpjsTooltip+""" p,"""+jumpjsTooltip+""" div.par { margin: 0px !important; padding: 0px !important; }
-div.document > div.par > p.sl,div.document > div.par > p.sz { margin: 0px !important; padding: 0px !important; }
-body > input#rsconf + div#wrapper > div#header { height:40%!important/*no more or scroll-JS is too far wrong*/;position:fixed !important;top:0px!important;right/*not left or overflow problems, + right helps w. tooltips*/:0px!important;width:30%!important/*not fixed+100% or PgDn will go wrong*/;overflow:auto!important;border:blue solid!important;z-index:1!important;}
-"""+jumpjsContent+"""{margin-right:30%!important;z-index:0!important;}
-""" + jjSN + """{ position:fixed !important;/*or double-scroll JS fails*/bottom:0px;right/*not left,see below*/:0px;width:30%!important;height:60%!important;border:blue solid!important;overflow:auto!important;z-index:2!important;}""")
-  # and not just if pixelSize (because these icons aren't necessarily visible with our colour changes) -
-  outfile.write(""":not(:empty) li#menuNavigation.iconOnly > a > span.icon:after { content: "Navigation"; text-transform: none; }
-:not(:empty) li#menuSearchHitNext.iconOnly > a > span.icon:after { content: "Next hit"; text-transform: none !important; }
-:not(:empty) li#menuToolsPreferences.iconOnly > a > span.icon:after { content: "Preferences"; text-transform: none; }
-:not(:empty) div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after { content: "<- Prev"; text-transform: none; }
-:not(:empty) div.resultNavControls > ul > li.resultNavRight > a > span:after, div.jcarousel-container + div#slidePrevButton:empty + div#slideNextButton:empty:after { content: "Next ->"; text-transform: none; }
-:not(:empty) div.resultNavControls > ul > li.resultNavDoubleLeft > a > span:after { content: "<<- Backwd"; text-transform: none; }
-:not(:empty) div.resultNavControls > ul > li.resultNavDoubleRight > a > span:after { content: "Fwd ->>"; text-transform: none; }
-""")
-  outfile.write(jumpjsContent.replace(","," span.hl,")+""" span.hl{background: """+colour['highlight']+""" !important;}
-div.result > div.document span.mk,div.result > div.document span.mk b, div.par p.sb span.mk, div.par p.ss span.mk b { background: """+colour["reset_button"]+""" !important; }
-""")
-  # if pixelSize: outfile.write(":not(:empty) input#rsconf + div#wrapper > div#header > div#menuFrame > ul.menu > li:before { content: attr(id); text-transform: none; display: inline !important; }\n")
-  outfile.write(".menu li a span.label { display:inline !important; text-transform: none !important;}\n") # not just 'if pixelSize', we need this anyway due to background overrides
-  # some site JS adds modal boxes to the end of the document, try:
-  outfile.write("body.yesJS > div.fancybox-wrap[style] { position: absolute !important; border: blue solid !important; } body.yesJS > div.fancybox-wrap[style] div.fancybox-close:after { content: \"Close\"; }\n")
-  # hack for sites that embed YouTube videos (NASA etc) when using the YouTube5 Safari extension on a Mac (TODO: Safari 6 needs sorting out)
-  outfile.write("div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls { background-color:transparent!important;background:transparent!important;}\n")
-  # End site-specific hacks
-  outfile.write("input[type=text],input[type=password],input[type=search] { border: 1px solid grey !important; }") # TODO what if background is close to grey?
-  # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
-  if pixelSize: outfile.write("html:not(:empty) { overflow: visible !important; }\n")
-  # speed up scrolling on Midori (from their FAQ) -
-  outfile.write("* {-webkit-box-shadow: none !important;}\n")
-  # help Opera 12 and other browsers that don't show keyboard focus -
-  outfile.write(":focus { outline: "+colour.get("focusOutlineStyle","thin dotted")+"; }\n")
 
-  if pixelSize: printFontSize="font-size: 12pt !important;" # TODO: option?
-  else: printFontSize=""
-  outfile.write("""
-@media print { * { color: black !important; background-color: white !important; background: white !important; %s } }
-  """ % printFontSize)
-  # old IE (including IE6 on Windows Mobile 5/6) completely ignores the entire contents of @media, so we need to make screen the default case and put this here to override.
-  # I *hope* that if any old browsers don't understand @media but still read the inside, they also won't understand the * selector.
-  # However, making screen the default case and overriding here means original sizes and layouts are NOT preserved for printing
-  # (which might or might not be wanted).
-  # Note: if introducing any other @media lines, need to change the mention of "@media line" in index.html (Midori instructions).
-  # (This comment is in Python rather than in CSS o/p so Midori users don't have to remove it; TODO: test if the string '@media' really hurts the affected versions of Midori even if it's in a comment)
+  outfile.write("""@media print {
+/*
+  Old IE (including IE6 on Windows Mobile 5/6) completely ignores the entire contents of @media, so we need to make screen the default
+  and use @media to override for print.
+  Making screen the default case and overriding here means original sizes and layouts are NOT preserved for printing
+  (which might or might not be wanted).
+  W3C's CSS Level 1 specs Section 7.1 showed how to ignore these 'at-rules', so CSS1-only browsers SHOULD be ok.
+  PocketIE7 on Windows Mobile 6.1 reads inside the @media for 'color' but not 'background', possibly leading to black on black, so we need a second non-"print" @media block to override it back.
+*/
+""")
+  # (PocketIE7 also has a habit of displaying the page with a white background while rendering, and applying the CSS's colours only afterwards, even if the CSS is in cache.  PocketIE6 did not do this.  See cssHtmlAttrs option in Web Adjuster for a possible workaround.)
+  printCss(printOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
+  # and the above-mentioned second override for IE7 :
+  outfile.write("} @media tv,handheld,screen,projection {\n")
+  for k in printOverride.keys():
+    if 'color' in printOverride[k]:
+      printOverride[k]={"color":css.get(k,{}).get("color",colour["text"])}
+    else: del printOverride[k]
+  printCss(printOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
+  webkitScreenOverride.update(webkitGeckoScreenOverride)
+  if webkitScreenOverride:
+    outfile.write("} @media screen and (-webkit-min-device-pixel-ratio:0) {\n") # TODO: tv,handheld,projection?
+    printCss(webkitScreenOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
+  geckoScreenOverride.update(webkitGeckoScreenOverride)
+  if geckoScreenOverride:
+    outfile.write("} @media screen and (-moz-images-in-menus:0) {\n") # TODO: tv,handheld,projection?
+    printCss(geckoScreenOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
+  outfile.write("} /* end of @media */\n")
 
   return ret
 
@@ -651,7 +830,10 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
   else: return debug_binary_chop(items,chop_results[1:],problem_start,problem_mid)
 
 from textwrap import fill
-def printCss(css,outfile,debugStopAfter=0):
+def printCss(css,outfile,debugStopAfter=0,eolComment=""):
+  # hack for MathJax (see comments above)
+  for k in css.keys()[:]:
+    if "div.MathJax_Display" in k: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
   # For each attrib:val find which elems share it & group them
   rDic={} # maps (attrib,val) to a list of elements that have it
   for elem,attribValDict in css.items():
@@ -661,6 +843,7 @@ def printCss(css,outfile,debugStopAfter=0):
     for i in attribValDict.items():
       if not rDic.has_key(i): rDic[i]=[]
       rDic[i].append(elem.strip())
+  del css # won't use that any more this function
   attrib_val_elemList = rDic.items()
   # Browser debugging by binary chop:
   attrib_val_elemList.sort() # (makes it easier to think about)
@@ -695,25 +878,26 @@ def printCss(css,outfile,debugStopAfter=0):
     if debugStopAfter:
       # for pedantic debugging, write each rule separately
       for e in elemList:
-        outfile.write(e+" {\n")
+        outfile.write(e+" {"+eolComment+"\n")
         l=style.items() ; l.sort()
         for k,v in l:
-          outfile.write("   %s: %s !important;\n" % (k,v))
+          outfile.write("   %s: %s !important;%s\n" % (k,v,eolComment))
           debugStopAfter -= 1
           if not debugStopAfter: break
-        outfile.write("}\n")
+        outfile.write("}"+eolComment+"\n")
         if not debugStopAfter: return 0
       continue
     # else, if not debugStopAfter:
-    outfile.write(fill(", ".join(elemList).replace("-","#@#"),break_long_words=False).replace("#@#","-")) # (don't let 'fill' break on the hyphens)
-    outfile.write(" {\n")
+    outfile.write(fill(", ".join(x.replace(" ","%@%") for x in elemList).replace("-","#@#"),break_long_words=False).replace("#@#","-").replace("%@%"," ").replace("\n",eolComment+"\n")) # (don't let 'fill' break on the hyphens, or on spaces WITHIN each item which might be inside quoted attributes etc, just on spaces BETWEEN items)
+    outfile.write(" {"+eolComment+"\n")
     l=style.items() ; l.sort()
-    for k,v in l: outfile.write("   %s: %s !important;\n" % (k,v))
-    outfile.write("}\n")
+    for k,v in l: outfile.write("   %s: %s !important;%s\n" % (k,v,eolComment))
+    outfile.write("}"+eolComment+"\n")
   return debugStopAfter
 
 def main():
-  print "<DIV id=pregen_download><H3>Download pre-generated low-vision stylesheets</H3><NOSCRIPT>(If you switch on Javascript, there will be an interactive chooser here.&nbsp; Otherwise you can still choose manually from the links below.)</NOSCRIPT><SCRIPT LANGUAGE=Javascript><!-- \ndocument.write('Although Javascript is on, for some reason the interactive chooser failed to run on your particular browser. Falling back to the list below.'); //--></SCRIPT><BR><UL>"
+  print "<div id=pregen_download><h3>Download pre-generated low-vision stylesheets</h3><noscript>(If you switch on Javascript, there will be an interactive chooser here.&nbsp; Otherwise you can still choose manually from the links below.)</noscript><script><!-- \ndocument.write('Although Javascript is on, for some reason the interactive chooser failed to run on your particular browser. Falling back to the list below.'); //--></script><br><ul>"
+  # (HTML5 defaults script type to text/javascript, as do all pre-HTML5 browsers including NN2's 'script language="javascript"' thing, so we might as well save a few bytes)
   for pixelSize in pixel_sizes_to_generate:
     saidPixels = False
     for i in range(len(colour_schemes_to_generate)):
@@ -730,7 +914,7 @@ def main():
       else: print toPrn+","
       do_one_stylesheet(pixelSize,colour,filename)
   print "</UL></DIV>"
-  print """<SCRIPT language=Javascript><!--
+  print """<SCRIPT><!--
 if(document.all||document.getElementById) {
 var newDiv=document.createElement('DIV');
 var e=document.createElement('H3'); e.appendChild(document.createTextNode('Download or Try Low Vision Stylesheets')); newDiv.appendChild(e);
@@ -781,7 +965,19 @@ if(document.location.href.indexOf("?whatLookLike")>-1) {"""+tryStylesheetJS('css
 do_binary_chop = False
 binary_chop_results = ""
 import sys
-if "desperate-debug" in sys.argv:
+if "adjuster-config" in sys.argv:
+  # print out configuration options for Web Adjuster
+  # e.g. large-print-websites.appspot.com
+  ps = [] ; cs = [] ; ha = []
+  for p in pixel_sizes_to_generate:
+    if p==0: ps.append("0=unchanged size")
+    else: ps.append(str(p)+"="+str(p)+" pixels")
+  for d,f,rest in colour_schemes_to_generate:
+    cs.append(f+'='+d)
+    ha.append('text="%s" bgcolor="%s" link="%s" vlink="%s" alink="%s"' % (rest['text'],rest['background'],rest['link'],rest['visited'],'red'))
+  print "adjuster.options.headAppendCSS="+repr('http://people.ds.cam.ac.uk/ssb22/css/%s%s.css;'+','.join(ps)+';'+','.join(cs))
+  print "adjuster.options.cssHtmlAttrs="+repr(';'.join(ha))
+elif "desperate-debug" in sys.argv:
   scheme,suffix,colour = colour_schemes_to_generate[0]
   debugStopAfter=1
   while not do_one_stylesheet(pixel_sizes_to_generate[0],colour,"debug%04d.css" % debugStopAfter,debugStopAfter):
