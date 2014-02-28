@@ -311,7 +311,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["blockquote[type=cite]"]={"*margin":"1em 0px","*padding":"1em 0px 0px 0px"}
   css["dd"]["*margin"]="0em 2em"
   
-  for t in ["th","td"]: css[t]["*padding"]="%.1fpx" % (pixelSize/18.0,)
+  for t in ["th","td"]:
+    css[t]["*padding"]="%.1fpx" % (pixelSize/18.0,)
+    css[t+'[align^="right"]'] = {"*text-align":"right"}
   
   # Don't say white-space normal on user input elements or pre
   # Galeon 1.25: we also have to exclude "body" and "div" for some reason
