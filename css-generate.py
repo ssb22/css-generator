@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9818"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9819"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -228,7 +228,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*opacity":"1",
     "*-moz-opacity":"1",
     
-    "*-moz-appearance":"none",
+    "-moz-appearance":"none", # DON'T * this, it can lead to white-on-white situations so we need it for colour changes not just size changes
     "*-moz-transform":"none",
     "*-webkit-transform":"none",
 
