@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9819"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.982"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -509,6 +509,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Exception to above for Mozilla scrollbars:
   css[":root:not(HTML) slider:not(:empty)"]={"background":"#301090"}
 
+  checkbox_scale = int(pixelSize/16)
+  if checkbox_scale > 1:
+    v = "scale(%d,%d)" % (checkbox_scale,checkbox_scale)
+    css["input[type=checkbox]"]={"-ms-transform":v,"-moz-transform":v,"-webkit-transform":v,"-o-transform":"scale(%d)" % checkbox_scale,"padding":"%dpx"%(checkbox_scale*5)}
+
   if pixelSize:
     # In many versions of firefox, a <P ALIGN=center> with an <IFRAME> inside it will result in the iframe being positioned over the top of the main text if the P's text-align is overridden to "left".  But missing out text-align could allow websites to do full justification.  However it seems OK if we override iframe's display to "block" (this may make some layouts slightly less brief, but iframes usually need a line of their own anyway)
     css["iframe"]["*display"]="block"
@@ -613,6 +618,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["ul.profile-icons li span"]={"*display":"inline"}
   # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
   css["body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map, div.googlemaps > div.mapsbord"]={"*display":"none"}
+  
+  # hack for CAMCors
+  if pixelSize:
+    css['form[action^="/camcors/supervisor/reports"] div.reportBox > table,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr > td']={"display":"block"}
+    css['form[action^="/camcors/supervisor/reports"] textarea']={"height":"4em"}
   
   # hack for MHonarc and similar setups that put full-sized images into clickable links
   # (see comments on max-width above; doesn't seem to be a problem in this instance)
