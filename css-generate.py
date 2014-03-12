@@ -512,7 +512,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   checkbox_scale = int(pixelSize/16)
   if checkbox_scale > 1:
     v = "scale(%d,%d)" % (checkbox_scale,checkbox_scale)
-    css["input[type=checkbox]"]={"-ms-transform":v,"-moz-transform":v,"-webkit-transform":v,"-o-transform":"scale(%d)" % checkbox_scale,"padding":"%dpx"%(checkbox_scale*5)}
+    css["input[type=checkbox]"]={"-ms-transform":v,"-moz-transform":v,"-webkit-transform":v,"-o-transform":"scale(%d)" % checkbox_scale,"margin":"%dpx"%(checkbox_scale*6)}
 
   if pixelSize:
     # In many versions of firefox, a <P ALIGN=center> with an <IFRAME> inside it will result in the iframe being positioned over the top of the main text if the P's text-align is overridden to "left".  But missing out text-align could allow websites to do full justification.  However it seems OK if we override iframe's display to "block" (this may make some layouts slightly less brief, but iframes usually need a line of their own anyway)
