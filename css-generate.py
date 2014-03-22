@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.982"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.983"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -54,8 +54,8 @@ colour_schemes_to_generate = [
     "selectbox":"#600060",
     "reset_button":"#400060",
     "form_disabled":"#404040", # GrayText requires CSS 2.1
-    "selection":"#0080c0", # (for CSS3, ignored by 1 and 2)
-    "highlight":"#003050",
+    "selection":"#006080", # (if supported by the browser)
+    "highlight":"#003050", # (misc non-selection highlights in site-specific hacks)
     "image_transparency_compromise":"#808000" # non-black and non-white background for transparent images, so at least stand a chance of seeing transparent imgs that were meant for white bkg (or black bkg)
     }),
   
@@ -555,6 +555,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Hack for Google search results:
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
+  css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
+  for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]}
   
   # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi, .diff-*)
   k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem"
@@ -879,9 +881,11 @@ def printCss(css,outfile,debugStopAfter=0,eolComment=""):
   outDic = {}
   for (k,v),elemList in attrib_val_elemList:
     # With IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list.  So we need to separate it out.
-    elemList_ie = filter(lambda x:not '*' in x and not '>' in x and not ':not' in x and not '[' in x, elemList)
-    elemList_rest = filter(lambda x:x not in elemList_ie, elemList)
-    for eList in [elemList_ie, elemList_rest]:
+    # Also we need to COMPLETELY separate the ::selection markup at all times.
+    elemList_sep = [x for x in elemList if '::' in x]
+    elemList_ie = [x for x in elemList if not x in elemList_sep and not '*' in x and not '>' in x and not ':not' in x and not '[' in x]
+    elemList_rest = [x for x in elemList if x not in elemList_ie and x not in elemList_sep]
+    for eList in [[x] for x in elemList_sep]+[elemList_ie, elemList_rest]:
       if not eList: continue
       eList.sort()
       elems=tuple(eList)
