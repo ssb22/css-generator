@@ -556,7 +556,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hack for Google search results:
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
-  for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]}
+  for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
   
   # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi, .diff-*)
   k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem"
