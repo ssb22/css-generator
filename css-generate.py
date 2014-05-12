@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9831"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9832"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -244,7 +244,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # combinations.  NB however we don't list ALL elements in
   # mostElements (see code later).
   mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas,video".split(",")
-  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins".split(",") # (and ruby/rt/rp/rb)
+  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg".split(",") # (and ruby/rt/rp/rb)
   mostElements += html5Elements
 
   # Selector prefixes to exclude certain browsers from trying to implement a rule:
@@ -620,7 +620,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # hack for (some versions of) phpBB
   css["ul.profile-icons li span"]={"*display":"inline"}
   # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
-  css["body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map, div.googlemaps > div.mapsbord"]={"*display":"none"}
+  css["body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map, div.googlemaps > div.mapsbord, div#divMapContainer.MapSingle > div#divMapTools.MapTools, div#divMapContainer.MapSingle > div#divMapTools.MapTools + div#divMap"]={"*display":"none"}
+  css["div.rsltDetails > div.jsDivMoreInfo.hideObj"]={"*display":"block"} # not 'reveal address only when mouse-over' (which might be OK in conjunction with a map but...)
   
   # hack for CAMCors
   if pixelSize:
@@ -727,6 +728,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
   css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
   css["nav p#showHideMenu > a#goToMenu > span.icon:empty:after"]={"content":'"goToMenu"'}
+  css["a[onclick] > span.iconPrint:empty:after"]={"content":'"Print"'}
+  css["a > span.iconHelp:empty:after"]={"content":'"Help"'}
   # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
   if pixelSize:
     css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"}
