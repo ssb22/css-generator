@@ -684,7 +684,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # hack for MusOpen:
   css["a.download-icon span.icon-down:empty:after"]={"content":'"Download"',"color":colour["link"]}
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
-  if pixelSize: css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"display":"none"}
+  css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"*display":"none"}
   # Hack for some other sites that put nothing inside software download links:
   def emptyLink(lType,content,css,printOverride):
     # Fill in the text of an empty link according to
@@ -730,6 +730,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["nav p#showHideMenu > a#goToMenu > span.icon:empty:after"]={"content":'"goToMenu"'}
   css["a[onclick] > span.iconPrint:empty:after"]={"content":'"Print"'}
   css["a > span.iconHelp:empty:after"]={"content":'"Help"'}
+  # Hacks for LinkedIn:
+  css['div#post-module > div.post-module-in > form#slideshare-upload-form, div#post-module > div.post-module-in > div#slideshare-upload-callout']={'*display':'none'} # can't get it to work, and a non-working form is just clutter
+  css['iframe[src^="https://www.linkedin.com/csp/ads"],iframe[src^="https://ad-emea.doubleclick.net"]']={'*display':'none'} # sorry LinkedIn but they're getting really too cluttered for giant-print navigation
+  emptyLink("input.post-link + a.post-link-close","Cancel posting link",css,printOverride) ; emptyLink("a.cancel-file-upload","Cancel file upload",css,printOverride) # I think (not sure how this is supposed to work)
   # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
   if pixelSize:
     css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"}
