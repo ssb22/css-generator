@@ -171,8 +171,6 @@ separate_adjacent_links_at_other_sizes = True
 # if some sites are going to use stock scripts that switch them on and
 # off every few seconds inadvertently making the rest of the page dance around
 
-# TODO why do some sites still have iframes that obscure the text
-
 def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   outfile = open(filename,"w")
   smallestHeadingSize = pixelSize*5.0/6.0
@@ -279,7 +277,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["textarea"]["*width"]="100%" # not "auto", as that can cause Firefox to sometimes indent the textarea's contents off-screen
 
   css["frame"]={}
-  for e in ["frame","iframe"]: css[e]["*overflow"]="auto" # to override 'scrolling=no' which can go wrong in large print (but this override doesn't always work in Safari)
+  for e in ["frame","iframe"]: css[e]["*overflow"]="auto" # to override 'scrolling=no' which can go wrong in large print (but this override doesn't always work)
 
   css["sup"]["*vertical-align"] = "super /* in case authors try to do it with font size instead */"
   css["sub"]["*vertical-align"] = "sub"
@@ -519,8 +517,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["iframe"]["*display"]="block"
     # and if we're doing that, we might as well use the full width:
     css["iframe"]["*width"]="100%"
-    # The following may help a little as well: make iframes 50% transparent so at least we can see what's under them if they do overprint
-    # (the overprinting does still happen on some sites; apparently the IFRAME's height is treated as close to 0 when it's not)
+    # The following may help a little as well: make iframes 50% transparent so at least we can see what's under them if they do overprint (depends on the browser and the site; apparently the IFRAME's height can be treated as close to 0 when it's not) (fixed? keeping this anyway just in case)
     css["iframe"].update({"*filter":"alpha(opacity=50)","*opacity":"0.5","*-moz-opacity":"0.5"})
 
   # float exceptions for img align=left and align=right (might as well)
@@ -741,7 +738,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['iframe[title^="Facebook Cross Domain"]']={'display':'none'}
     css['iframe[height="90"][scrolling="no"]']={'display':'none'}
     # + for many sites with large transparent.png images:
-    css['img[src*="/transparent.png"]']={'*display':'none'}
+    css['img[src*="/transparent.png"]']={'display':'none'}
+    # + for sites that embed their news in Twitter format:
+    css["body > div.twitter-timeline"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
