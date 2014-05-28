@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9832"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9833"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -42,7 +42,7 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9832
 # changes, and the layout changes that are meant for large
 # sizes.  This is for people who need only colour changes.
 
-pixel_sizes_to_generate = [0,18,20,25,30,35,40,45,50,60,75,100]
+pixel_sizes_to_generate = [20,25,30,35,40,45,50,60,75,100,18,0] # (1st one listed has special status in debugging - see 'binary chop' below)
 colour_schemes_to_generate = [
   ("yellow on black","",
    {"text":"yellow","background":"black",
@@ -270,7 +270,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # (if broken, consider re-instating the delete and move body:auto to the
   # non-IE7 override hack at end)
   # del css["body"]["*overflow"] # Do not set both "body" and "html" in IE7 - it disables keyboard-only scrolling!
-  
+
   for e in ["object","embed","img"]:
     del css[e]["*width"], css[e]["*height"] # object/embed should not be forced to 'auto' as that can sometimes break Flash applications (when the Flash application is actually useful), and if img is 'auto' then that can break on some versions of IE
 
@@ -741,6 +741,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['img[src*="/transparent.png"]']={'display':'none'}
     # + for sites that embed their news in Twitter format:
     css["body > div.twitter-timeline"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
+  
+  # sites created at wix.com must have this or their JS will crash on load and not display any content:
+  css['div#ReflowTestContainer[style^="width: 1px"]']={"*width":"1px","*height":"1px","*overflow":"hidden"}
+  css['div#ReflowTestContainer[style^="width: 1px"] > div#ReflowTestNode']={"*width":"200px"}
+  css['div#ReflowTestContainer[style^="width: 1px"] > div#ReflowTestNode > div.ReflowTextInnerNode']={"*width":"10%"}
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
