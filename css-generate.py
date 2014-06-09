@@ -740,7 +740,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # + for many sites with large transparent.png images:
     css['img[src*="/transparent.png"]']={'display':'none'}
     # + for sites that embed their news in Twitter format:
-    css["body > div.twitter-timeline"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
+    css["body > div.twitter-timeline,body > div.twitter-tweet"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
   
   # sites created at wix.com must have this or their JS will crash on load and not display any content:
   css['div#ReflowTestContainer[style^="width: 1px"]']={"*width":"1px","*height":"1px","*overflow":"hidden"}
