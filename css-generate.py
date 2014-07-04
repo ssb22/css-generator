@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9833"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9834"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -728,6 +728,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["nav p#showHideMenu > a#goToMenu > span.icon:empty:after"]={"content":'"goToMenu"'}
   css["a[onclick] > span.iconPrint:empty:after"]={"content":'"Print"'}
   css["a > span.iconHelp:empty:after"]={"content":'"Help"'}
+  # Hacks for RoundCube-based webmail sites:
+  for t in ["Reset search","Search modifiers","Show preview pane"]: emptyLink('a[title="'+t+'"]',t,css,printOverride)
+  css[exclude_ie_below_9+"li.unread > a > span.unreadcount:before"]={"content":'" ("',"color":colour["coloured"]}
+  css[exclude_ie_below_9+"li.unread > a > span.unreadcount:after"]={"content":'")"',"color":colour["coloured"]}
+  css[exclude_ie_below_9+"li.unread > a > span.unreadcount"]={"color":colour["coloured"]}
+  css["div#mailboxcontainer > div#folderlist-content ul#mailboxlist > li.mailbox"]={"*display":"inline","*border":"none"} # in case you have a lot of folders (seeing as they're displayed on every screen)
+  css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe"]={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+  # Hacks for eBay:
+  css['td#storeHeader']={"*width":"30%"}
+  css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
   # Hacks for LinkedIn:
   css['div#post-module > div.post-module-in > form#slideshare-upload-form, div#post-module > div.post-module-in > div#slideshare-upload-callout']={'*display':'none'} # can't get it to work, and a non-working form is just clutter
   css['iframe[src^="https://www.linkedin.com/csp/ads"],iframe[src^="https://ad-emea.doubleclick.net"]']={'*display':'none'} # sorry LinkedIn but they're getting really too cluttered for giant-print navigation
