@@ -734,7 +734,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:after"]={"content":'")"',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount"]={"color":colour["coloured"]}
   css["div#mailboxcontainer > div#folderlist-content ul#mailboxlist > li.mailbox"]={"*display":"inline","*border":"none"} # in case you have a lot of folders (seeing as they're displayed on every screen)
-  css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe"]={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+  css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe"]={
+      "*height":"15em","*overflow":"visible", # hopefully one of those will work
+      "*filter":"none","*opacity":"1","*-moz-opacity":"1"}
   # Hacks for eBay:
   css['td#storeHeader']={"*width":"30%"}
   css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
