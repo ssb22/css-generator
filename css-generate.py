@@ -768,9 +768,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["*"]={"-webkit-box-shadow":"none"}
   # help Opera 12 and other browsers that don't show keyboard focus -
   css[":focus"]={"outline":colour.get("focusOutlineStyle","thin dotted")}
-  # Workaround for missing strokes in Chinese characters at size 20px in Safari 7 on OS X 10.9 with lang="zh" when -webkit-font-smoothing is 'none'.  Does not apply to lang="ja"; TODO: what if user has set Chinese style by default? we'd rather not do this for large-print English text, so we can't set it for the case where the site has not supplied 'lang' attributes (or has set lang="en", possibly incorrectly); is there any way to work around this?
+  # Workaround for missing thin horizontal strokes in Chinese characters at size 20px in Safari 7 on OS X 10.9 with lang="zh" when -webkit-font-smoothing is 'none'.  Less likely to apply to lang="ja"; TODO: what if user has set Chinese style by default? we'd rather not do this for large-print English text, so we can't set it for the case where the site has not supplied 'lang' attributes (or has set lang="en", possibly incorrectly); is there any way to work around this?
   css[":lang(zh)"]={"*-webkit-font-smoothing":"antialiased"} # TODO: would subpixel-antialiased work?  (depends on device, resolution, orientation etc?)
-  css['div[data-lang^="zh"],div[data-lang^="zh"] *']=css[":lang(zh)"] # this might at least help on some sites (TODO: also set a specific Chinese-rather-than-Japanese font?)
+  css['div[data-lang^="zh"],div[data-lang^="zh"] *']=css[":lang(zh)"] # this might at least help on some sites (TODO: also set a specific Chinese-rather-than-Japanese font list?  although English font-family list might probably still need to depend on what sort of element it is)
   
   # Remove '*' as necessary (in css, not needed in printOverride):
   for el in css.keys()[:]:
