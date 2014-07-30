@@ -768,6 +768,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["*"]={"-webkit-box-shadow":"none"}
   # help Opera 12 and other browsers that don't show keyboard focus -
   css[":focus"]={"outline":colour.get("focusOutlineStyle","thin dotted")}
+  # Workaround for missing strokes in Chinese characters at size 20px in Safari 7 with lang="zh" (not lang="ja") when -webkit-font-smoothing is 'none':
+  css[":lang(zh)"]={"*-webkit-font-smoothing":"antialiased"} # TODO: would subpixel-antialiased work?  (depends on device, resolution, orientation etc?)
 
   # Remove '*' as necessary (in css, not needed in printOverride):
   for el in css.keys()[:]:
