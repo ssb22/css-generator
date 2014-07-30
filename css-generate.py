@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9834"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9835"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -323,7 +323,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Monospaced elements
   for t in "pre,code,tt,kbd,var".split(","): css[t]["*font-family"]="monospace"
   # and 'samp' let's have sans-serif
-  for t in "samp".split(","): css[t]["*font-family"]="helvetica, arial, verdana"
+  for t in "samp".split(","): css[t]["*font-family"]="helvetica, arial, verdana, sans-serif"
   
   css["spacer"]={"*display":"none"} # no point in keeping the spacers now we've changed the layout so much
   css["a"]["*display"] = "inline" # some sites override it to block, which might have worked OK in their CSS's context but it's not so good in ours
@@ -360,7 +360,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["color"]=colour["headings"]
     printOverride[el]={"color":"black"}
     css[el]["*font-weight"]="bold"
-    css[el]["*font-family"]="helvetica, arial, verdana"
+    css[el]["*font-family"]="helvetica, arial, verdana, sans-serif" # MUST have the generic "sans-serif" fallback, in case there's CJK around (e.g. for Safari 7, otherwise it'll ignore any 'lang' attribute in the HTML when choosing a CJK font; TODO: will it work to fallback to "inherit"?)
     size = (largestHeadingSize-h*(largestHeadingSize-smallestHeadingSize)/(6-1.0))
     indent += size
     css[el]["*font-size"]="%.1fpx" % size
@@ -398,7 +398,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Italic and bold:
   for i in "i,em,cite,address,dfn,u".split(","):
     css[i+" span"]={
-      "*font-family":"helvetica, arial, verdana",
+      "*font-family":"helvetica, arial, verdana, sans-serif",
       "color":colour["italic"]}
     printOverride[i+" span"]={"color":"black"}
     css[i].update(css[i+" span"])
