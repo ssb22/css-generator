@@ -171,6 +171,14 @@ separate_adjacent_links_at_other_sizes = True
 # if some sites are going to use stock scripts that switch them on and
 # off every few seconds inadvertently making the rest of the page dance around
 
+cjk_fonts = "Lantinghei SC, AppleGothic"
+# AppleGothic must be listed or Korean is broken on Mac OS 10.7
+# Lantinghei SC was introduced to OS X in 10.9, which is handy because the previously-good STSong font (which was the system default for Simplified Chinese) broke on 10.9: it renders badly with antialiasing turned off at 20px, e.g. missing the horizontal stroke on U+95E8.  So we set Lantinghei SC for 10.9 but fall back to STSong on 10.8/10.7/etc (I don't think we need to explicitly say STSong, and there are advantages in not doing so, e.g. the TODO below about :lang(ja) is not relevant for pre-10.9 systems)
+# TODO: for :lang(ko) and :lang(ja) we had better put AppleGothic and a Japanese font like YuGothic first (before Lantinghei) - see below re U+8D77, U+95E8 etc.  Pity can't read the system preferences for pages that don't set a CJK value of LANG.  This :lang exception needs to be done separately for every element that has a font-family, to avoid corrupting headings etc.
+# Other Mac CJK fonts to be aware of: MingLiU prefers full 'Traditional' forms of characters where Trad/Simp has same Unicode value (e.g. U+8D77 'qi3' has an extra vertical stroke making the 'ji' component look more like a 'si'); renders OK on Mac OS 10.9 at 20px without antialias, but might not always be present (the ttf is installed to /Library/Fonts/Microsoft by MS Office and is not present on machines without MS Office).  Arial Unicode MS (present on both 10.7 and 10.9) has some issues with baselines not lining up e.g. in the word 'zhen1li3' U+771F U+7406; it prefers Simplifed Chinese forms (e.g. U+8D77 uses 'ji', and U+95E8 is the Chinese rather than the Japanese simplification).  GB18030 Bitmap (NISC18030) might work at 16px, 32px etc, but scales badly to other sizes.  "Hei" has irregular stroke widths in 10.9 20px no-antialias, but otherwise OK
+serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", serif" # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
+sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
+
 def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   outfile = open(filename,"w")
   smallestHeadingSize = pixelSize*5.0/6.0
@@ -180,9 +188,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # be omitted from the "pixelSize 0" option (i.e. leave
   # site's size/layout alone and just changing colours)
   defaultStyle={
-    "*font-family":"Times New Roman, times, utopia, /* charter, */ AppleGothic, serif",
-    # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
-    # AppleGothic must be listed or Korean is broken on Mac OS (at least 10.7); doesn't seem to affect other scripts, and doesn't seem to be a problem to not mention it in headings etc.  (Safari 5.x works with AppleGothic listed last; in 6.0 it must be listed before serif)
+    "*font-family":serif_fonts,
     "*font-size":"%.1fpx" % pixelSize,
     "color":colour["text"],
     "background":colour["background"], # background-color is handled by aliases
@@ -323,7 +329,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Monospaced elements
   for t in "pre,code,tt,kbd,var".split(","): css[t]["*font-family"]="monospace"
   # and 'samp' let's have sans-serif
-  for t in "samp".split(","): css[t]["*font-family"]="helvetica, arial, verdana, sans-serif"
+  for t in "samp".split(","): css[t]["*font-family"]=sans_serif_fonts
   
   css["spacer"]={"*display":"none"} # no point in keeping the spacers now we've changed the layout so much
   css["a"]["*display"] = "inline" # some sites override it to block, which might have worked OK in their CSS's context but it's not so good in ours
@@ -360,7 +366,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["color"]=colour["headings"]
     printOverride[el]={"color":"black"}
     css[el]["*font-weight"]="bold"
-    css[el]["*font-family"]="helvetica, arial, verdana, sans-serif" # MUST have the generic "sans-serif" fallback, in case there's CJK around (e.g. for Safari 7, otherwise it'll ignore any 'lang' attribute in the HTML when choosing a CJK font; TODO: will it work to fallback to "inherit"?)
+    css[el]["*font-family"]=sans_serif_fonts
     size = (largestHeadingSize-h*(largestHeadingSize-smallestHeadingSize)/(6-1.0))
     indent += size
     css[el]["*font-size"]="%.1fpx" % size
@@ -398,7 +404,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Italic and bold:
   for i in "i,em,cite,address,dfn,u".split(","):
     css[i+" span"]={
-      "*font-family":"helvetica, arial, verdana, sans-serif",
+      "*font-family":sans_serif_fonts,
       "color":colour["italic"]}
     printOverride[i+" span"]={"color":"black"}
     css[i].update(css[i+" span"])
@@ -857,12 +863,6 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
     outfile.write("} @media screen and (-moz-images-in-menus:0) {\n") # TODO: tv,handheld,projection?
     printCss(geckoScreenOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
   outfile.write("} /* end of @media */\n")
-  # Workaround for missing thin horizontal strokes in Chinese characters at size 20px in Safari 7 on OS X 10.9 with lang="zh" when -webkit-font-smoothing is 'none'.  Less likely to apply to lang="ja"; TODO: what if user has set Chinese style by default? we'd rather not do this for large-print English text, so we can't set it for the case where the site has not supplied 'lang' attributes (or has set lang="en", possibly incorrectly); is there any way to work around this?
-  # TODO: how do we say "only on OS X 10.9"?  The code below does "only in Safari >=7" and therefore excludes Safari 6 on 10.7 (which is better without this), but does Safari 7 work on 10.7/10.8 and if so would this code misfire?
-  k=":lang(zh)"
-  k += ',div[data-lang^="zh"],div[data-lang^="zh"] *' # this might at least help on some sites (TODO: also set a specific Chinese-rather-than-Japanese font list?  although English font-family list might probably still need to depend on what sort of element it is)
-  outfile.write(k+' { -webkit-font-smoothing: antialiased !important; }\n')
-  outfile.write('@media screen { @media (min-width: 0px) { '+k+' { -webkit-font-smoothing: antialiased !important; } } }\n') # should override it back, on Safari <= 6 (tried r"@media \\0 screen {" which is supposed to be for Safari >=7, but Safari 6 also reads this)
 
   return ret
 
