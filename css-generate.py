@@ -858,6 +858,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
     printCss(geckoScreenOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
   outfile.write("} /* end of @media */\n")
   # Workaround for missing thin horizontal strokes in Chinese characters at size 20px in Safari 7 on OS X 10.9 with lang="zh" when -webkit-font-smoothing is 'none'.  Less likely to apply to lang="ja"; TODO: what if user has set Chinese style by default? we'd rather not do this for large-print English text, so we can't set it for the case where the site has not supplied 'lang' attributes (or has set lang="en", possibly incorrectly); is there any way to work around this?
+  # TODO: how do we say "only on OS X 10.9"?  The code below does "only in Safari >=7" and therefore excludes Safari 6 on 10.7 (which is better without this), but does Safari 7 work on 10.7/10.8 and if so would this code misfire?
   k=":lang(zh)"
   k += ',div[data-lang^="zh"],div[data-lang^="zh"] *' # this might at least help on some sites (TODO: also set a specific Chinese-rather-than-Japanese font list?  although English font-family list might probably still need to depend on what sort of element it is)
   outfile.write(k+' { -webkit-font-smoothing: antialiased !important; }\n')
