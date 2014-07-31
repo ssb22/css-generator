@@ -54,8 +54,8 @@ colour_schemes_to_generate = [
     "selectbox":"#600060",
     "reset_button":"#400060",
     "form_disabled":"#404040", # GrayText requires CSS 2.1
-    "selection":"#006080", # (if supported by the browser)
-    "highlight":"#003050", # (misc non-selection highlights in site-specific hacks)
+    "selection":"#006080", # (if supported by the browser. BEWARE: Some browsers, e.g. Safari 6, will NOT display this exact colour, but a computed medium mid-way between it and the unselected background; you should therefore ensure that other backgrounds (e.g. highlight) are discernable against those 'computed medium' colours as well)
+    "highlight":"#300030", # (misc non-selection highlights in site-specific hacks)
     "image_transparency_compromise":"#808000" # non-black and non-white background for transparent images, so at least stand a chance of seeing transparent imgs that were meant for white bkg (or black bkg)
     }),
   
