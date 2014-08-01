@@ -210,7 +210,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-border-radius":"0.05em",
     "*-webkit-border-radius":"0.05em",
     "*-webkit-font-smoothing":"none", # font smoothing doesn't work so well on large-print low-resolution dark-background displays...
-    "*-moz-osx-font-smoothing":"auto","*font-smooth":"auto", # ('never' might be better but at least some versions of Firefox ignore it)
+    "*-moz-osx-font-smoothing":"never","*font-smooth":"never", # (some versions of Firefox don't support 'never' but should fall back to 'auto' which is often better than what the site specifies)
     "*-webkit-text-stroke":"0",
     "*position":"static",
     "*visibility":"visible /* because we're forcing position to static, we must also force visibility to visible otherwise will get large gaps.  Unfortunately some authors use visibility:hidden when they should be using display:none, and CSS does not provide a way of saying '[visibility=hidden] {display:none}' */",
