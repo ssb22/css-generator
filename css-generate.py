@@ -210,7 +210,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-border-radius":"0.05em",
     "*-webkit-border-radius":"0.05em",
     "*-webkit-font-smoothing":"none", # font smoothing doesn't work so well on large-print low-resolution dark-background displays...
-    "*-moz-osx-font-smoothing":"never","*font-smooth":"never", # (some versions of Firefox don't support 'never' but should fall back to 'auto' which is often better than what the site specifies; -moz-osx-font-smoothing (Firefox 25+) may override the font-smooth property and might not support 'never', but we must set it anyway to stop sites setting it to grayscale which is worse than auto in large print low resolution)
+    "*-moz-osx-font-smoothing":"auto","*font-smooth":"never", # -moz-osx-font-smoothing overrides font-smooth on Firefox 25+; "never" would be better, but at least Ffx 29 doesn't support it and falls back to the SITE's spec :-( (greyscale is worse than auto in large print low resolution)
     "*-webkit-text-stroke":"0",
     "*position":"static",
     "*visibility":"visible /* because we're forcing position to static, we must also force visibility to visible otherwise will get large gaps.  Unfortunately some authors use visibility:hidden when they should be using display:none, and CSS does not provide a way of saying '[visibility=hidden] {display:none}' */",
@@ -249,7 +249,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # combinations.  NB however we don't list ALL elements in
   # mostElements (see code later).
   mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas,video".split(",")
-  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg".split(",") # (and ruby/rt/rp/rb)
+  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg,output".split(",") # (and ruby/rt/rp/rb)
   mostElements += html5Elements
 
   # Selector prefixes to exclude certain browsers from trying to implement a rule:
