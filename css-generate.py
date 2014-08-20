@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9835"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9836"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -280,6 +280,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   for e in ["object","embed","img"]:
     del css[e]["*width"], css[e]["*height"] # object/embed should not be forced to 'auto' as that can sometimes break Flash applications (when the Flash application is actually useful), and if img is 'auto' then that can break on some versions of IE
+  css[exclude_ie_below_9+"img"]={"*width":"auto","*height":"auto"} # but we can at least add it back on other browsers (TODO: which versions of IE were affected?) - we DO need to specify this, to cope with sites that do silly things like set image height to something e+7 pixels and expect layering to compensate
 
   css["textarea"]["*width"]="100%" # not "auto", as that can cause Firefox to sometimes indent the textarea's contents off-screen
 
