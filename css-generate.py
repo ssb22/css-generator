@@ -747,6 +747,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hacks for eBay:
   css['td#storeHeader']={"*width":"30%"}
   css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+  # Hacks for LycaMobile online top-up (2014):
+  css['iframe[style="height: 1024px;"]']={"*height":"50em","*filter":"none","*opacity":"1","*-moz-opacity":"1"} # (some versions of Firefox can't turn off their misguided scrolling="no" markup AND can't access a context menu to open frame in new tab, so I hope height=50em will be enough; TODO: overflow-y within the iframe like the Twitter-embedded hack below?)
   # Hacks for LinkedIn:
   css['div#post-module > div.post-module-in > form#slideshare-upload-form, div#post-module > div.post-module-in > div#slideshare-upload-callout']={'*display':'none'} # can't get it to work, and a non-working form is just clutter
   css['iframe[src^="https://www.linkedin.com/csp/ads"],iframe[src^="https://ad-emea.doubleclick.net"]']={'*display':'none'} # sorry LinkedIn but they're getting really too cluttered for giant-print navigation
