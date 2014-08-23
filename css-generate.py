@@ -250,6 +250,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # mostElements (see code later).
   mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas,video".split(",")
   html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg,output".split(",") # (and ruby/rt/rp/rb)
+  html5Elements += ['text','text > tspan'] # used within svg, sometimes for nothing more than effect (unfortunately there doesn't seem to be a way of ensuring the containing svg is displayed large enough, but truncation is better than having the text go underneath other elements)
   mostElements += html5Elements
 
   # Selector prefixes to exclude certain browsers from trying to implement a rule:
