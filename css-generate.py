@@ -764,6 +764,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['img[src*="/transparent.png"]']={'display':'none'}
     # + for sites that embed their news in Twitter format:
     css["body > div.twitter-timeline,body > div.twitter-tweet"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
+    # + for BBC radio player:
+    css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
   
   # sites created at wix.com must have this or their JS will crash on load and not display any content:
   css['div#ReflowTestContainer[style^="width: 1px"]']={"*width":"1px","*height":"1px","*overflow":"hidden"}
