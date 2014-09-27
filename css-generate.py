@@ -772,6 +772,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#ReflowTestContainer[style^="width: 1px"]']={"*width":"1px","*height":"1px","*overflow":"hidden"}
   css['div#ReflowTestContainer[style^="width: 1px"] > div#ReflowTestNode']={"*width":"200px"}
   css['div#ReflowTestContainer[style^="width: 1px"] > div#ReflowTestNode > div.ReflowTextInnerNode']={"*width":"10%"}
+  # w3schools, since it's often coming up in search results -
+  for tht in ["Chrome","Internet Explorer","Firefox","Safari","Opera"]: css['th[title="'+tht+'"]:empty:after']={'*content':'"'+tht+'"'}
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
