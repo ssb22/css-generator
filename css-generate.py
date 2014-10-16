@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9837"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9838"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -241,6 +241,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-hyphens":"manual",
     "*-ms-hyphens":"manual",
     "hyphens":"manual",
+    "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     }
 
   # have to explicitly set for every type of element,
@@ -388,7 +389,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Links stuff:
   for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(","):
-    for type in [":link",":visited","[onclick]"]:
+    for type in [":link",":visited","[onclick]",
+                 ".button", # used by some JS applications
+                 ]:
       css["a"+type+" "+linkInside]={"color":colour["link"],"text-decoration":"underline","cursor":"pointer"}
       printOverride["a"+type+" "+linkInside]={"color":"#101010"} # (dark grey, TODO: option?)
       css["a"+type+":hover "+linkInside]={"background":colour["hover"]}
@@ -605,6 +608,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride["a:link.new, a:link.new i,a:link.new b"]={"color":"black" } # TODO: shade of grey?
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
   css["body.mediawiki > div.navpopup,body.mediawiki .referencetooltip, ul.ui-autocomplete"]={"*position":"absolute","border":"blue solid"}
+  css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
   # Hack for some authoring tools that use <FONT COLOR=..> to indicate special emphasis
@@ -737,8 +741,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["nav p#showHideMenu > a#goToMenu > span.icon:empty:after"]={"content":'"goToMenu"'}
   css["a[onclick] > span.iconPrint:empty:after"]={"content":'"Print"'}
   css["a > span.iconHelp:empty:after"]={"content":'"Help"'}
+  css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child:before"]={"content":'"Play/pause button: "'} ; css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child > button"]={"width":'2em'} # (CSS can't put a text label into that button itself, but we can at least put one before it.  Original is done with background graphics etc.  Incidentally, button:empty doesn't work because it does have some whitespace.)
+  css["div.jwplayer span.jwcontrolbar,div.jwplayer span.jwcontrols"]={"display":"inline"} # don't hide controls when mouse is not over video (seeing as they're being repositioned outside it)
   # Hacks for RoundCube-based webmail sites:
-  for t in ["Reset search","Search modifiers","Show preview pane"]: emptyLink('a[title="'+t+'"]',t,css,printOverride)
+  for t in ["Reset search","Search modifiers","Show preview pane","Enlarge"]: emptyLink('a[title="'+t+'"]',t,css,printOverride) # (OK 'Enlarge' isn't RoundCube but is used on some MediaWiki sites)
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:before"]={"content":'" ("',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:after"]={"content":'")"',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount"]={"color":colour["coloured"]}
