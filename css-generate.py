@@ -755,6 +755,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hacks for eBay:
   css['td#storeHeader']={"*width":"30%"}
   css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+  css['a#gh-la > img#gh-logo']={"*display":"none"} # sorry but it's too big and causes too much horizontal scrolling
+  css['div#main + div#spinner > div.spinWrap > p.loader:empty']={'*display':'none'} # Energenie/Sagepay+Paypal 2014-10: please don't spin that line all over the screen and give me a seizure (TODO: would be nice to inspect their scripts to figure out which CSS attributes they were using and consider turning these off globally, but this might require another purchase; the site has timeouts so you can't hang around for too long inspecting how it works)
   # Hacks for LycaMobile online top-up (2014):
   css['iframe[style="height: 1024px;"]']={"*height":"50em","*filter":"none","*opacity":"1","*-moz-opacity":"1"} # (some versions of Firefox can't turn off their misguided scrolling="no" markup AND can't access a context menu to open frame in new tab, so I hope height=50em will be enough; TODO: overflow-y within the iframe like the Twitter-embedded hack below?)
   # Hacks for LinkedIn:
