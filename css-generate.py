@@ -869,7 +869,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   outfile.write("} @media tv,handheld,screen,projection {\n")
   for k in printOverride.keys():
     for attr in printOverride[k].keys():
-      if printOverride[k][attr] == css.get(k,{}).get(attr,None): del printOverride[k][attr] # don't need to re-iterate an identical attribute
+      if attr=='background-color' or printOverride[k][attr] == css.get(k,{}).get(attr,None): del printOverride[k][attr] # don't need to re-iterate an identical attribute (and anyway delete the added background-color alias: we'll re-generate it)
       elif attr=='color': printOverride[k][attr] = css.get(k,{}).get("color",colour["text"])
       elif attr=='background': printOverride[k][attr] = css.get(k,{}).get("background",colour["background"])
     if not printOverride[k]: del printOverride[k]
