@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9838"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9839"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -691,7 +691,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
     css["body.yesJS > div.fancybox-wrap[style] div.fancybox-close:after"]={"content":"\"Close\""}
     # hack for sites that embed YouTube videos (NASA etc) when using the YouTube5 Safari extension on a Mac (TODO: Safari 6 needs sorting out)
-    css["div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls"]={"background-color":"transparent","background":"transparent"}
+    css["div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls"]={"background":"transparent"}
   # hack for MusOpen:
   css["a.download-icon span.icon-down:empty:after"]={"content":'"Download"',"color":colour["link"]}
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
@@ -860,26 +860,29 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   (which might or might not be wanted).
   W3C's CSS Level 1 specs Section 7.1 showed how to ignore these 'at-rules', so CSS1-only browsers SHOULD be ok.
   PocketIE7 on Windows Mobile 6.1 reads inside the @media for 'color' but not 'background', possibly leading to black on black, so we need a second non-"print" @media block to override it back.
+  We also need a second block to override things back for Midori (at least some versions): both color and background.
 */
 """)
   # (PocketIE7 also has a habit of displaying the page with a white background while rendering, and applying the CSS's colours only afterwards, even if the CSS is in cache.  PocketIE6 did not do this.  See cssHtmlAttrs option in Web Adjuster for a possible workaround.)
-  printCss(printOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
-  # and the above-mentioned second override for IE7 :
+  printCss(printOverride,outfile,debugStopAfter=0)
+  # and the above-mentioned second override for IE7, Midori etc :
   outfile.write("} @media tv,handheld,screen,projection {\n")
   for k in printOverride.keys():
-    if 'color' in printOverride[k]:
-      printOverride[k]={"color":css.get(k,{}).get("color",colour["text"])}
-    else: del printOverride[k]
-  printCss(printOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
+    for attr in printOverride[k].keys():
+      if printOverride[k][attr] == css.get(k,{}).get(attr,None): del printOverride[k][attr] # don't need to re-iterate an identical attribute
+      elif attr=='color': printOverride[k][attr] = css.get(k,{}).get("color",colour["text"])
+      elif attr=='background': printOverride[k][attr] = css.get(k,{}).get("background",colour["background"])
+    if not printOverride[k]: del printOverride[k]
+  printCss(printOverride,outfile,debugStopAfter=0)
   webkitScreenOverride.update(webkitGeckoScreenOverride)
   if webkitScreenOverride:
     outfile.write("} @media screen and (-webkit-min-device-pixel-ratio:0) {\n") # TODO: tv,handheld,projection?
-    printCss(webkitScreenOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
+    printCss(webkitScreenOverride,outfile,debugStopAfter=0)
   geckoScreenOverride.update(webkitGeckoScreenOverride)
   if geckoScreenOverride:
     outfile.write("} @media screen and (-moz-images-in-menus:0) {\n") # TODO: tv,handheld,projection?
-    printCss(geckoScreenOverride,outfile,debugStopAfter=0,eolComment=" /* @media */")
-  outfile.write("} /* end of @media */\n")
+    printCss(geckoScreenOverride,outfile,debugStopAfter=0)
+  outfile.write("}\n")
 
   return ret
 
@@ -895,7 +898,7 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
   else: return debug_binary_chop(items,chop_results[1:],problem_start,problem_mid)
 
 from textwrap import fill
-def printCss(css,outfile,debugStopAfter=0,eolComment=""):
+def printCss(css,outfile,debugStopAfter=0):
   # hack for MathJax (see comments above)
   for k in css.keys()[:]:
     if "div.MathJax_Display" in k: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
@@ -945,21 +948,21 @@ def printCss(css,outfile,debugStopAfter=0,eolComment=""):
     if debugStopAfter:
       # for pedantic debugging, write each rule separately
       for e in elemList:
-        outfile.write(e+" {"+eolComment+"\n")
+        outfile.write(e+" {\n")
         l=style.items() ; l.sort()
         for k,v in l:
-          outfile.write("   %s: %s !important;%s\n" % (k,v,eolComment))
+          outfile.write("   %s: %s !important;\n" % (k,v))
           debugStopAfter -= 1
           if not debugStopAfter: break
-        outfile.write("}"+eolComment+"\n")
+        outfile.write("}\n")
         if not debugStopAfter: return 0
       continue
     # else, if not debugStopAfter:
-    outfile.write(fill(", ".join(x.replace(" ","%@%") for x in elemList).replace("-","#@#"),break_long_words=False).replace("#@#","-").replace("%@%"," ").replace("\n",eolComment+"\n")) # (don't let 'fill' break on the hyphens, or on spaces WITHIN each item which might be inside quoted attributes etc, just on spaces BETWEEN items)
-    outfile.write(" {"+eolComment+"\n")
+    outfile.write(fill(", ".join(x.replace(" ","%@%") for x in elemList).replace("-","#@#"),break_long_words=False).replace("#@#","-").replace("%@%"," ")) # (don't let 'fill' break on the hyphens, or on spaces WITHIN each item which might be inside quoted attributes etc, just on spaces BETWEEN items)
+    outfile.write(" {\n")
     l=style.items() ; l.sort()
-    for k,v in l: outfile.write("   %s: %s !important;%s\n" % (k,v,eolComment))
-    outfile.write("}"+eolComment+"\n")
+    for k,v in l: outfile.write("   %s: %s !important;\n" % (k,v))
+    outfile.write("}\n")
   return debugStopAfter
 
 def main():
