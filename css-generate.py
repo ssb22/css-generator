@@ -1,4 +1,4 @@
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.9839"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.984"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -872,6 +872,8 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
       if attr=='background-color' or printOverride[k][attr] == css.get(k,{}).get(attr,None): del printOverride[k][attr] # don't need to re-iterate an identical attribute (and anyway delete the added background-color alias: we'll re-generate it)
       elif attr=='color': printOverride[k][attr] = css.get(k,{}).get("color",colour["text"])
       elif attr=='background': printOverride[k][attr] = css.get(k,{}).get("background",colour["background"])
+      elif attr in ['font-size']: printOverride[k][attr] = css.get(k,{}).get(attr,"")
+      else: del printOverride[k][attr] # TODO: shouldn't happen?
     if not printOverride[k]: del printOverride[k]
   printCss(printOverride,outfile,debugStopAfter=0)
   webkitScreenOverride.update(webkitGeckoScreenOverride)
