@@ -743,8 +743,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a > span.iconHelp:empty:after"]={"content":'"Help"'}
   css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child:before"]={"content":'"Play/pause button: "'} ; css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child > button"]={"width":'2em'} # (CSS can't put a text label into that button itself, but we can at least put one before it.  Original is done with background graphics etc.  Incidentally, button:empty doesn't work because it does have some whitespace.)
   css["div.jwplayer span.jwcontrolbar,div.jwplayer span.jwcontrols"]={"display":"inline"} # don't hide controls when mouse is not over video (seeing as they're being repositioned outside it)
-  # Hacks for RoundCube-based webmail sites:
-  for t in ["Reset search","Search modifiers","Show preview pane","Enlarge"]: emptyLink('a[title="'+t+'"]',t,css,printOverride) # (OK 'Enlarge' isn't RoundCube but is used on some MediaWiki sites)
+  # Hacks for RoundCube-based webmail sites and some forums:
+  for t in ["Reset search","Search modifiers","Show preview pane","Enlarge","Click here to give thanks to this post."]: emptyLink('a[title="'+t+'"]',t,css,printOverride) # (OK 'Enlarge' isn't RoundCube but is used on some MediaWiki sites)
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:before"]={"content":'" ("',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:after"]={"content":'")"',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount"]={"color":colour["coloured"]}
