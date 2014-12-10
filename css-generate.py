@@ -179,6 +179,14 @@ cjk_fonts = "Lantinghei SC, AppleGothic"
 serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", serif" # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
 sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
 
+# ------------------------------------------------------
+# Any of the above variables can be overridden in a file
+# called css_generate_config.py (must use _ not - here)
+# in the same Python format as above.
+try: from css_generate_config import *
+except: pass
+# ------------------------------------------------------
+
 def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   outfile = open(filename,"w")
   smallestHeadingSize = pixelSize*5.0/6.0
