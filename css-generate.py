@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.984"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9841"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -21,29 +21,51 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2014.  Version 0.984"
 # To check out the repository, you can do:
 # svn co http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
 
-# INSTRUCTIONS
-# ------------
+# CONFIGURATION
+# -------------
 
-# When you run this code, it writes the generated .css files
-# to the current directory, and an HTML menu of them to
-# standard output (see my CSS page for example).
-# If putting this on the Web, include in .htaccess:
+# The default configuration can be changed here, or if you
+# prefer you can copy and paste all of this to a separate
+# file called css_generate_config.py and edit it there
+# (which should make it easier to update the code
+# independently of your configuration).
+
+# Where to put the output CSS files: default is current directory,
+# but you might want to put them in a subdirectory, or set
+# an absolute path
+outputDir = "."
+
+# Whether to write an HTML menu to standard output as well
+# (see my CSS page for example)
+outHTML = True
+# if putting this on the Web, include in .htaccess:
 # AddType text/css css
 # SetEnvIf Request_URI "\.css$" requested_css=css
 # Header add Content-Disposition "Attachment" env=requested_css
 
-# You can change pixel_sizes_to_generate and
-# colour_schemes_to_generate below - the format of the
-# latter is [("description","filename-prefix",{...}),...]
-# see the existing ones for example.
-# There are also a few advanced options you can change if
-# you want, after the sizes and colour schemes.
-
+# Which pixel sizes to generate.
 # Size 0 means "unchanged" - it will disable the size
 # changes, and the layout changes that are meant for large
 # sizes.  This is for people who need only colour changes.
+pixel_sizes_to_generate = [0,18,20,25,30,35,40,45,50,60,75,100]
 
-pixel_sizes_to_generate = [20,25,30,35,40,45,50,60,75,100,18,0] # (1st one listed has special status in debugging - see 'binary chop' below)
+# Which pixel size to use with the "chop" and related debug options:
+chop_pixel_size = 20
+
+# Which colour schemes to generate.  The format of this is
+# [("description","filename-prefix",{...}),...]
+# - see the existing ones for examples.
+# If you have many of these, you might want to read them
+# in from separate configuration files instead of listing
+# them here.  In that case, set colour_schemes_to_generate
+# to a string containing a wildcard,
+# e.g. colour_schemes_to_generate = "my_config_dir/*.conf"
+# in which case each file in my_config_dir/*.conf should
+# contain one or more entries in the same [(...),...] format
+# WARNING: this will be passed to Python's eval() function
+# which can execute any command, so don't allow an
+# untrusted third party to write these *.conf files.
+
 colour_schemes_to_generate = [
   ("yellow on black","",
    {"text":"yellow","background":"black",
@@ -137,9 +159,20 @@ colour_schemes_to_generate = [
     }),
   ]
 
-# OPTIONS
+# Some other options you might want to change:
 separate_adjacent_links_at_size_0 = False # sometimes interferes with layouts
 separate_adjacent_links_at_other_sizes = True
+
+# Fonts: (cjk_fonts is listed first so it can be used in both serif_fonts and sans_serif_fonts)
+cjk_fonts = "Lantinghei SC, AppleGothic"
+# AppleGothic must be listed or Korean is broken on Mac OS 10.7
+# Lantinghei SC was introduced to OS X in 10.9, which is handy because the previously-good STSong font (which was the system default for Simplified Chinese) broke on 10.9: it renders badly with antialiasing turned off at 20px, e.g. missing the horizontal stroke on U+95E8.  So we set Lantinghei SC for 10.9 but fall back to STSong on 10.8/10.7/etc (I don't think we need to explicitly say STSong, and there are advantages in not doing so, e.g. the TODO below about :lang(ja) is not relevant for pre-10.9 systems)
+# TODO: for :lang(ko) and :lang(ja) we had better put AppleGothic and a Japanese font like YuGothic first (before Lantinghei) - see below re U+8D77, U+95E8 etc.  Pity can't read the system preferences for pages that don't set a CJK value of LANG.  This :lang exception needs to be done separately for every element that has a font-family, to avoid corrupting headings etc.
+# Other Mac CJK fonts to be aware of: MingLiU prefers full 'Traditional' forms of characters where Trad/Simp has same Unicode value (e.g. U+8D77 'qi3' has an extra vertical stroke making the 'ji' component look more like a 'si'); renders OK on Mac OS 10.9 at 20px without antialias, but might not always be present (the ttf is installed to /Library/Fonts/Microsoft by MS Office and is not present on machines without MS Office).  Arial Unicode MS (present on both 10.7 and 10.9) has some issues with baselines not lining up e.g. in the word 'zhen1li3' U+771F U+7406; it prefers Simplifed Chinese forms (e.g. U+8D77 uses 'ji', and U+95E8 is the Chinese rather than the Japanese simplification).  GB18030 Bitmap (NISC18030) might work at 16px, 32px etc, but scales badly to other sizes.  "Hei" has irregular stroke widths in 10.9 20px no-antialias, but otherwise OK
+serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", serif" # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
+sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
+
+# ---- End of options (but read on for debugging) ----
 
 # DEBUGGING BY BINARY CHOP: If a complex stylesheet exhibits
 # a behaviour you weren't expecting (maybe due to a browser
@@ -172,24 +205,16 @@ separate_adjacent_links_at_other_sizes = True
 # if some sites are going to use stock scripts that switch them on and
 # off every few seconds inadvertently making the rest of the page dance around
 
-cjk_fonts = "Lantinghei SC, AppleGothic"
-# AppleGothic must be listed or Korean is broken on Mac OS 10.7
-# Lantinghei SC was introduced to OS X in 10.9, which is handy because the previously-good STSong font (which was the system default for Simplified Chinese) broke on 10.9: it renders badly with antialiasing turned off at 20px, e.g. missing the horizontal stroke on U+95E8.  So we set Lantinghei SC for 10.9 but fall back to STSong on 10.8/10.7/etc (I don't think we need to explicitly say STSong, and there are advantages in not doing so, e.g. the TODO below about :lang(ja) is not relevant for pre-10.9 systems)
-# TODO: for :lang(ko) and :lang(ja) we had better put AppleGothic and a Japanese font like YuGothic first (before Lantinghei) - see below re U+8D77, U+95E8 etc.  Pity can't read the system preferences for pages that don't set a CJK value of LANG.  This :lang exception needs to be done separately for every element that has a font-family, to avoid corrupting headings etc.
-# Other Mac CJK fonts to be aware of: MingLiU prefers full 'Traditional' forms of characters where Trad/Simp has same Unicode value (e.g. U+8D77 'qi3' has an extra vertical stroke making the 'ji' component look more like a 'si'); renders OK on Mac OS 10.9 at 20px without antialias, but might not always be present (the ttf is installed to /Library/Fonts/Microsoft by MS Office and is not present on machines without MS Office).  Arial Unicode MS (present on both 10.7 and 10.9) has some issues with baselines not lining up e.g. in the word 'zhen1li3' U+771F U+7406; it prefers Simplifed Chinese forms (e.g. U+8D77 uses 'ji', and U+95E8 is the Chinese rather than the Japanese simplification).  GB18030 Bitmap (NISC18030) might work at 16px, 32px etc, but scales badly to other sizes.  "Hei" has irregular stroke widths in 10.9 20px no-antialias, but otherwise OK
-serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", serif" # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
-sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
+# ---- End of debugging info, code follows ----
 
-# ------------------------------------------------------
-# Any of the above variables can be overridden in a file
-# called css_generate_config.py (must use _ not - here)
-# in the same Python format as above.
 try: from css_generate_config import *
-except: pass
-# ------------------------------------------------------
+except ImportError: pass
+if type(colour_schemes_to_generate) in (str,unicode):
+  import glob
+  colour_schemes_to_generate = reduce(lambda x,y:x+eval(open(y).read()), glob.glob(colour_schemes_to_generate), [])
 
 def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
-  outfile = open(filename,"w")
+  outfile = open(outputDir+os.sep+filename,"w")
   smallestHeadingSize = pixelSize*5.0/6.0
   largestHeadingSize = pixelSize*10.0/6.0
 
@@ -977,7 +1002,7 @@ def printCss(css,outfile,debugStopAfter=0):
   return debugStopAfter
 
 def main():
-  print "<div id=pregen_download><h3>Download pre-generated low-vision stylesheets</h3><noscript>(If you switch on Javascript, there will be an interactive chooser here.&nbsp; Otherwise you can still choose manually from the links below.)</noscript><script><!-- \ndocument.write('Although Javascript is on, for some reason the interactive chooser failed to run on your particular browser. Falling back to the list below.'); //--></script><br><ul>"
+  if outHTML: print "<div id=pregen_download><h3>Download pre-generated low-vision stylesheets</h3><noscript>(If you switch on Javascript, there will be an interactive chooser here.&nbsp; Otherwise you can still choose manually from the links below.)</noscript><script><!-- \ndocument.write('Although Javascript is on, for some reason the interactive chooser failed to run on your particular browser. Falling back to the list below.'); //--></script><br><ul>"
   # (HTML5 defaults script type to text/javascript, as do all pre-HTML5 browsers including NN2's 'script language="javascript"' thing, so we might as well save a few bytes)
   for pixelSize in pixel_sizes_to_generate:
     saidPixels = False
@@ -990,12 +1015,14 @@ def main():
           pxDesc = "%d pixels" % pixelSize
           saidPixels = True
       else: pxDesc = "unchanged"
-      toPrn="<LI><A HREF=\"%s\">%s %s</A>" % (filename,pxDesc,scheme)
-      if i==len(colour_schemes_to_generate)-1: print toPrn+"</LI>"
+      toPrn="<li><a href=\"%s\">%s %s</a>" % (filename,pxDesc,scheme)
+      if not outHTML: pass
+      elif i==len(colour_schemes_to_generate)-1: print toPrn+"</li>"
       else: print toPrn+","
       do_one_stylesheet(pixelSize,colour,filename)
-  print "</UL></DIV>"
-  print """<SCRIPT><!--
+  if not outHTML: return
+  print "</ul></div>"
+  print """<script><!--
 if(document.all||document.getElementById) {
 var newDiv=document.createElement('DIV');
 var e=document.createElement('H3'); e.appendChild(document.createTextNode('Download or Try Low Vision Stylesheets')); newDiv.appendChild(e);
@@ -1040,12 +1067,12 @@ function update() {
 sizeSelect.onchange=update; colourSelect.onchange=update; update();
 e=document.getElementById('pregen_download'); e.parentNode.replaceChild(newDiv,e);
 if(document.location.href.indexOf("?whatLookLike")>-1) {"""+tryStylesheetJS('cssLink.href')+"""}}
-//--></SCRIPT>""" # "  # (comment for emacs)
+//--></script>""" # "  # (comment for emacs)
   print "(above stylesheets generated by version "+prog.split()[-1]+")"
 
 do_binary_chop = False
 binary_chop_results = ""
-import sys
+import sys, os
 if "adjuster-config" in sys.argv:
   # print out configuration options for Web Adjuster
   # e.g. large-print-websites.appspot.com
@@ -1061,14 +1088,14 @@ if "adjuster-config" in sys.argv:
 elif "desperate-debug" in sys.argv:
   scheme,suffix,colour = colour_schemes_to_generate[0]
   debugStopAfter=1
-  while not do_one_stylesheet(pixel_sizes_to_generate[0],colour,"debug%04d.css" % debugStopAfter,debugStopAfter):
+  while not do_one_stylesheet(chop_pixel_size,colour,"debug%04d.css" % debugStopAfter,debugStopAfter):
     print "Generated debug stylesheet debug%04d.css" % debugStopAfter
     debugStopAfter += 1
 elif "chop" in sys.argv:
   do_binary_chop = True
   if not sys.argv[-1] == "chop": binary_chop_results = sys.argv[-1]
   scheme,suffix,colour = colour_schemes_to_generate[0]
-  filename="%d%s.css" % (pixel_sizes_to_generate[0],suffix)
-  do_one_stylesheet(pixel_sizes_to_generate[0],colour,filename)
+  filename="%d%s.css" % (chop_pixel_size,suffix)
+  do_one_stylesheet(chop_pixel_size,colour,filename)
   print "Generated debug stylesheet:",filename
 else: main()
