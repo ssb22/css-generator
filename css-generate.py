@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9841"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9842"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -600,6 +600,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
   for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
+  css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight"]} # suggestions cursor 2015-04
+  css['a#logo > img[src="/images/nav_logo195.png"]']={"*display":"none"}
   css['div#main div#cnt div#rcnt div.col div#ifb div.rg_meta,div#main div#cnt div#rcnt div.col div#ifb div.rg_bb_i div.rg_bb_i_meta']={"*display":"none"} # image search
   css['div#mngb > div#gb > div.gb_Sb,body#gsr.srp > div#mngb']={"*display":"none"} # other graphical clutter they added 2014-09 and 2014-10
   
@@ -809,6 +811,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["body > div.twitter-timeline,body > div.twitter-tweet"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
     # + for BBC radio player:
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
+
+  # alternative to <wbr/> :
+  css['article > div.bodyTxt div.pGroup > p span.wd.refID']={"display":"none"}
+
+  # HomeSwapper etc:
+  css['iframe[style^="display: none"]']={"*display":"none"}
   
   # sites created at wix.com must have this or their JS will crash on load and not display any content:
   css['div#ReflowTestContainer[style^="width: 1px"]']={"*width":"1px","*height":"1px","*overflow":"hidden"}
