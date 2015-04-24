@@ -284,7 +284,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # combinations.  NB however we don't list ALL elements in
   # mostElements (see code later).
   mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas,video".split(",")
-  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg,output".split(",") # (and ruby/rt/rp/rb)
+  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg,output".split(",")
+  rubyElements = "ruby,rt,rp,rb".split(",") # NOT counted in mostElements
   html5Elements += ['text','text > tspan'] # used within svg, sometimes for nothing more than effect (unfortunately there doesn't seem to be a way of ensuring the containing svg is displayed large enough, but truncation is better than having the text go underneath other elements)
   mostElements += html5Elements
 
@@ -296,12 +297,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css={} ; printOverride = {}
   webkitScreenOverride = {} ; geckoScreenOverride = {}
   webkitGeckoScreenOverride = {}
-  for e in mostElements:
+  for e in mostElements+rubyElements:
     css[e]=defaultStyle.copy()
     printOverride[e] = {"color":"black","background":"white"}.copy()
     if pixelSize: printOverride[e]["font-size"] = "12pt" # TODO: option?
 
   # but there are some exceptions:
+
+  for e in rubyElements: del css[e]["*text-align"]
 
   for t in ["textarea","html","body","input"]:
     css[t]["*overflow"] = "auto"
@@ -422,7 +425,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
   # Links stuff:
-  for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(","):
+  for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(",")+rubyElements:
     for type in [":link",":visited","[onclick]",
                  ".button", # used by some JS applications
                  ]:
@@ -433,12 +436,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       if linkInside in ["b","i","em","u","strong"] and not css[linkInside]["color"]==colour["text"]: css["a"+type+" "+linkInside]["color"]=css[linkInside]["color"]
     css["a:visited "+linkInside]["color"]=colour["visited"]
   # set cursor:pointer for links and ANYTHING inside them (including images etc).  The above cursor:auto should theoretically do the right thing anyway, but it seems that some versions of Firefox need help.
-  for linkInside in mostElements:
+  for linkInside in mostElements+rubyElements:
     for type in [":link",":visited","[onclick]"]:
       key="a"+type+" "+linkInside
       if not css.has_key(key): css[key]={}
       css[key]["cursor"]="pointer"
-      css[key]["*display"]="inline" # some sites have 'div' or do JS things with 'span'...
+      if not linkInside in rubyElements: css[key]["*display"]="inline" # some sites have 'div' or do JS things with 'span'...
 
   # Italic and bold:
   for i in "i,em,cite,address,dfn,u".split(","):
@@ -684,7 +687,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.jsAutoCompleteSelector[style~="relative;"]'] = {'*position':'relative','border':'blue solid'}
   
   # hack for sites that use jump.js with nav boxes
-  jjc = "body > input#site + div#band + div#wrapper > div#header + div#container > "
+  jjc = "body > input#site + div#band + div#wrapper " # " > div#header + div#container > " but sometimes regionHeader or other
   # wrapper might or might not be .dropShadow50
   jjSN = jjc + "div#secondaryNav,"+jjc+"div#message + div#secondaryNav"
   jumpjsContent = jjc+"div#content," +jjc + "div#secondaryNav + div#content,"+jjc+"div#message + div#secondaryNav + div#content,"+jjc+"div#message"
@@ -695,7 +698,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
-      css["body > input#site + div#band + div#wrapper > div#header"]={
+      css["body > input#site + div#band + div#wrapper > div#header, body > input#site + div#band + div#wrapper > div#regionHeader"]={
         "height":"40%", # no more or scroll-JS is too far wrong
         "position":"fixed","top":"0px","left":"auto",
         "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
@@ -708,18 +711,18 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                  "width":"30%","height":"60%","bottom":"0%","top":"auto","border":"blue solid","overflow":"auto","z-index":"2"}
       css["body.HomePage > div#regionMain > div.wrapper > div.wrapperShadow > div#slider > div#slideMain"]={"width":"1px","height":"1px","overflow":"hidden"} # can't get those kind of JS image+caption sliders to work well in large print so might be better off cutting them out (TODO somehow relocate to end of page?) (anyway, do height=width=1 because display:none or height=width=0 seems to get some versions of WebKit in a loop and visibility:hidden doesn't always work)
   # and not just if pixelSize (because these icons aren't necessarily visible with our colour changes) -
-  css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon:after"]={"content":'"Navigation"',"text-transform":"none"}
-  css[exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a > span.icon:after"]={"content":'"Next hit"',"text-transform":"none"}
-  css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:before"]={"content":'"Sync"',"text-transform":"none"}
-  css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]={"content":'"Preferences"',"text-transform":"none"}
+  css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a:empty:after"]={"content":'"Navigation"',"text-transform":"none"}
+  css[exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a:empty:after"]={"content":'"Next hit"',"text-transform":"none"}
+  css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:after, div#regionHeader menu li#menuSynchronizeSwitch a:after"]={"content":'"Sync"',"text-transform":"none"}
+  css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a:empty:after"]={"content":'"Preferences"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after"]={"content":'"<- Prev"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavRight > a > span:after, div.jcarousel-container + div#slidePrevButton:empty + div#slideNextButton:empty:after"]={"content":'"Next ->"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavDoubleLeft > a > span:after"]={'content':'"<<- Backwd"','text-transform':'none'}
   css[exclude_ie_below_9+'div.resultNavControls > ul > li.resultNavDoubleRight > a > span:after']={'content':'"Fwd ->>"','text-transform':'none'}
   css[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":colour['highlight']}
   printOverride[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":'white'} # TODO: shade of grey?
-  css["div.result > div.document span.mk,div.result > div.document span.mk b, div.par p.sb span.mk, div.par p.ss span.mk b"]={"background":colour["reset_button"]}
-  printOverride["div.result > div.document span.mk,div.result > div.document span.mk b, div.par p.sb span.mk, div.par p.ss span.mk b"]={"background":"white"}
+  css[jjc+" span.mk, "+jjc+" span.mk b"]={"background":colour["reset_button"]}
+  printOverride[jjc+" span.mk, "+jjc+" span.mk b"]={"background":"white"}
   # if pixelSize: css[exclude_ie_below_9+"input#site + div#band + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   # some site JS adds modal boxes to the end of the document, try:
