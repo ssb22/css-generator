@@ -274,7 +274,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-webkit-hyphens":"manual", # auto hyphenation doesn't always work very well with our fonts (TODO: manual or none?  manual might be needed if devs put breakpoints into very long words)
     "*-moz-hyphens":"manual",
     "*-ms-hyphens":"manual",
-    "hyphens":"manual",
+    "*hyphens":"manual",
+    "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     }
 
@@ -284,7 +285,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # combinations.  NB however we don't list ALL elements in
   # mostElements (see code later).
   mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas,video".split(",")
-  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg,output".split(",")
+  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg,output,thead,tbody".split(",")
   rubyElements = "ruby,rt,rp,rb".split(",") # NOT counted in mostElements
   html5Elements += ['text','text > tspan'] # used within svg, sometimes for nothing more than effect (unfortunately there doesn't seem to be a way of ensuring the containing svg is displayed large enough, but truncation is better than having the text go underneath other elements)
   mostElements += html5Elements
@@ -791,6 +792,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe"]={
       "*height":"15em","*overflow":"visible", # hopefully one of those will work
       "*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+  css["a#composeoptionstoggle > span.iconlink[title=\"Options\"]:empty:after"]={"content":'"Options"'}
   # Hacks for eBay:
   css['td#storeHeader']={"*width":"30%"}
   css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
