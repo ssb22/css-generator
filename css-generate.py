@@ -710,6 +710,17 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                  "bottom":"0px","left":"auto",
                  "right":"0px", # not left,see above
                  "width":"30%","height":"60%","bottom":"0%","top":"auto","border":"blue solid","overflow":"auto","z-index":"2"}
+      css[jjc+"div#content div#navScrollPositionFloating"]={
+        "position":"fixed", # don't 'pop up' using display toggle and disrupt the vertical positioning of the entire text due to our position:static override
+        "display":"block", # don't flash on/off
+        "top":"auto", # because we're using bottom:0px (overriding the popup location)
+        "bottom":"0px","right":"0px",
+        "width":"30%", # to match the above
+        "border":"thin blue solid",
+        "overflow":"auto", # just in case
+        "z-index":"3", # ditto
+      }
+
       css["body.HomePage > div#regionMain > div.wrapper > div.wrapperShadow > div#slider > div#slideMain"]={"width":"1px","height":"1px","overflow":"hidden"} # can't get those kind of JS image+caption sliders to work well in large print so might be better off cutting them out (TODO somehow relocate to end of page?) (anyway, do height=width=1 because display:none or height=width=0 seems to get some versions of WebKit in a loop and visibility:hidden doesn't always work)
   # and not just if pixelSize (because these icons aren't necessarily visible with our colour changes) -
   css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a:empty:after"]={"content":'"Navigation"',"text-transform":"none"}
