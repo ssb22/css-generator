@@ -404,13 +404,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   indent = 0
   for h in range(6):
     el="h%d" % (h+1)
-    css[el]["color"]=colour["headings"]
-    printOverride[el]={"color":"black"}
-    css[el]["*font-weight"]="bold"
     css[el]["*font-family"]=sans_serif_fonts
     size = (largestHeadingSize-h*(largestHeadingSize-smallestHeadingSize)/(6-1.0))
     indent += size
     css[el]["*font-size"]="%.1fpx" % size
+    css[el]["*font-weight"]="bold"
+    # ensure 'h1 strong' etc inherits family (but not necessarily colour):
+    for i in ['strong','em','i','b']: css[el+" "+i]=css[el].copy()
+    # now for colour:
+    css[el]["color"]=colour["headings"]
+    printOverride[el]={"color":"black"}
     # ensure links in headings inherit size and family:
     css[el+" center"]=css[el].copy() # rather than the default for 'center'
     css[el+" a"]=css[el].copy() # because it's usually A NAME (in the case of HREF, the specificity of a:link should be greater)
