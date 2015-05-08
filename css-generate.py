@@ -832,7 +832,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
 
   # alternative to <wbr/> :
-  css['article > div.bodyTxt div.pGroup > p span.wd.refID']={"display":"none"}
+  css['div#regionMain > div.wrapper div#content > div#article > article p span.wd.refID']={"display":"none"}
 
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
