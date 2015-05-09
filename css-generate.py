@@ -695,7 +695,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # wrapper might or might not be .dropShadow50
   jjSN = jjc + "div#secondaryNav,"+jjc+"div#message + div#secondaryNav"
   jumpjsContent = jjc+"div#content," +jjc + "div#secondaryNav + div#content,"+jjc+"div#message + div#secondaryNav + div#content,"+jjc+"div#message"
-  jumpjsTooltip = 'div > div.tooltip.dropShadowTooltip[dir="ltr"]'
+  jumpjsTooltip = 'div > div.tooltip.unstyled.dir-ltr[dir="ltr"]'
   css[jumpjsTooltip+","+jjc+"div#message"]={"border":"thin solid "+colour["italic"]}
   for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
   if pixelSize:
