@@ -792,6 +792,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("div.digitalPubFormat > a.fileFormatIcon","Pub format",css,printOverride) # digital publication or whatever
   emptyLink("div.audioFormat > a.fileFormatIcon.audio","Audio format",css,printOverride)
   emptyLink('a[target="itunes_store"]',"iTunes shop",css,printOverride)
+  emptyLink('a.appStore[href^="https://itunes.apple.com/"]',"Apple shop",css,printOverride)
   emptyLink('a[href^="https://play.google.com/store/apps/"]',"Android shop",css,printOverride)
   emptyLink('a[href^="http://apps.microsoft.com/"]',"Microsoft shop",css,printOverride)
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
@@ -836,7 +837,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
 
   # alternative to <wbr/> :
-  css['div#regionMain > div.wrapper div#content > div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content > div#article > article h2 span.wd.refID']={"display":"none"}
+  css['div#regionMain > div.wrapper div#content > div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content > div#article > article h2 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
 
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
