@@ -713,6 +713,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                  "bottom":"0px","left":"auto",
                  "right":"0px", # not left,see above
                  "width":"30%","height":"60%","bottom":"0%","top":"auto","border":"blue solid","overflow":"auto","z-index":"2"}
+      css["body > div#wrapper div#content div#navScrollPositionFloating"]={
+        "display":"block", # don't flash on/off
+      }
       css[jjc+"div#content div#navScrollPositionFloating"]={
         "position":"fixed", # don't 'pop up' using display toggle and disrupt the vertical positioning of the entire text due to our position:static override
         "display":"block", # don't flash on/off
