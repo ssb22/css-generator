@@ -268,8 +268,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-opacity":"1",
     
     "-moz-appearance":"none", # DON'T * this, it can lead to white-on-white situations so we need it for colour changes not just size changes
-    "*-moz-transform":"none",
-    "*-webkit-transform":"none",
+    "transform":"none",
+    "-moz-transform":"none",
+    "-webkit-transform":"none",
+    "-ms-transform":"none",
+    "-o-transform":"none",
+    "transition-property":"none",
+    "-webkit-transition-property":"none",
+    "-moz-transition-property":"none",
+    "-o-transition-property":"none",
 
     "*-webkit-hyphens":"manual", # auto hyphenation doesn't always work very well with our fonts (TODO: manual or none?  manual might be needed if devs put breakpoints into very long words)
     "*-moz-hyphens":"manual",
