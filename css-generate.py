@@ -858,6 +858,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # w3schools, since it's often coming up in search results -
   for tht in ["Chrome","Internet Explorer","Firefox","Safari","Opera"]: css['th[title="'+tht+'"]:empty:after']={'*content':'"'+tht+'"'}
 
+  # practicalmandarin and other sites designed by some company: please don't jump around when we're in large print
+  css['header.sticky-header']={'*display':'block'}
+
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
   # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
