@@ -268,20 +268,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-opacity":"1",
     
     "-moz-appearance":"none", # DON'T * this, it can lead to white-on-white situations so we need it for colour changes not just size changes
-    "transform":"none",
-    "-moz-transform":"none",
-    "-webkit-transform":"none",
-    "-ms-transform":"none",
-    "-o-transform":"none",
-    "transform-style":"none",
-    "-moz-transform-style":"none",
-    "-webkit-transform-style":"none",
-    "-ms-transform-style":"none",
-    "-o-transform-style":"none",
-    "transition-property":"none",
-    "-webkit-transition-property":"none",
-    "-moz-transition-property":"none",
-    "-o-transition-property":"none",
 
     "*-webkit-hyphens":"manual", # auto hyphenation doesn't always work very well with our fonts (TODO: manual or none?  manual might be needed if devs put breakpoints into very long words)
     "*-moz-hyphens":"manual",
@@ -290,6 +276,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     }
+  for css3Thing in "transform transform-style transition-property ".split():
+    for browser in ["",'-o-','-ms-','-moz-','-webkit-']:
+      defaultStyle['*'+browser+css3Thing] = "none"
 
   # have to explicitly set for every type of element,
   # because wildcards don't always work and inheritance can
