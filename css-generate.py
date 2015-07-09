@@ -276,9 +276,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     }
-  for css3Thing in "transform transform-style transition-property ".split():
+  for css3Thing,value in [
+      ("transform","none"),
+      ("transform-style","flat"),
+      ("transition-property","none")]:
     for browser in ["",'-o-','-ms-','-moz-','-webkit-']:
-      defaultStyle['*'+browser+css3Thing] = "none"
+      defaultStyle['*'+browser+css3Thing] = value
 
   # have to explicitly set for every type of element,
   # because wildcards don't always work and inheritance can
