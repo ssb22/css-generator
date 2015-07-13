@@ -847,7 +847,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # alternative to <wbr/> :
   css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
-
+  # also use of 'q' adding duplicate quotes:
+  css['div#regionMain > div.wrapper div#content div#article > article q.scrp:before, div#regionMain > div.wrapper div#content div#article > article q.scrp:after']={'content':'""'}
+  
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
   
