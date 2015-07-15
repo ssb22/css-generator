@@ -867,8 +867,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
   # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
   css["html:not(:empty)"]={"*overflow":"visible"}
-  # speed up scrolling on Midori (from their FAQ) -
-  css["*"]={"-webkit-box-shadow":"none"}
+  # speed up scrolling on Midori (from their FAQ), also avoid colour problems in other browsers on some sites:
+  css["*"]={"-webkit-box-shadow":"none","box-shadow":"none"}
   # help Opera 12 and other browsers that don't show keyboard focus -
   css[":focus"]={"outline":colour.get("focusOutlineStyle","thin dotted")}
   
