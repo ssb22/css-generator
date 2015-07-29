@@ -764,24 +764,32 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
   css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"*display":"none"}
   # Hack for some other sites that put nothing inside software download links:
-  def emptyLink(lType,content,css,printOverride):
+  def emptyLink(lType,content,css,printOverride,isRealLink=True):
     # Fill in the text of an empty link according to
     # context (making up for the fact that we're not
     # displaying whatever CSS-oriented graphical thing
     # the site is showing).  lType is the link in context
     # and 'content' is our guess of what it should say.
-    key = lType+":link:empty"
+    if isRealLink: key = lType+":link:empty"
+    else: key = lType+":empty"
     css[key+":after"]={
       "content":'"'+content+']"', # overriding "]"
       "color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
     printOverride[key+":after"]={"color":"black"}
     css[key+":before"]={"color":colour["link"]}
     printOverride[key+":before"]={"color":"black"}
-    key = key.replace(":link",":visited")
-    css[key+":after"]={"color":colour["visited"]}
-    printOverride[key+":after"]={"color":"black"}
-    css[key+":before"]={"color":colour["visited"]}
-    printOverride[key+":before"]={"color":"black"}
+    if isRealLink:
+      key = key.replace(":link",":visited")
+      css[key+":after"]={"color":colour["visited"]}
+      printOverride[key+":after"]={"color":"black"}
+      css[key+":before"]={"color":colour["visited"]}
+      printOverride[key+":before"]={"color":"black"}
+    else: # not isRealLink
+      css[key+":before"]["content"] = '"["'
+      css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
+      css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
+      for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
+      printOverride[key] = {"color":"black"}
   emptyLink("a[title~=download]","Download",css,printOverride)
   # and more for audio players:
   emptyLink("div.audioFormat > a.stream","Stream",css,printOverride)
@@ -804,6 +812,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('a.appStore[href^="https://itunes.apple.com/"]',"Apple shop",css,printOverride)
   emptyLink('a[href^="https://play.google.com/store/apps/"]',"Android shop",css,printOverride)
   emptyLink('a[href^="http://apps.microsoft.com/"]',"Microsoft shop",css,printOverride)
+  emptyLink('div#btnPreviousPage.previousPage',"Previous page",css,printOverride,False)
+  emptyLink('div#btnNextPage.nextPage',"Next page",css,printOverride,False)
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
   css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
   css["nav p#showHideMenu > a#goToMenu > span.icon:empty:after"]={"content":'"goToMenu"'}
