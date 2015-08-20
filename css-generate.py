@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9842"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9843"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -406,35 +406,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   # for e in mostElements: css[e]["*max-width"]=("%.1fpx" % min(1200,pixelSize*470/18))
 
-  # Headings stuff:
-  indent = 0
-  for h in range(6):
-    el="h%d" % (h+1)
-    css[el]["*font-family"]=sans_serif_fonts
-    size = (largestHeadingSize-h*(largestHeadingSize-smallestHeadingSize)/(6-1.0))
-    indent += size
-    css[el]["*font-size"]="%.1fpx" % size
-    css[el]["*font-weight"]="bold"
-    # ensure 'h1 strong' etc inherits family (but not necessarily colour):
-    for i in ['strong','em','i','b']: css[el+" "+i]=css[el].copy()
-    # now for colour:
-    css[el]["color"]=colour["headings"]
-    printOverride[el]={"color":"black"}
-    # ensure links in headings inherit size and family:
-    css[el+" center"]=css[el].copy() # rather than the default for 'center'
-    css[el+" a"]=css[el].copy() # because it's usually A NAME (in the case of HREF, the specificity of a:link should be greater)
-    css[el+" abbr"]=css[el].copy() ; del css[el+" abbr"]["*text-decoration"]
-    css[el+" span"]=css[el].copy()
-    css[el+" a b"]=css[el].copy()
-    printOverride[el+" center"]=printOverride[el].copy()
-    printOverride[el+" a"]=printOverride[el].copy()
-    printOverride[el+" abbr"]=printOverride[el].copy()
-    printOverride[el+" span"]=printOverride[el].copy()
-    printOverride[el+" a b"]=printOverride[el].copy()
-    # and now (AFTER the above) set margins on headings
-    css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
-
-  # Links stuff:
+  # Links stuff - must be before bold/italic colour overrides:
   for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(",")+rubyElements:
     for type in [":link",":visited","[onclick]",
                  ".button", # used by some JS applications
@@ -471,6 +443,37 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Some browsers might start styling abbr by default but not acronym.  Some older browsers might understand acronym title= but not abbr title=, so some sites might try to use acronym= for backward compatibility, but given that this must be for nonessential information anyway (as many simpler browsers don't support either) it probably makes sense to prefer abbr now (if it might be displayed by default on a greater number of modern browsers) unless the webmaster wants to emulate the browser in CSS.
   css["acronym"]["border-bottom"]="1px dotted"
   css["abbr"]["border-bottom"]="1px dotted"
+
+  # Headings stuff (must be after italic/bold):
+  indent = 0
+  for h in range(6):
+    el="h%d" % (h+1)
+    css[el]["*font-family"]=sans_serif_fonts
+    size = (largestHeadingSize-h*(largestHeadingSize-smallestHeadingSize)/(6-1.0))
+    indent += size
+    css[el]["*font-size"]="%.1fpx" % size
+    css[el]["*font-weight"]="bold"
+    # ensure 'h1 strong' etc inherits family (but not necessarily colour):
+    for i in ['strong','em','i','b']:
+      css[el+" "+i]=css[el].copy()
+      css[el+" "+i]["color"]=css[i]["color"]
+      printOverride[el+" "+i]={"color":"black"}
+    # now for heading colour:
+    css[el]["color"]=colour["headings"]
+    printOverride[el]={"color":"black"}
+    # ensure links in headings inherit size and family:
+    css[el+" center"]=css[el].copy() # rather than the default for 'center'
+    css[el+" a"]=css[el].copy() # because it's usually A NAME (in the case of HREF, the specificity of a:link should be greater)
+    css[el+" abbr"]=css[el].copy() ; del css[el+" abbr"]["*text-decoration"]
+    css[el+" span"]=css[el].copy()
+    css[el+" a b"]=css[el].copy()
+    printOverride[el+" center"]=printOverride[el].copy()
+    printOverride[el+" a"]=printOverride[el].copy()
+    printOverride[el+" abbr"]=printOverride[el].copy()
+    printOverride[el+" span"]=printOverride[el].copy()
+    printOverride[el+" a b"]=printOverride[el].copy()
+    # and now (AFTER the above) set margins on headings
+    css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
   # Images and buttons:
   css["img"]["background"]=colour["image_transparency_compromise"]
