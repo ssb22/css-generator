@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9843"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9844"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -614,6 +614,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Hack for Google search results:
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
+  css['img[src="/images/nav_logo225.png"][alt="Google"]']={"*display":"none"}
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
   for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
   css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight"]} # suggestions cursor 2015-04
@@ -824,6 +825,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a > span.iconHelp:empty:after"]={"content":'"Help"'}
   css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child:before"]={"content":'"Play/pause button: "'} ; css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child > button"]={"width":'2em'} # (CSS can't put a text label into that button itself, but we can at least put one before it.  Original is done with background graphics etc.  Incidentally, button:empty doesn't work because it does have some whitespace.)
   css["div.jwplayer span.jwcontrolbar,div.jwplayer span.jwcontrols"]={"display":"inline"} # don't hide controls when mouse is not over video (seeing as they're being repositioned outside it)
+  css['div.rp__controls__playback[aria-label="Play"]:empty:before']={"content":'"Play/pause"'} # e.g. ABC Classic FM
+  def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
+  doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be a social network link whose natural size is full-screen (and some news sites put these right at the top of all their pages)
+  css['img[width="18"][height="18"]']={"height":"18px","width":"18px"} # better keep that because it could be a social network link whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
