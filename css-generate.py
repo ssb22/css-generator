@@ -614,7 +614,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Hack for Google search results:
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
-  css['img[src="/images/nav_logo225.png"][alt="Google"]']={"*display":"none"}
+  css['img[src^="/images/nav_logo"][alt="Google"]']={"*display":"none"}
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
   for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
   css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight"]} # suggestions cursor 2015-04
