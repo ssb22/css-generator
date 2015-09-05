@@ -1038,10 +1038,10 @@ def printCss(css,outfile,debugStopAfter=0):
     # With IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list.  So we need to separate it out.
     # Also we need to COMPLETELY separate the ::selection markup at all times.
     elemList_sep = [x for x in elemList if '::' in x]
-    elemList_ieOld = [x for x in elemList if not x in elemList_sep and not '*' in x and not '>' in x and not ':empty' in x and not '[' in x]
-    elemList_ieNew = [x for x in elemList if not x in elemList_ieOld and not x in elemList_sep and not ':not' in x]
-    elemList_rest = [x for x in elemList if x not in elemList_ieOld and x not in elemList_ieNew and x not in elemList_sep]
-    for eList in [[x] for x in elemList_sep]+[elemList_ieOld, elemList_ieNew, elemList_rest]:
+    elemList_ieVeryOld = [x for x in elemList if not x in elemList_sep and not '*' in x and not '>' in x and not ':empty' in x and not '[' in x]
+    elemList_ieLessOld = [x for x in elemList if not x in elemList_ieVeryOld and not x in elemList_sep and not ':not' in x]
+    elemList_rest = [x for x in elemList if x not in elemList_ieVeryOld and x not in elemList_ieLessOld and x not in elemList_sep]
+    for eList in [[x] for x in elemList_sep]+[elemList_ieVeryOld, elemList_ieLessOld, elemList_rest]:
       if not eList: continue
       eList.sort()
       elems=tuple(eList)
