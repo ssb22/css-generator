@@ -628,7 +628,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
   # and media players:
-  css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":'"\21E8 Play"'}
+  css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":r'"\21E8 Play"'}
   css["div.mwPlayerContainer div.play-btn span.ui-icon-pause:empty:after"]={"content":'"Pause"'}
   # Hack for jqMath:
   if pixelSize: css["td.fm-num-frac,td.fm-den-frac"] = {"text-align":"center"}
@@ -701,10 +701,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.jsAutoCompleteSelector[style~="relative;"]'] = {'*position':'relative','border':'blue solid'}
   
   # hack for sites that use jump.js with nav boxes
-  jjc = "body > input#site + div#band + div#wrapper " # " > div#header + div#container > " but sometimes regionHeader or other
-  # wrapper might or might not be .dropShadow50
-  jjSN = jjc + "div#secondaryNav,"+jjc+"div#message + div#secondaryNav"
-  jumpjsContent = jjc+"div#content," +jjc + "div#secondaryNav + div#content,"+jjc+"div#message + div#secondaryNav + div#content,"+jjc+"div#message"
+  jjc = "body > input#site + div#wrapper "
+  jumpjsContent = jjc+"div#content,"+jjc+"div#message"
   jumpjsTooltip = 'div > div.tooltip.unstyled.dir-ltr[dir="ltr"]'
   css[jumpjsTooltip+","+jjc+"div#message"]={"border":"thin solid "+colour["italic"]}
   for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
@@ -712,21 +710,22 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
-      css["body > input#site + div#band + div#wrapper > div#header, body > input#site + div#band + div#wrapper > div#regionHeader"]={
+      css["body > input#site + div#wrapper > div#header, body > input#site + div#wrapper > div#regionHeader"]={
         "height":"40%", # no more or scroll-JS is too far wrong
         "position":"fixed","top":"0px","left":"auto",
         "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
         "width":"30%", # not fixed+100% or PgDn will go wrong
         "overflow":"auto","border":"blue solid","z-index":"1"}
-      css[jumpjsContent]={"margin-right":"31%","z-index":"0"}
-      css[jjSN]={"position":"fixed", # or double-scroll JS fails
-                 "bottom":"0px","left":"auto",
-                 "right":"0px", # not left,see above
-                 "width":"30%","height":"60%","bottom":"0%","top":"auto","border":"blue solid","overflow":"auto","z-index":"2"}
+      css[jumpjsContent]={"margin-right":"31%","z-index":"0"} # to match the 30% (i.e. take 70%, actually 69%)
+      css[jjc+"div#secondaryNavContent"]={"*display":"block"} # not None, even if the screen SEEMS to be too small, because we've changed the layout
+      css[jjc + "div#secondaryNav"]={"position":"fixed", # or double-scroll JS fails
+                 "bottom":"0px","top":"auto",
+                 "right":"0px","left":"auto",
+                 "width":"30%","height":"60%","border":"blue solid","overflow":"auto","z-index":"2"}
       css["body > div#wrapper div#content div#navScrollPositionFloating"]={
         "display":"block", # don't flash on/off
       }
-      css[jjc+"div#content div#navScrollPositionFloating"]={
+      css[jjc+"div#content div#navScrollPositionFloating,"+jjc+"div.navPosition > div.scrollPositionDisplay"]={
         "position":"fixed", # don't 'pop up' using display toggle and disrupt the vertical positioning of the entire text due to our position:static override
         "display":"block", # don't flash on/off
         "top":"auto", # because we're using bottom:0px (overriding the popup location)
@@ -735,6 +734,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "border":"thin blue solid",
         "overflow":"auto", # just in case
         "z-index":"3", # ditto
+      }
+      css[jjc+"div#regionHeader div.navPosition > div.scrollPositionDisplay"]={
+        "position":"static", # as it's inside regionHeader; no point putting it bottom/right or it won't be visible (clipped by regionHeader)
+        "width":"100%", # not 30% because this time it's of regionHeader not of screen
       }
 
       css["body.HomePage > div#regionMain > div.wrapper > div.wrapperShadow > div#slider > div#slideMain"]={"width":"1px","height":"1px","overflow":"hidden"} # can't get those kind of JS image+caption sliders to work well in large print so might be better off cutting them out (TODO somehow relocate to end of page?) (anyway, do height=width=1 because display:none or height=width=0 seems to get some versions of WebKit in a loop and visibility:hidden doesn't always work)
@@ -749,13 +752,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a:empty:after"]={"content":'"Preferences"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after"]={"content":'"<- Prev"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavRight > a > span:after, div.jcarousel-container + div#slidePrevButton:empty + div#slideNextButton:empty:after"]={"content":'"Next ->"',"text-transform":"none"}
+  css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft"]={"margin-left":"0px","margin-right":"1ex"}
+  css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavRight"]={"margin":"0px"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavDoubleLeft > a > span:after"]={'content':'"<<- Backwd"','text-transform':'none'}
   css[exclude_ie_below_9+'div.resultNavControls > ul > li.resultNavDoubleRight > a > span:after']={'content':'"Fwd ->>"','text-transform':'none'}
   css[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":colour['highlight']}
   printOverride[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":'white'} # TODO: shade of grey?
   css[jjc+" span.mk, "+jjc+" span.mk b"]={"background":colour["reset_button"]}
   printOverride[jjc+" span.mk, "+jjc+" span.mk b"]={"background":"white"}
-  # if pixelSize: css[exclude_ie_below_9+"input#site + div#band + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
+  # if pixelSize: css[exclude_ie_below_9+"input#site + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
@@ -769,13 +774,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"*display":"none"}
   # Hack for some other sites that put nothing inside software download links:
   def emptyLink(lType,content,css,printOverride,isRealLink=True):
+   for empty in [":empty",":blank",":-moz-only-whitespace"]:
     # Fill in the text of an empty link according to
     # context (making up for the fact that we're not
     # displaying whatever CSS-oriented graphical thing
     # the site is showing).  lType is the link in context
     # and 'content' is our guess of what it should say.
-    if isRealLink: key = lType+":link:empty"
-    else: key = lType+":empty"
+    if isRealLink: key = lType+":link"+empty
+    else: key = lType+empty
     css[key+":after"]={
       "content":'"'+content+']"', # overriding "]"
       "color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
@@ -818,6 +824,17 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('a[href^="http://apps.microsoft.com/"]',"Microsoft shop",css,printOverride)
   emptyLink('div#btnPreviousPage.previousPage',"Previous page",css,printOverride,False)
   emptyLink('div#btnNextPage.nextPage',"Next page",css,printOverride,False)
+  emptyLink('div.expanderIcon.collapsed',"+ expand",css,printOverride,False)
+  emptyLink('div.expanderIcon.expanded',"- collapse",css,printOverride,False)
+  emptyLink('a.navButton.prevNav > div.buttonShell',"Previous",css,printOverride,False)
+  emptyLink('a.navButton.nextNav > div.buttonShell',"Next",css,printOverride,False)
+  # emptyLink('div.toolbar > a.jsZoomIn.zoomIn',"Zoom in",css,printOverride,False);emptyLink('div.toolbar > a.jsZoomOut.zoomOut',"Zoom out",css,printOverride,False) # TODO: somehow let these work? (apparently it's all CSS tricks and we're overriding it)
+  emptyLink('div.toolbar > a.jsCloseModal',"Close",css,printOverride,False)
+  css["div.galleryCarouselItems"]={"*white-space":"normal"} # not 'nowrap'
+  emptyLink('div.tabViews > div.tabControls > a.discoveryTab',"Discovery",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.comparisonTab',"Comparison",css,printOverride,True) # has href="#" so True; NB these are more likely :blank than :empty, so might not work in all browsers (but don't want to risk removing :empty altogether)
+  emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-play > button",r"\21E8 Play",css,printOverride,False)
+  emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-pause > button",r"Pause",css,printOverride,False)
+  css["div#screenReaderNavLinkTop > p,div#primaryNav > nav > ul > li"]={"*display":"inline"} # save a bit of vertical space
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
   css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
   css["nav p#showHideMenu > a#goToMenu > span.icon:empty:after"]={"content":'"goToMenu"'}
@@ -1032,16 +1049,19 @@ def printCss(css,outfile,debugStopAfter=0):
     else:
       print "Binary chop: Disabling these attributes: ","; ".join([("%s=%s"%(k,v)) for (k,v),e in attrib_val_elemList[disable_start:disable_end]])
       del attrib_val_elemList[disable_start:disable_end]
-  # If any elem grps are identical, merge contents
+  # If any element groups are identical, merge contents, but beware to keep some things separate:
   outDic = {}
   for (k,v),elemList in attrib_val_elemList:
-    # With IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list.  So we need to separate it out.
-    # Also we need to COMPLETELY separate the ::selection markup at all times.
-    elemList_sep = [x for x in elemList if '::' in x]
-    elemList_ieVeryOld = [x for x in elemList if not x in elemList_sep and not '*' in x and not '>' in x and not ':empty' in x and not '[' in x]
-    elemList_ieLessOld = [x for x in elemList if not x in elemList_ieVeryOld and not x in elemList_sep and not ':not' in x]
-    elemList_rest = [x for x in elemList if x not in elemList_ieVeryOld and x not in elemList_ieLessOld and x not in elemList_sep]
-    for eList in [[x] for x in elemList_sep]+[elemList_ieVeryOld, elemList_ieLessOld, elemList_rest]:
+    elemLists = [[x] for x in elemList if '::' in x] # COMPLETELY separate the ::selection markup at all times, to work around browsers ignoring the whole list if they don't like it
+    def addIn(l):
+      flat=set(reduce(lambda a,b:a+b,elemLists,[]))
+      elemLists.append([i for i in l if not i in flat])
+    addIn([x for x in elemList if ':blank' in x]) # some Firefox versions need this separated
+    addIn([x for x in elemList if ':-moz' in x]) # just in case
+    addIn([x for x in elemList if not '*' in x and not '>' in x and not ':empty' in x and not ':not' in x and not '[' in x]) # with IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list, so we need to separate these out
+    addIn([x for x in elemList if not ':not' in x]) # for later versions of IE
+    addIn(elemList) # everything else
+    for eList in elemLists:
       if not eList: continue
       eList.sort()
       elems=tuple(eList)
