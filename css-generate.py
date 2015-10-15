@@ -758,8 +758,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[exclude_ie_below_9+'div.resultNavControls > ul > li.resultNavDoubleRight > a > span:after']={'content':'"Fwd ->>"','text-transform':'none'}
   css[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":colour['highlight']}
   printOverride[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":'white'} # TODO: shade of grey?
-  css[jjc+" span.mk, "+jjc+" span.mk b"]={"background":colour["reset_button"]}
-  printOverride[jjc+" span.mk, "+jjc+" span.mk b"]={"background":"white"}
+  css[jjc+"span.mk, "+jjc+"span.mk b"]={"background":colour["reset_button"]}
+  printOverride[jjc+"span.mk, "+jjc+"span.mk b"]={"background":"white"}
   # if pixelSize: css[exclude_ie_below_9+"input#site + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   # some site JS adds modal boxes to the end of the document, try:
@@ -831,9 +831,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # emptyLink('div.toolbar > a.jsZoomIn.zoomIn',"Zoom in",css,printOverride,False);emptyLink('div.toolbar > a.jsZoomOut.zoomOut',"Zoom out",css,printOverride,False) # TODO: somehow let these work? (apparently it's all CSS tricks and we're overriding it)
   emptyLink('div.toolbar > a.jsCloseModal',"Close",css,printOverride,False)
   css["div.galleryCarouselItems"]={"*white-space":"normal"} # not 'nowrap'
-  emptyLink('div.tabViews > div.tabControls > a.discoveryTab',"Discovery",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.comparisonTab',"Comparison",css,printOverride,True) # has href="#" so True; NB these are more likely :blank than :empty, so might not work in all browsers (but don't want to risk removing :empty altogether)
+  emptyLink('div.tabViews > div.tabControls > a.discoveryTab',"Discovery",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.comparisonTab',"Comparison",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.xRefTab',"xref",css,printOverride,True) # has href="#" so True; NB these are more likely :blank than :empty, so might not work in all browsers (but don't want to risk removing :empty altogether)
   emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-play > button",r"\21E8 Play",css,printOverride,False)
   emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-pause > button",r"Pause",css,printOverride,False)
+  emptyLink(jjc+"div#regionHeader > div#publicationNavigation > div.studyPaneToggle > span.icon","Toggle study pane",css,printOverride,False)
+  if pixelSize:
+    css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane"]={"position":"fixed","bottom":"0px","left":"30%","height":"30%","border":"magenta solid","overflow":"auto","z-index":"4"}
+    css[jjc+".pub-int ruby"]={"padding":"0 0.35em"}
+    css[jjc+"nav div#documentNavigation div.navVerses ul.verses li.verse"]={"display":"inline","margin":"0 0.1ex"}
+  emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,False)
+  emptyLink(jjc+"li.verseOutline a.outToggle > span","Outline",css,printOverride,False) # TODO: why won't this match?
   css["div#screenReaderNavLinkTop > p,div#primaryNav > nav > ul > li"]={"*display":"inline"} # save a bit of vertical space
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
   css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
