@@ -828,6 +828,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('div.expanderIcon.expanded',"- collapse",css,printOverride,False)
   emptyLink('a.navButton.prevNav > div.buttonShell',"Previous",css,printOverride,False)
   emptyLink('a.navButton.nextNav > div.buttonShell',"Next",css,printOverride,False)
+  emptyLink('a[title="PREVIOUS"]',"Previous",css,printOverride,True)
   emptyLink('a[title="NEXT"]',"Next",css,printOverride,True)
   # emptyLink('div.toolbar > a.jsZoomIn.zoomIn',"Zoom in",css,printOverride,False);emptyLink('div.toolbar > a.jsZoomOut.zoomOut',"Zoom out",css,printOverride,False) # TODO: somehow let these work? (apparently it's all CSS tricks and we're overriding it)
   emptyLink('div.toolbar > a.jsCloseModal',"Close",css,printOverride,False)
