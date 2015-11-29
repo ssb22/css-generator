@@ -869,6 +869,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       "*height":"15em","*overflow":"visible", # hopefully one of those will work
       "*filter":"none","*opacity":"1","*-moz-opacity":"1"}
   css["a#composeoptionstoggle > span.iconlink[title=\"Options\"]:empty:after"]={"content":'"Options"'}
+  # Blackwells article feedback:
+  emptyLink("a[title=\"Yes\"]","Yes",css,printOverride)
+  emptyLink("a[title=\"No\"]","No",css,printOverride)
   # Hacks for eBay:
   css['td#storeHeader']={"*width":"30%"}
   css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
