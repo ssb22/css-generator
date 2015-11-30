@@ -914,6 +914,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # practicalmandarin and other sites designed by some company: please don't jump around when we're in large print
   css['header.sticky-header']={'*display':'block'}
 
+  # video controls etc
+  css['svg[viewBox="0 0 22 22"]']={'*height':'22px','*width':'22px'}
+  css['svg[viewBox="0 0 36 36"]']={'*height':'36px','*width':'36px'}
+
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
   # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
