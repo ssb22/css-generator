@@ -14,8 +14,8 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9844
 # CHANGES
 # -------
 # If you want to compare this code to old versions, the old
-# versions are being kept on SourceForge's E-GuideDog SVN repository
-# http://sourceforge.net/p/e-guidedog/code/HEAD/tree/ssb22/css-generator/
+# versions are being kept in the E-GuideDog SVN repository on
+# http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
 # as of v0.9782.  Versions prior to that were not kept, but
 # you might be able to find some on Internet Archive.
 # To check out the repository, you can do:
