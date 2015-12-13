@@ -865,9 +865,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:after"]={"content":'")"',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount"]={"color":colour["coloured"]}
   css["div#mailboxcontainer > div#folderlist-content ul#mailboxlist > li.mailbox"]={"*display":"inline","*border":"none"} # in case you have a lot of folders (seeing as they're displayed on every screen)
-  css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe"]={
-      "*height":"15em","*overflow":"visible", # hopefully one of those will work
+  css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe,body.home > div.container > header#globalMasthead + div.clear + header#localMasthead + div.clear + div#frameStore > iframe,body.back > div#content > iframe#ifraResult,body.detailhost > table#detable td#drifdiv > iframe#drif"]={ # 'body.home' etc is for search.lib.cam.ac.uk
+      "*height":"25em","*overflow":"visible", # hopefully one of those will work
       "*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+  css["body.detailhost > table#detable,body.detailhost > table#detable td#drifdiv"]={"*width":"100%"} # also for search.lib.cam.ac.uk
   css["a#composeoptionstoggle > span.iconlink[title=\"Options\"]:empty:after"]={"content":'"Options"'}
   # Blackwells article feedback:
   emptyLink("a[title=\"Yes\"]","Yes",css,printOverride)
