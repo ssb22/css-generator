@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9844"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9845"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -597,6 +597,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['select']['background']=colour['selectbox']
   printOverride['select']['background']=printButtonBackground # TODO: or something else?
 
+  css['input[type=radio]']={'-webkit-appearance':'radio'}
+  css['input[type=checkbox]']={'-webkit-appearance':'checkbox'}
+
   if "alt-backgrounds" in colour:
     css['td:nth-child(odd),div:nth-child(odd)'] = {"background":colour["alt-backgrounds"][0]}
     printOverride['td:nth-child(odd),div:nth-child(odd)'] = {"background":"white"} # TODO: or a very light grey?
@@ -917,6 +920,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # video controls etc
   css['svg[viewBox="0 0 22 22"]']={'*height':'22px','*width':'22px'}
+  css['svg[viewBox="0 0 32 32"]']={'*height':'32px','*width':'32px'}
   css['svg[viewBox="0 0 36 36"]']={'*height':'36px','*width':'36px'}
 
   # End site-specific hacks
