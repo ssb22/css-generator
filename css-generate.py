@@ -295,6 +295,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   rubyElements = "ruby,rt,rp,rb".split(",") # NOT counted in mostElements
   html5Elements += ['text','text > tspan'] # used within svg, sometimes for nothing more than effect (unfortunately there doesn't seem to be a way of ensuring the containing svg is displayed large enough, but truncation is better than having the text go underneath other elements)
   mostElements += html5Elements
+  mostElements += ['location'] # site-specific hack for lib.cam.ac.uk
 
   # Selector prefixes to exclude certain browsers from trying to implement a rule:
   exclude_ie_below_7 = "html > "
@@ -922,6 +923,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['svg[viewBox="0 0 22 22"]']={'*height':'22px','*width':'22px'}
   css['svg[viewBox="0 0 32 32"]']={'*height':'32px','*width':'32px'}
   css['svg[viewBox="0 0 36 36"]']={'*height':'36px','*width':'36px'}
+  css['div#streamingAudio.jsAudioPlayer']={"*display":"block"} # please don't change it to display:none in Firefox when it scrolls out of view: doing this causes 'jumpy scrolling'
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
