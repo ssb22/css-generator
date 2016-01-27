@@ -695,7 +695,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if pixelSize:
     css['form[action^="/camcors/supervisor/reports"] div.reportBox > table,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr > td']={"display":"block"}
     css['form[action^="/camcors/supervisor/reports"] textarea']={"height":"4em"}
-  
+  css["div.GFTJ4-XN2 > a.gwt-Anchor"] = css["a:link "] ; css["div.GFTJ4-XN2 > a.gwt-Anchor:hover"] = css["a:link:hover "] # CamCORS 6
+  if (pixelSize and separate_adjacent_links_at_other_sizes) or (not pixelSize and separate_adjacent_links_at_size_0):
+    for l in [":before",":after"]: css["div.GFTJ4-XN2 > a.gwt-Anchor"+l] = css[exclude_ie_below_9+"a:link"+l] # ditto
+
   # hack for MHonarc and similar setups that put full-sized images into clickable links
   # (see comments on max-width above; doesn't seem to be a problem in this instance)
   # if pixelSize: css["a:link img,a:visited img"]={"max-width":"100%","max-height":"100%"}
