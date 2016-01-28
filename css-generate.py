@@ -695,9 +695,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if pixelSize:
     css['form[action^="/camcors/supervisor/reports"] div.reportBox > table,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr > td']={"display":"block"}
     css['form[action^="/camcors/supervisor/reports"] textarea']={"height":"4em"}
-  css["div.GFTJ4-XN2 > a.gwt-Anchor"] = css["a:link "] ; css["div.GFTJ4-XN2 > a.gwt-Anchor:hover"] = css["a:link:hover "] # CamCORS 6
+  make_like_link = ["div.GFTJ4-XN2 > a.gwt-Anchor"] # CamCORS 6
+  make_like_link += ["ul.sidebar-navigation > li.sidebar-navigation-item > div.sidebar-navigation-item-header > div.columns:not(:empty)",'a[data-target]'] # ott.cl.cam.ac.uk
+  css[','.join(make_like_link)] = css["a:link "] ; css[','.join(x+":hover" for x in make_like_link)] = css["a:link:hover "]
+  printOverride[','.join(make_like_link)] = printOverride["a:link "]
   if (pixelSize and separate_adjacent_links_at_other_sizes) or (not pixelSize and separate_adjacent_links_at_size_0):
-    for l in [":before",":after"]: css["div.GFTJ4-XN2 > a.gwt-Anchor"+l] = css[exclude_ie_below_9+"a:link"+l] # ditto
+    for l in [":before",":after"]:
+      css[','.join(x+l for x in make_like_link)] = css[exclude_ie_below_9+"a:link"+l]
+      printOverride[','.join(x+l for x in make_like_link)] = printOverride[exclude_ie_below_9+"a:link"+l]
+  css['img[src="img/otterlogo.jpg"][width="100%"]']={'*display':'none'} # ott.cl.cam.ac.uk
 
   # hack for MHonarc and similar setups that put full-sized images into clickable links
   # (see comments on max-width above; doesn't seem to be a problem in this instance)
