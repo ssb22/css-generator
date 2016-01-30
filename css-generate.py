@@ -748,6 +748,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "overflow":"auto", # just in case
         "z-index":"3", # ditto
       }
+      css[jjc+"div.navPosition"]={"display":"block"} # as above, don't flash on/off
       css[jjc+"div#regionHeader div.navPosition > div.scrollPositionDisplay"]={
         "position":"static", # as it's inside regionHeader; no point putting it bottom/right or it won't be visible (clipped by regionHeader)
         "width":"100%", # not 30% because this time it's of regionHeader not of screen
