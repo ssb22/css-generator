@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-2015.  Version 0.9845"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9845"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -912,7 +912,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
 
   # alternative to <wbr/> :
-  css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
+  css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
   # also use of 'q' adding duplicate quotes:
   css['div#regionMain > div.wrapper div#content div#article > article q.scrp:before, div#regionMain > div.wrapper div#content div#article > article q.scrp:after']={'content':'""'}
   
