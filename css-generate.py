@@ -691,11 +691,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map, div.googlemaps > div.mapsbord, div#divMapContainer.MapSingle > div#divMapTools.MapTools, div#divMapContainer.MapSingle > div#divMapTools.MapTools + div#divMap"]={"*display":"none"}
   css["div.rsltDetails > div.jsDivMoreInfo.hideObj"]={"*display":"block"} # not 'reveal address only when mouse-over' (which might be OK in conjunction with a map but...)
   
-  # hack for CAMCors
+  # hacks for CAMCors 6, deconstructing some tables etc:
   if pixelSize:
-    css['form[action^="/camcors/supervisor/reports"] div.reportBox > table,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr > td']={"display":"block"}
-    css['form[action^="/camcors/supervisor/reports"] textarea']={"height":"4em"}
-  make_like_link = ["div.GFTJ4-XN2 > a.gwt-Anchor"] # CamCORS 6
+    css['form[action^="/camcors/supervisor/reports"] div.reportBox > table,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr > td']={"display":"block"} # doesn't work well as table
+    css['form[action^="/camcors/supervisor/reports"] textarea']={"height":"4em"} # not too high for small windows
+    for t in ['table','table > tbody','table > tbody > tr','table > tbody > tr > td']: css['body.camcors-small div.span12 > div > '+t]={"display":"block"} # doesn't work well as table
+    css['body.camcors-small div.span12 > div > table'] = {"border":"thin blue solid","margin-bottom":"1ex"} # show difference (important for selection mechanism to make sense)
+    css['body.camcors-small input.gwt-TextBox'] = {"width":"2em"} # otherwise they are too wide and affect the whole div
+    css['body.camcors-small div.span12 > div > table > tbody > tr > td > div > div > table > tbody > tr > td[align="right"] > div > div.gwt-Label'] = {"display":"none"} # otherwise the "non-supervision hours disabled by college" message can get too wide which affects the whole div
+  make_like_link = ["div.GFTJ4-XN2 > a.gwt-Anchor"] # CamCORS
+  # (CamCORS hacks end here)
   make_like_link += ["ul.sidebar-navigation > li.sidebar-navigation-item > div.sidebar-navigation-item-header > div.columns:not(:empty)",'a[data-target]'] # ott.cl.cam.ac.uk
   css[','.join(make_like_link)] = css["a:link "] ; css[','.join(x+":hover" for x in make_like_link)] = css["a:link:hover "]
   printOverride[','.join(make_like_link)] = printOverride["a:link "]
