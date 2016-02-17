@@ -855,7 +855,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('div.tabViews > div.tabControls > a.discoveryTab',"Discovery",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.comparisonTab',"Comparison",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.xRefTab',"xref",css,printOverride,True) # has href="#" so True; NB these are more likely :blank than :empty, so might not work in all browsers (but don't want to risk removing :empty altogether)
   emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-play > button",r"\21E8 Play",css,printOverride,False)
   emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-pause > button",r"Pause",css,printOverride,False)
-  emptyLink(jjc+"div#regionHeader > div#publicationNavigation > div.studyPaneToggle > span.icon","Toggle study pane",css,printOverride,False)
+  emptyLink(jjc+"div#regionHeader > div#publicationNavigation > div.studyPaneToggle > span.icon","Toggle study pane",css,printOverride,False) # (TODO: on some versions this is effective only if the browser window exceeds a certain width)
   if pixelSize:
     css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane"]={"position":"fixed","bottom":"0px","left":"30%","height":"30%","border":"magenta solid","overflow":"auto","z-index":"4"}
     css[jjc+".pub-int ruby"]={"padding":"0 0.35em"}
