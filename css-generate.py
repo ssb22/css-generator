@@ -1180,7 +1180,7 @@ newDiv.appendChild(document.createTextNode(" or "));
 newDiv.appendChild(cssLink);
 newDiv.appendChild(document.createTextNode("."));
 newDiv.appendChild(document.createElement("BR"));
-newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page. But it might work better if you set it as a user-supplied stylesheet "));
+newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page, except for HTTPS sites in recent browsers which block &quot;mixed content&quot; (my site is not yet able to offer an HTTPS option). It might work better if you set it as a user-supplied stylesheet "));
 e=document.createElement("A"); e.href="#inst"; e.appendChild(document.createTextNode("as described below")); newDiv.appendChild(e);
 newDiv.appendChild(document.createTextNode("."));
 //newDiv.appendChild(document.createTextNode(" (which also means you won't have to press it each time and it will continue to work if this website moves). The 'bookmarklet' approach is best for short-term use (public terminals etc) or testing."));
