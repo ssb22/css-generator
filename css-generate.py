@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9845"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9846"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -275,6 +275,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*hyphens":"manual",
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
+    "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths, so set "auto" instead
     }
   for css3Thing,value in [
       # Get rid of "flip boxes"...
@@ -617,6 +618,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Begin site-specific hacks
 
   # Hack for Google search results:
+  css["g-img"]={"*display":"inline","*position":"static"}
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   css['img[src^="/images/nav_logo"][alt="Google"]']={"*display":"none"}
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
