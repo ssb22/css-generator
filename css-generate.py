@@ -313,7 +313,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # but there are some exceptions:
 
-  for e in rubyElements: del css[e]["*text-align"]
+  for e in rubyElements:
+    del css[e]["*text-align"] ; del css[e]["*line-height"]
 
   for t in ["textarea","html","body","input"]:
     css[t]["*overflow"] = "auto"
