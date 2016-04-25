@@ -263,7 +263,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*cursor":"auto",
     "*overflow":"visible", # the default.  NOT "auto" - it may put the scroll bar of a table off-screen at the bottom.  If (e.g.) "pre" overflows, we want the whole window to be scrollable to see it.
     
-    "*filter":"none",
+    "*filter":"none","*-webkit-filter":"none","*-moz-filter":"none","*-o-filter":"none","*-ms-filter":"none",
     "*opacity":"1",
     "*-moz-opacity":"1",
     
