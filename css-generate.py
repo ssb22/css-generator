@@ -947,6 +947,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.line-gutter-backdrop + table span.html-tag']={"color":colour["headings"]}
   css['body > div.line-gutter-backdrop + table span.html-attribute-name']={"color":colour["bold"]}
   css['body > div.line-gutter-backdrop + table span.html-attribute-value']={"color":colour["italic"]}
+  css['body > div.line-gutter-backdrop + table span.html-comment']={"color":colour["form_disabled"]}
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
