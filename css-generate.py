@@ -942,6 +942,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['svg[viewBox="0 0 32 32"]']={'*height':'32px','*width':'32px'}
   css['svg[viewBox="0 0 36 36"]']={'*height':'36px','*width':'36px'}
   css['div#streamingAudio.jsAudioPlayer']={"*display":"block"} # please don't change it to display:none in Firefox when it scrolls out of view: doing this causes 'jumpy scrolling'
+  
+  # Chrome view source (you can activate a CSS bookmarklet on it)
+  css['body > div.line-gutter-backdrop + table span.html-tag']={"color":colour["headings"]}
+  css['body > div.line-gutter-backdrop + table span.html-attribute-name']={"color":colour["bold"]}
+  css['body > div.line-gutter-backdrop + table span.html-attribute-value']={"color":colour["italic"]}
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
