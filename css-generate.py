@@ -948,7 +948,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.line-gutter-backdrop + table span.html-attribute-name, body#viewsource span.attribute-name']={"color":colour["bold"]}
   css['body > div.line-gutter-backdrop + table span.html-attribute-value, body#viewsource a.attribute-value']={"color":colour["italic"]}
   css['body > div.line-gutter-backdrop + table span.html-comment, body#viewsource span.comment']={"color":colour["form_disabled"]}
-  css['body#viewsource span[id^=line]:before']={"*content":'" "',"*display":"block"}
+  css['body#viewsource span > span[id^=line]:before']={"*content":'" "',"*display":"block","*font-size":"0","*line-height":"0"} # force line break before line number
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
