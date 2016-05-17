@@ -944,10 +944,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#streamingAudio.jsAudioPlayer']={"*display":"block"} # please don't change it to display:none in Firefox when it scrolls out of view: doing this causes 'jumpy scrolling'
   
   # Chrome view source (you can activate a CSS bookmarklet on it), and Firefox view source:
-  css['body > div.line-gutter-backdrop + table span.html-tag, body.viewsource span.start-tag']={"color":colour["headings"]}
-  css['body > div.line-gutter-backdrop + table span.html-attribute-name, body.viewsource span.attribute-name']={"color":colour["bold"]}
-  css['body > div.line-gutter-backdrop + table span.html-attribute-value, body.viewsource span.attribute-value']={"color":colour["italic"]}
-  css['body > div.line-gutter-backdrop + table span.html-comment, body.viewsource span.comment']={"color":colour["form_disabled"]}
+  css['body > div.line-gutter-backdrop + table span.html-tag, body#viewsource span.start-tag']={"color":colour["headings"]}
+  css['body > div.line-gutter-backdrop + table span.html-attribute-name, body#viewsource span.attribute-name']={"color":colour["bold"]}
+  css['body > div.line-gutter-backdrop + table span.html-attribute-value, body#viewsource span.attribute-value']={"color":colour["italic"]}
+  css['body > div.line-gutter-backdrop + table span.html-comment, body#viewsource span.comment']={"color":colour["form_disabled"]}
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
