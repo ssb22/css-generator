@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9846"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9847"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -529,16 +529,20 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Avoid style overrides from :first-letter, :first-line,
   # :before and :after in author's CSS.  However be careful
   # which elements you do this because of browser bugs.
-  firstLetterBugs=[
-   "div", # Gecko messes up textarea when enter multiple paragraphs
+  firstLetterBugs_multiple=[
   "input","select","option","textarea","table","colgroup","col","img", # probably best to avoid these
-  "a", # causes problems in IE
+  ]
+  firstLetterBugs_gecko=[
+   "div", # Gecko messes up textarea when enter multiple paragraphs
+  ]
+  firstLetterBugs_webkit=[
   # The following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
-  # TODO: allow them in Gecko via a Gecko-specific rule?  especially (e.g.) "p"
   "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center","article","span","aside","figure","figcaption"
   ]
-  # TODO: old version had th:first-letter but not tr,td & no documentation of why; similar with first-line
+  firstLetterBugs_other=[
+  "a", # causes problems in IE
+  ]
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
   "input","select","option","textarea","table","colgroup","col","img",
@@ -554,7 +558,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # (NB must say inherit, because consider things like p:first-line / A HREF... - the first-line may have higher specificity.
   # If IE7 seems to be getting first lines and first letters wrong, check that Ignore Document Colours is NOT set - "document" can include parts of the CSS.  and try toggling high-contrast mode twice.)
   for e in mostElements:
-    if not e in firstLetterBugs: css[e+":first-letter"]=inheritDic.copy()
+    if not e in firstLetterBugs_multiple:
+      if e in firstLetterBugs_gecko: dictToAddTo = webkitScreenOverride
+      elif e in firstLetterBugs_webkit: dictToAddTo = geckoScreenOverride
+      elif e in firstLetterBugs_other: dictToAddTo = webkitGeckoScreenOverride
+      else: dictToAddTo = css
+      dictToAddTo[e+":first-letter"]=inheritDic.copy()
     if not e in firstLineBugs: css[e+":first-line"]=inheritDic.copy()
     for i in map(lambda x:exclude_ie_below_9+e+x,[":before",":after"]):
       css[i]=defaultStyle.copy()
