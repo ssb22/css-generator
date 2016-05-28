@@ -885,7 +885,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.rp__controls__playback[aria-label="Play"]:empty:before']={"content":'"Play/pause"'} # e.g. ABC Classic FM
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
   doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be a social network link whose natural size is full-screen (and some news sites put these right at the top of all their pages)
-  css['img[width="18"][height="18"]']={"height":"18px","width":"18px"} # better keep that because it could be a social network link whose natural size is full-screen (and some news sites put these right at the top of all their pages)
+  doHeightWidth(16,16);doHeightWidth(24,24);doHeightWidth(36,36) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
