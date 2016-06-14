@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9847"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9848"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -531,11 +531,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # which elements you do this because of browser bugs.
   firstLetterBugs_multiple=[
   "input","select","option","textarea","table","colgroup","col","img", # probably best to avoid these
+   "div", # Gecko messes up textarea when enter multiple paragraphs; Safari has text selection visibility problem see below
   ]
-  firstLetterBugs_gecko=[
-   "div", # Gecko messes up textarea when enter multiple paragraphs
+  firstLetterBugs_geckoOnly=[
+    # none here for now
   ]
-  firstLetterBugs_webkit=[
+  firstLetterBugs_webkitOnly=[
   # The following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
   "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center","article","span","aside","figure","figcaption"
@@ -543,6 +544,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   firstLetterBugs_other=[
   "a", # causes problems in IE
   ]
+  assert not(any(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_other for x in firstLetterBugs_multiple) or any(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_other for x in firstLetterBugs_geckoOnly) or any(x in firstLetterBugs_other for x in firstLetterBugs_webkitOnly)), "Error: firstLetterBugs item in more than one category"
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
   "input","select","option","textarea","table","colgroup","col","img",
@@ -559,8 +561,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # If IE7 seems to be getting first lines and first letters wrong, check that Ignore Document Colours is NOT set - "document" can include parts of the CSS.  and try toggling high-contrast mode twice.)
   for e in mostElements:
     if not e in firstLetterBugs_multiple:
-      if e in firstLetterBugs_gecko: dictToAddTo = webkitScreenOverride
-      elif e in firstLetterBugs_webkit: dictToAddTo = geckoScreenOverride
+      if e in firstLetterBugs_geckoOnly: dictToAddTo = webkitScreenOverride
+      elif e in firstLetterBugs_webkitOnly: dictToAddTo = geckoScreenOverride
       elif e in firstLetterBugs_other: dictToAddTo = webkitGeckoScreenOverride
       else: dictToAddTo = css
       dictToAddTo[e+":first-letter"]=inheritDic.copy()
@@ -624,6 +626,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Make definition lists a bit more legible, including when there is more than one definition for one term
   css['dd+dd']={'*padding-top':'0.5ex','*margin-top':'1ex','*border-top':'thin dotted grey'}
   css['dt'].update({'*padding':'0.5ex 0px 0px 0px','*margin':'1ex 0px 0px 0px','border-top':'thin solid grey'})
+  
+  # Prevent pages from changing the colour of horizontal rules, especially to black if we have a black background (sometimes used within tables to mimic fraction lines in formulae)
+  css['hr']={"color":"grey","border-style":"inset"}
 
   # Begin site-specific hacks
 
@@ -958,6 +963,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.line-gutter-backdrop + table span.html-attribute-value, body#viewsource a.attribute-value:not([href])']={"color":colour["italic"]}
   css['body > div.line-gutter-backdrop + table span.html-comment, body#viewsource span.comment']={"color":colour["form_disabled"]}
   css['body#viewsource span > span[id^=line]:before']={"*content":'" "',"*display":"block","*font-size":"0","*line-height":"0"} # force line break before line number
+
+  css['h1:before']={"*content":'""'} # overrides large multi-icon image display in Tesco search results 2016-06 (if not logged in with accessibility mode set)
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
