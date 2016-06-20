@@ -893,6 +893,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
   doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be a social network link whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   doHeightWidth(16,16);doHeightWidth(24,24);doHeightWidth(36,36) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space
+  doHeightWidth(48,48);doHeightWidth(26,26)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
