@@ -811,8 +811,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
   css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"*display":"none"}
   # Hack for some other sites that put nothing inside software download links:
-  def emptyLink(lType,content,css,printOverride,isRealLink=True):
-   for empty in [":empty",":blank",":-moz-only-whitespace"]:
+  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False):
+   if omitEmpty: eList = [""]
+   else: eList = [":empty",":blank",":-moz-only-whitespace"]
+   for empty in eList:
     # Fill in the text of an empty link according to
     # context (making up for the fact that we're not
     # displaying whatever CSS-oriented graphical thing
@@ -820,9 +822,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # and 'content' is our guess of what it should say.
     if isRealLink: key = lType+":link"+empty
     else: key = lType+empty
-    css[key+":after"]={
-      "content":'"'+content+']"', # overriding "]"
-      "color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
+    css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
+    if content: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
     printOverride[key+":after"]={"color":"black"}
     css[key+":before"]={"color":colour["link"]}
     printOverride[key+":before"]={"color":"black"}
@@ -838,6 +839,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
       for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
       printOverride[key] = {"color":"black"}
+  css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
+  emptyLink("a.shareButton > span",None,css,printOverride,False,True);emptyLink("div.standardModal-content > div.itemInfoContainer > div.itemFinderLink > a.copyLink[title=\"Copy Link\"] > span","Copy Link",css,printOverride,False);css["div.itemInfoContainer > div.itemFinderLink, div.itemFinderLink > div.shareLinkContainer,input.shareLink[readonly]"]={"*width":"100%"}
   emptyLink("a[title~=download]","Download",css,printOverride)
   # and more for audio players:
   emptyLink("div.audioFormat > a.stream","Stream",css,printOverride)
@@ -891,9 +894,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.jwplayer span.jwcontrolbar,div.jwplayer span.jwcontrols"]={"display":"inline"} # don't hide controls when mouse is not over video (seeing as they're being repositioned outside it)
   css['div.rp__controls__playback[aria-label="Play"]:empty:before']={"content":'"Play/pause"'} # e.g. ABC Classic FM
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
-  doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be a social network link whose natural size is full-screen (and some news sites put these right at the top of all their pages)
+  doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   doHeightWidth(16,16);doHeightWidth(24,24);doHeightWidth(36,36) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space
-  doHeightWidth(48,48);doHeightWidth(26,26)
+  doHeightWidth(48,48);doHeightWidth(26,26) # (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
