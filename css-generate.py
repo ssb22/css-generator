@@ -971,6 +971,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body#viewsource span > span[id^=line]:before']={"*content":'" "',"*display":"block","*font-size":"0","*line-height":"0"} # force line break before line number
 
   css['h1:before']={"*content":'""'} # overrides large multi-icon image display in Tesco search results 2016-06 (if not logged in with accessibility mode set)
+  css['.basketDeliverySurcharge p:before, p.basketInfo:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
