@@ -630,7 +630,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Prevent pages from changing the colour of horizontal rules, especially to black if we have a black background (sometimes used within tables to mimic fraction lines in formulae)
   css['hr']={"color":"grey","border-style":"inset"}
   
-  css['aside']['border']="thin "+colour["italic"]+" solid" # might help sometimes
+  for aside in ['aside','figure']: css[aside]['border']="thin "+colour["italic"]+" solid" # might help sometimes
 
   # Begin site-specific hacks
 
@@ -798,6 +798,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride[jumpjsContent.replace(","," span.hl,")+" span.hl"]={"background":'white'} # TODO: shade of grey?
   css[jjc+"span.mk, "+jjc+"span.mk b"]={"background":colour["reset_button"]}
   printOverride[jjc+"span.mk, "+jjc+"span.mk b"]={"background":"white"}
+  css[jjc+"div.stdPullQuote"]={"border":css["aside"]["border"]}
   # if pixelSize: css[exclude_ie_below_9+"input#site + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   # some site JS adds modal boxes to the end of the document, try:
