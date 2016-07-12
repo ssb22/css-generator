@@ -629,7 +629,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   css['hr']={"color":"grey","border-style":"inset"} # prevent pages from changing the colour of horizontal rules, especially to black if we have a black background (sometimes used within tables to mimic fraction lines in formulae)
   for aside in ['aside','figure']: css[aside]['border']="thin "+colour["italic"]+" solid" # might help sometimes
-  css['body > pre:only-child']={'*white-space':'pre-line','*font-family':serif_fonts} # this might make Gopher pages easier to read in Firefox Overbyte (unless ASCII art is in use)
+  css['body > pre:only-child']={'*white-space':'pre-line','*font-family':serif_fonts} # this might make Gopher pages easier to read in Firefox's "OverbiteFF" (unless ASCII art is in use)
 
   # Begin site-specific hacks
 
@@ -973,6 +973,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['h1:before']={"*content":'""'} # overrides large multi-icon image display in Tesco search results 2016-06 (if not logged in with accessibility mode set)
   css['.basketDeliverySurcharge p:before, p.basketInfo:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
+  
+  css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em'} # Tsinghua online course login
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
