@@ -1101,7 +1101,8 @@ def printCss(css,outfile,debugStopAfter=0):
   rDic={} # maps (attrib,val) to a list of elements that have it
   for elem,attribValDict in css.items():
     # add aliases before starting
-    if attribValDict.has_key("background") and not attribValDict.has_key("background-color"): attribValDict["background-color"]=attribValDict["background"]
+    for master,alias in [("background","background-color"),("color","-webkit-text-fill-color")]:
+      if attribValDict.has_key(master) and not attribValDict.has_key(alias): attribValDict[alias]=attribValDict[master]
     # end of adding aliases
     for i in attribValDict.items():
       if not rDic.has_key(i): rDic[i]=[]
