@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9848"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9849"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -631,7 +631,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for aside in ['aside','figure']: css[aside]['border']="thin "+colour["italic"]+" solid" # might help sometimes
   css['body > pre:only-child']={'*white-space':'pre-line','*font-family':serif_fonts} # this might make Gopher pages easier to read in Firefox's "OverbiteFF" (unless ASCII art is in use)
   
-  css['::-webkit-input-placeholder,:-moz-placeholder,::-moz-placeholder,:ms-input-placeholder,::placeholder'] = {"color":colour["form_disabled"]}
+  for pt in '::-webkit-input-placeholder,:-moz-placeholder,::-moz-placeholder,:ms-input-placeholder,::placeholder'.split(","): css[pt] = {"color":colour["form_disabled"]}
 
   # Begin site-specific hacks
 
@@ -1138,6 +1138,8 @@ def printCss(css,outfile,debugStopAfter=0):
       elemLists.append([i for i in l if not i in flat])
     addIn([x for x in elemList if ':blank' in x]) # some Firefox versions need this separated
     addIn([x for x in elemList if ':-moz' in x]) # just in case
+    addIn([x for x in elemList if ':-webkit' in x]) # just in case
+    addIn([x for x in elemList if ':ms-' in x]) # just in case
     addIn([x for x in elemList if not '*' in x and not '>' in x and not ':empty' in x and not ':not' in x and not '[' in x]) # with IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list, so we need to separate these out
     addIn([x for x in elemList if not ':not' in x]) # for later versions of IE
     addIn(elemList) # everything else
