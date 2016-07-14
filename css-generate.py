@@ -630,6 +630,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['hr']={"color":"grey","border-style":"inset"} # prevent pages from changing the colour of horizontal rules, especially to black if we have a black background (sometimes used within tables to mimic fraction lines in formulae)
   for aside in ['aside','figure']: css[aside]['border']="thin "+colour["italic"]+" solid" # might help sometimes
   css['body > pre:only-child']={'*white-space':'pre-line','*font-family':serif_fonts} # this might make Gopher pages easier to read in Firefox's "OverbiteFF" (unless ASCII art is in use)
+  
+  css['::-webkit-input-placeholder,:-moz-placeholder,::-moz-placeholder,:ms-input-placeholder,::placeholder'] = {"color":colour["form_disabled"]}
 
   # Begin site-specific hacks
 
@@ -798,6 +800,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[jjc+"span.mk, "+jjc+"span.mk b"]={"background":colour["reset_button"]}
   printOverride[jjc+"span.mk, "+jjc+"span.mk b"]={"background":"white"}
   css[jjc+"div.stdPullQuote"]={"border":css["aside"]["border"]}
+  css['div.jsDownloadFileList ul.downloadItemSet > li.itemRow'] = { # confusion re is the Play button above or below the item: delineate them more clearly
+    '*padding-top':'1em', # TODO: does this even work?
+    'border':'thin blue solid'}
   # if pixelSize: css[exclude_ie_below_9+"input#site + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   # some site JS adds modal boxes to the end of the document, try:
