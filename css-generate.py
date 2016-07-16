@@ -686,7 +686,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
   css["body.mediawiki > div.navpopup,body.mediawiki .referencetooltip, ul.ui-autocomplete"]={"*position":"absolute","border":"blue solid"}
   css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
-  # and the maps:
+  # and the map pins (TODO: this is still only approximate! pins tend to be a bit too far to the south-west; not sure why) :
   css['body.mediawiki table.geography tr.mergedtoprow div[style^="position:absolute"]']={"*position":"absolute","background-color":"transparent"}
   css['body.mediawiki table.geography tr.mergedtoprow div[style^="position:relative"]']={"*position":"relative","*display":"inline-block"} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
   css['body.mediawiki table.geography tr.mergedtoprow div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
