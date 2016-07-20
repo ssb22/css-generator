@@ -906,6 +906,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   doHeightWidth(16,16);doHeightWidth(24,24);doHeightWidth(36,36) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space
   doHeightWidth(48,48);doHeightWidth(26,26) # (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
+  doHeightWidth(12,12)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
@@ -984,6 +985,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.basketDeliverySurcharge p:before, p.basketInfo:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
   
   css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em'} # Tsinghua online course login
+
+  css['div#wrap > div.__iklan + header#masthead + main#content > article[id^="single-post"] > div.container > div.entry-main > aside.entry-sidebar'] = {"display":"none"} # zap an ever-expanding "sidebar" that never lets you get to the article
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
