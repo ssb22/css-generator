@@ -326,6 +326,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # (if broken, consider re-instating the delete and move body:auto to the
   # non-IE7 override hack at end)
   # del css["body"]["*overflow"] # Do not set both "body" and "html" in IE7 - it disables keyboard-only scrolling!
+  del css["input"]["*overflow"] # for IE 6 and possibly 8 overprinting too-long input type="text" with a horizontal scrollbar
 
   for e in ["object","embed","img"]:
     del css[e]["*width"], css[e]["*height"] # object/embed should not be forced to 'auto' as that can sometimes break Flash applications (when the Flash application is actually useful), and if img is 'auto' then that can break on some versions of IE
