@@ -416,7 +416,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                  ".button", # used by some JS applications
                  ]:
       css["a"+type+" "+linkInside]={"color":colour["link"],"text-decoration":"underline","cursor":"pointer"}
-      printOverride["a"+type+" "+linkInside]={"color":"#101010"} # (dark grey, TODO: option?)
+      printOverride["a"+type+" "+linkInside]={"color":"#000080"} # printing: links in blue might be useful for sending PDFs to others, but make it a dark blue so still readable if printed in black and white (don't try to ensure page is ALWAYS black and white: that can't be done w/out suppressing images.  User needs to suppress colour at print time.  But ensure legible choice of shading when that happens.)
       css["a"+type+":hover "+linkInside]={"background":colour["hover"]}
       css["a"+type+":active "+linkInside]={"color":"red","text-decoration":"underline","cursor":"pointer"}
       if linkInside in ["b","i","em","u","strong"] and not css[linkInside]["color"]==colour["text"]: css["a"+type+" "+linkInside]["color"]=css[linkInside]["color"]
@@ -626,7 +626,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Make definition lists a bit more legible, including when there is more than one definition for one term
   css['dd+dd']={'*padding-top':'0.5ex','*margin-top':'1ex','*border-top':'thin dotted grey'}
-  css['dt'].update({'*padding':'0.5ex 0px 0px 0px','*margin':'1ex 0px 0px 0px','border-top':'thin solid grey'})
+  css['dt'].update({'*padding':'0.5ex 0px 0px 0px','*margin':'1ex 0px 0px 0px','border-top':'thin grey solid'})
   
   css['hr']={"color":"grey","border-style":"inset"} # prevent pages from changing the colour of horizontal rules, especially to black if we have a black background (sometimes used within tables to mimic fraction lines in formulae)
   for aside in ['aside','figure']: css[aside]['border']="thin "+colour["italic"]+" solid" # might help sometimes
@@ -646,7 +646,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['a#logo > img[src="/images/nav_logo195.png"]']={"*display":"none"}
   css['div#main div#cnt div#rcnt div.col div#ifb div.rg_meta,div#main div#cnt div#rcnt div.col div#ifb div.rg_bb_i div.rg_bb_i_meta']={"*display":"none"} # image search
   css['div#mngb > div#gb > div.gb_Sb,body#gsr.srp > div#mngb']={"*display":"none"} # other graphical clutter they added 2014-09 and 2014-10
-  
+  css['div#gbqfbw > button#gbqfb > span.gbqfi:empty']={'*display':'none'} # 2549-pixel high image on Android shop that messes up scrolling 2016-08
   # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi, .diff-*)
   k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem"
   css[k] = {"color":colour["italic"]}
@@ -688,9 +688,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.mediawiki > div.navpopup,body.mediawiki .referencetooltip, ul.ui-autocomplete"]={"*position":"absolute","border":"blue solid"}
   css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
   # and the map pins (TODO: this is still only approximate! pins tend to be a bit too far to the south-west; not sure why) :
-  css['body.mediawiki table.geography tr.mergedtoprow div[style^="position:absolute"]']={"*position":"absolute","background-color":"transparent"}
-  css['body.mediawiki table.geography tr.mergedtoprow div[style^="position:relative"]']={"*position":"relative","*display":"inline-block"} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
-  css['body.mediawiki table.geography tr.mergedtoprow div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
+  css['body.mediawiki table tr div[style^="position:absolute"]']={"*position":"absolute","background-color":"transparent"}
+  css['body.mediawiki table tr div[style^="position:relative"]']={"*position":"relative","*display":"inline-block"} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
+  css['body.mediawiki table tr div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
   # Hack for some authoring tools that use <FONT COLOR=..> to indicate special emphasis
@@ -808,6 +808,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.jsDownloadFileList ul.downloadItemSet > li.itemRow'] = { # confusion re is the Play button above or below the item: delineate them more clearly
     '*padding-top':'1em', # TODO: does this even work?
     'border':'thin blue solid'}
+  css['div#content > div#pubListResults > div#pubsViewResults > div.publication'] = {'border':'thin blue solid'}
+  css[jjc+"span.pageNum[data-no]"]={'display':'none'}
+  css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
+  css['div#materialNav > nav > h1 + ul.directory > li > a > span.title + span.details'] = {'float':'right'}
   # if pixelSize: css[exclude_ie_below_9+"input#site + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   # some site JS adds modal boxes to the end of the document, try:
@@ -834,21 +838,21 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     else: key = lType+empty
     css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
     if content: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
-    printOverride[key+":after"]={"color":"black"}
+    printOverride[key+":after"]={"color":"#000080"}
     css[key+":before"]={"color":colour["link"]}
-    printOverride[key+":before"]={"color":"black"}
+    printOverride[key+":before"]={"color":"#000080"}
     if isRealLink:
       key = key.replace(":link",":visited")
       css[key+":after"]={"color":colour["visited"]}
-      printOverride[key+":after"]={"color":"black"}
+      printOverride[key+":after"]={"color":"#000080"}
       css[key+":before"]={"color":colour["visited"]}
-      printOverride[key+":before"]={"color":"black"}
+      printOverride[key+":before"]={"color":"#000080"}
     else: # not isRealLink
       css[key+":before"]["content"] = '"["'
       css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
       css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
       for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
-      printOverride[key] = {"color":"black"}
+      printOverride[key] = {"color":"#000080"}
   css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
   emptyLink("a.shareButton > span",None,css,printOverride,False,True);emptyLink("div.standardModal-content > div.itemInfoContainer > div.itemFinderLink > a.copyLink[title=\"Copy Link\"] > span","Copy Link",css,printOverride,False);css["div.itemInfoContainer > div.itemFinderLink, div.itemFinderLink > div.shareLinkContainer,input.shareLink[readonly]"]={"*width":"100%"}
   emptyLink("a[title~=download]","Download",css,printOverride)
@@ -903,6 +907,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child:before"]={"content":'"Play/pause button: "'} ; css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child > button"]={"width":'2em'} # (CSS can't put a text label into that button itself, but we can at least put one before it.  Original is done with background graphics etc.  Incidentally, button:empty doesn't work because it does have some whitespace.)
   css["div.jwplayer span.jwcontrolbar,div.jwplayer span.jwcontrols"]={"display":"inline"} # don't hide controls when mouse is not over video (seeing as they're being repositioned outside it)
   css['div.rp__controls__playback[aria-label="Play"]:empty:before']={"content":'"Play/pause"'} # e.g. ABC Classic FM
+  css['div.audio > div.play[rv-on-click]:empty:before']={'content':'"\21E8 Play"'}
+  css['div.audio > div.pause[rv-on-click]:empty:before']={'content':'"Pause"'}
+  css['body > div.ui-draggable > div.ui-dialog-titlebar']={'cursor':'move'}
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
   doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   doHeightWidth(16,16);doHeightWidth(24,24);doHeightWidth(36,36) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space
@@ -911,7 +918,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
-  printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']=printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':'black'}
+  printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']=printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':'#000080'}
   # Hacks for RoundCube-based webmail sites and some forums:
   for t in ["Reset search","Search modifiers","Show preview pane","Enlarge","Click here to give thanks to this post."]: emptyLink('a[title="'+t+'"]',t,css,printOverride) # (OK 'Enlarge' isn't RoundCube but is used on some MediaWiki sites)
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:before"]={"content":'" ("',"color":colour["coloured"]}
@@ -991,6 +998,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
+  css['input:-webkit-autofill']={'-webkit-text-fill-color':'blue'} # the background of these things is fixed to bright yellow, so we'd better make sure our webkit-text-fill-color override doesn't apply in this context
   # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
   css["html:not(:empty)"]={"*overflow":"visible"}
   # speed up scrolling on Midori (from their FAQ), also avoid colour problems in other browsers on some sites:
