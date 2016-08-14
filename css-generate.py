@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.985"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9851"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
