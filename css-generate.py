@@ -454,7 +454,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     el="h%d" % (h+1)
     css[el]["*font-family"]=sans_serif_fonts
     size = (largestHeadingSize-h*(largestHeadingSize-smallestHeadingSize)/(6-1.0))
-    indent += size
     css[el]["*font-size"]="%.1fpx" % size
     css[el]["*font-weight"]="bold"
     # ensure 'h1 strong' etc inherits family (but not necessarily colour):
@@ -478,6 +477,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     printOverride[el+" a b"]=printOverride[el].copy()
     # and now (AFTER the above) set margins on headings
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
+    indent += size
 
   # Images and buttons:
   css["img"]["background"]=colour["image_transparency_compromise"]
