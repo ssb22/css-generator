@@ -1229,7 +1229,7 @@ var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/18.12;
   def tryStylesheetJS(hrefExpr):
     r = "var e=document.createElement('link'); e.id0='ssb22css'; e.rel='stylesheet'; e.href="+hrefExpr+"; if(!document.getElementsByTagName('head')) document.body.appendChild(document.createElement('head')); var h=document.getElementsByTagName('head')[0]; if(h.lastChild && h.lastChild.id0=='ssb22css') h.removeChild(h.lastChild); h.appendChild(e);"
     if alternate_server_for_https_requests:
-      r = "var c="+hrefExpr+","+r[4:].replace(hrefExpr,"location.protocol=='https:'?'"+alternate_server_for_https_requests+"'+c.slice(c.search(/[^/]*\.css/)).replace('.css',''):c",1)
+      r = "var c="+hrefExpr+","+r[4:].replace(hrefExpr,"location.protocol=='https:'?'"+alternate_server_for_https_requests+r"'+c.slice(c.search(/[^/]*\.css/)).replace('.css',''):c",1)
     return r
   # (do NOT put that in a JS function, the 1st link must be self-contained.  and don't say link.click() it's too browser-specific)
   if alternate_server_for_https_requests: exception = ""
