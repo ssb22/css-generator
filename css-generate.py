@@ -1225,8 +1225,15 @@ var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/18.12;
     else: pxDesc = "unchanged"
     print "e=document.createElement('OPTION'); e.value='"+str(pixelSize)+"'; e.appendChild(document.createTextNode('"+pxDesc+"')); sizeSelect.appendChild(e); if(defaultSize) sizeSelect.selectedIndex="+str(pixel_sizes_to_generate.index(pixelSize))+"; if(defaultSize<"+str(pixelSize)+") defaultSize=0;"
   for scheme,suffix,colour in colour_schemes_to_generate: print "e=document.createElement('OPTION'); e.value='"+suffix+"'; e.appendChild(document.createTextNode('"+scheme+"')); colourSelect.appendChild(e);"
-  def tryStylesheetJS(hrefExpr): return "var e=document.createElement('link'); e.id0='ssb22css'; e.rel='stylesheet'; e.href="+hrefExpr+"; if(!document.getElementsByTagName('head')) document.body.appendChild(document.createElement('head')); var h=document.getElementsByTagName('head')[0]; if(h.lastChild && h.lastChild.id0=='ssb22css') h.removeChild(h.lastChild); h.appendChild(e);"
+  alternate_server_for_https_requests = os.environ.get('CSS_HTTPS_SERVER',None) # for the bookmarklet, if you want to apply it on https pages (which means the CSS itself must be served from https) and your main website isn't on an HTTPS-capable server but there's a secondary (lower-bandwidth) one you can use just for that use-case
+  def tryStylesheetJS(hrefExpr):
+    r = "var e=document.createElement('link'); e.id0='ssb22css'; e.rel='stylesheet'; e.href="+hrefExpr+"; if(!document.getElementsByTagName('head')) document.body.appendChild(document.createElement('head')); var h=document.getElementsByTagName('head')[0]; if(h.lastChild && h.lastChild.id0=='ssb22css') h.removeChild(h.lastChild); h.appendChild(e);"
+    if alternate_server_for_https_requests:
+      r = "var c="+hrefExpr+","+r[4:].replace(hrefExpr,"location.protocol=='https:'?'"+alternate_server_for_https_requests+"'+c.slice(c.search(/[^/]*.css/)).replace('.css',''):c",1)
+    return r
   # (do NOT put that in a JS function, the 1st link must be self-contained.  and don't say link.click() it's too browser-specific)
+  if alternate_server_for_https_requests: exception = ""
+  else: exception = ", except for HTTPS sites in recent browsers which block \"mixed content\" (my site is not yet able to offer an HTTPS option)" # TODO: implement 3rd alternative if primary server becomes HTTPS-capable
   print r"""
 newDiv.appendChild(document.createElement('BR'));
 newDiv.appendChild(document.createTextNode('Then press '));
@@ -1240,7 +1247,7 @@ newDiv.appendChild(document.createTextNode(" or "));
 newDiv.appendChild(cssLink);
 newDiv.appendChild(document.createTextNode("."));
 newDiv.appendChild(document.createElement("BR"));
-newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page, except for HTTPS sites in recent browsers which block \"mixed content\" (my site is not yet able to offer an HTTPS option). It might work better if you set it as a user-supplied stylesheet "));
+newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page"""+exception+r""". It might work better if you set it as a user-supplied stylesheet "));
 e=document.createElement("A"); e.href="#inst"; e.appendChild(document.createTextNode("as described below")); newDiv.appendChild(e);
 newDiv.appendChild(document.createTextNode("."));
 //newDiv.appendChild(document.createTextNode(" (which also means you won't have to press it each time and it will continue to work if this website moves). The 'bookmarklet' approach is best for short-term use (public terminals etc) or testing."));
