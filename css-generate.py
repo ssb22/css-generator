@@ -476,8 +476,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     printOverride[el+" span"]=printOverride[el].copy()
     printOverride[el+" a b"]=printOverride[el].copy()
     # and now (AFTER the above) set margins on headings
+    if h: indent += size
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
-    indent += size
 
   # Images and buttons:
   css["img"]["background"]=colour["image_transparency_compromise"]
