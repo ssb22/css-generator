@@ -746,7 +746,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # hack for sites that use jump.js with nav boxes
   jjc = "body > input#site + div#wrapper "
   jumpjsContent = jjc+"div#content,"+jjc+"div#message"
-  jumpjsTooltip = 'div > div.tooltip.unstyled.dir-ltr[dir="ltr"]'
+  jumpjsTooltip = 'div > div.tooltip.dir-ltr[dir="ltr"]' # TODO: ? div[style^="position: absolute"] > div > div.tooltip
   css[jumpjsTooltip+","+jjc+"div#message"]={"border":"thin solid "+colour["italic"]}
   for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
   if pixelSize:
