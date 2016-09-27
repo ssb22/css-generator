@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9851"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9852"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -577,12 +577,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for i in map(lambda x:exclude_ie_below_9+x,[":before",":after"]): css[i]=defaultStyle.copy() # (especially margin and padding)
 
   # CSS 2+ markup for viewing XML+CSS pages that don't use HTML.  Not perfect but should be better than nothing.
-  xmlKey=":root:not(HTML), :root:not(HTML) :not(:empty)"
-  # Careful not to use the universal selector, because it can mess up Mozilla's UI
+  xmlKey=":root:not(HTML):not(page), :root:not(HTML):not(page) :not(:empty)"
+  # Careful not to use the universal selector, because it can mess up Mozilla's UI.
+  # :not(page) is an important addition for recent versions of Firefox whose Preference pages start with 'page' (can be rendered invisible if apply whole of defaultStyle to it).
+  css["page:root *"]={"background-color":colour["background"]} # to normalise recent-Firefox preferences pages (without this, some parts do and some don't; result can look too stark).  Tested in Firefox 45.4.
   css[xmlKey]=defaultStyle.copy()
   del css[xmlKey]["*text-decoration"] # because this CSS won't be able to put it back in for links (since it doesn't know which elements ARE links in arbitrary XML)
   # Exception to above for Mozilla scrollbars:
-  css[":root:not(HTML) slider:not(:empty)"]={"background":"#301090"}
+  css[":root:not(HTML):not(page) slider:not(:empty)"]={"background":"#301090"}
 
   checkbox_scale = int(pixelSize/16)
   if checkbox_scale > 1:
