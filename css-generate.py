@@ -693,6 +693,17 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki table tr div[style^="position:absolute"]']={"*position":"absolute","background-color":"transparent"}
   css['body.mediawiki table tr div[style^="position:relative"]']={"*position":"relative","*display":"inline-block"} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
   css['body.mediawiki table tr div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
+  # and syntax highlighting of code:
+  css['body.mediawiki .mw-highlight .k']={"color":colour["italic"]} # keyword
+  css['body.mediawiki .mw-highlight .kt']={"color":colour["italic"]} # keyword type
+  css['body.mediawiki .mw-highlight .n']={"color":colour["bold"]} # (variable) name
+  css['body.mediawiki .mw-highlight .nf']={"color":colour["bold"]} # function name
+  css['body.mediawiki .mw-highlight .cm']={"color":colour["headings"]} # comment
+  css['body.mediawiki .mw-highlight .s']={"background":colour["highlight"]} # string
+  css['body.mediawiki .mw-highlight .cpf']={"background":colour["highlight"]} # #include parameter (treated like string in some editors)
+  css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
+  # TODO: p = punc, o = operator; cp for includes; others?
+  
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
   # Hack for some authoring tools that use <FONT COLOR=..> to indicate special emphasis
