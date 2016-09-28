@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9852"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9853"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -700,6 +700,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki .mw-highlight .nf']={"color":colour["bold"]} # function name
   css['body.mediawiki .mw-highlight .cm']={"color":colour["headings"]} # comment
   css['body.mediawiki .mw-highlight .s']={"background":colour["highlight"]} # string
+  css['body.mediawiki .mw-highlight .se']={"background":colour["highlight"],"color":colour["bold"]} # string escape character
   css['body.mediawiki .mw-highlight .cpf']={"background":colour["highlight"]} # #include parameter (treated like string in some editors)
   css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
   # TODO: p = punc, o = operator; cp for includes; others?
