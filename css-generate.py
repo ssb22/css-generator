@@ -642,6 +642,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["g-img"]={"*display":"inline","*position":"static"}
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   css['img[src^="/images/nav_logo"][alt="Google"]']={"*display":"none"}
+  css['div.gb_tc.gb_uc.gb_Vb:empty']={"*display":"none"} # TODO: if gb = Great Britain then we might need to rewrite this to cover other countries.  The div has a :before rule with image content, takes up lots of screen space and is not functional. (2016-10)
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
   for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
   css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight"]} # suggestions cursor 2015-04
