@@ -931,8 +931,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
   doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   doHeightWidth(16,16);doHeightWidth(24,24);doHeightWidth(36,36) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space
-  doHeightWidth(48,48);doHeightWidth(26,26);doHeightWidth(20,20);doHeightWidth(44,44) # (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
-  doHeightWidth(12,12)
+  for w in [12,20,26,28,44,48]: doHeightWidth(w,w) # (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
