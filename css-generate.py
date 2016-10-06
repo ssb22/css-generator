@@ -1012,6 +1012,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em'} # Tsinghua online course login
 
   css['div#wrap > div.__iklan + header#masthead + main#content > article[id^="single-post"] > div.container > div.entry-main > aside.entry-sidebar'] = {"display":"none"} # zap an ever-expanding "sidebar" that never lets you get to the article
+  
+  # Internet Archive:
+  css["div#position > div#wbCalendar > div#calUnder.calPosition"]={"display":"none"}
+  css["a.year-label.activeHighlight:link"]={"background":colour['highlight']}
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
@@ -1234,7 +1238,7 @@ newDiv.appendChild(document.createTextNode('Select your size and colour: '));
 var sizeSelect=document.createElement('SELECT');
 var colourSelect=document.createElement('SELECT');
 newDiv.appendChild(sizeSelect); newDiv.appendChild(colourSelect);
-var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/18.12; // 36pt 15.1in
+var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/(window.devicePixelRatio||1)/18.12; // 36pt 15.1in
 """
   pixel_sizes_to_generate.sort()
   for pixelSize in pixel_sizes_to_generate:
