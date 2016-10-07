@@ -838,6 +838,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["body.yesJS > div.fancybox-wrap[style] div.fancybox-close:after"]={"content":"\"Close\""}
     # hack for sites that embed YouTube videos (NASA etc) when using the YouTube5 Safari extension on a Mac (TODO: Safari 6 needs sorting out)
     css["div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls"]={"background":"transparent"}
+    css["div#yt-masthead > div.yt-masthead-logo-container, div#yt-masthead-content > form#masthead-search > button.yt-uix-button.yt-uix-button-default"]={"display":"none"}
+    css['div.guide-item-container > ul.guide-user-links.yt-box > li[role="menuitem"], div.guide-channels-content > ul#guide-channels > li[role="menuitem"]']={"display":"inline-block"}
   # hack for MusOpen:
   css["a.download-icon span.icon-down:empty:after"]={"content":'"Download"',"color":colour["link"]}
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
