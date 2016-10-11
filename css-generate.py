@@ -642,7 +642,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["g-img"]={"*display":"inline","*position":"static"}
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   css['img[src^="/images/nav_logo"][alt="Google"]']={"*display":"none"}
-  css['div.gb_tc.gb_uc.gb_Vb:empty']={"*display":"none"} # TODO: if gb = Great Britain then we might need to rewrite this to cover other countries.  The div has a :before rule with image content, takes up lots of screen space and is not functional. (2016-10)
+  css['div.gb_tc.gb_uc.gb_Vb:empty,div.gb_uc.gb_vc.gb_Wb:empty']={"*display":"none"} # TODO: if gb = Great Britain then we might need to rewrite this to cover other countries.  The div has a :before rule with image content, takes up lots of screen space and is not functional. (2016-10)
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
   for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
   css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight"]} # suggestions cursor 2015-04
@@ -658,6 +658,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # and media players:
   css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":r'"\21E8 Play"'}
   css["div.mwPlayerContainer div.play-btn span.ui-icon-pause:empty:after"]={"content":'"Pause"'}
+  css['body.mediawiki div[title="Play clip"]:empty:after']={"content":'"Play clip"'}
   # Hack for jqMath:
   if pixelSize: css["td.fm-num-frac,td.fm-den-frac"] = {"text-align":"center"}
   # Partial hack for MathJax:  (I wish webmasters would use
@@ -976,6 +977,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # + for BBC radio player:
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
     css['button.twite__share-button,button.twite__share-button + div.twite__panel']={"display":"none"} # BBC 2016: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
+    css['form[action^="https://ssl.bbc.co.uk"] > button.p-f-button']={'display':'none'} # doesn't work very well anyway and takes up too much room
 
   # alternative to <wbr/> :
   css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
