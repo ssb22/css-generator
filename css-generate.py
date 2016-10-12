@@ -932,9 +932,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.audio > div.pause[rv-on-click]:empty:before']={'content':'"Pause"'}
   css['body > div.ui-draggable > div.ui-dialog-titlebar']={'cursor':'move'}
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
-  doHeightWidth(18,18);doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
-  doHeightWidth(16,16);doHeightWidth(24,24);doHeightWidth(36,36) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space
-  for w in [12,20,26,28,44,48]: doHeightWidth(w,w) # (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
+  doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
+  for w in [12,16,17,18,20,24,26,28,30,36,44,48]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css["div.sidebar-wrapper > ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
