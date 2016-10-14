@@ -875,6 +875,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
       printOverride[key] = {"color":"#000080"}
   css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
+  emptyLink("div.jsDropdownMenu.downloadDropdown > a.secondaryButton.dropdownHandle > span.buttonIcon.download","Download",css,printOverride,False)
   emptyLink("a.shareButton > span",None,css,printOverride,False,True);emptyLink("div.standardModal-content > div.itemInfoContainer > div.itemFinderLink > a.copyLink[title=\"Copy Link\"] > span","Copy Link",css,printOverride,False);css["div.itemInfoContainer > div.itemFinderLink, div.itemFinderLink > div.shareLinkContainer,input.shareLink[readonly]"]={"*width":"100%"}
   emptyLink("a[title~=download]","Download",css,printOverride)
   # and more for audio players:
