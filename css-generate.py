@@ -965,6 +965,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#post-module > div.post-module-in > form#slideshare-upload-form, div#post-module > div.post-module-in > div#slideshare-upload-callout']={'*display':'none'} # can't get it to work, and a non-working form is just clutter
   css['iframe[src^="https://www.linkedin.com/csp/ads"],iframe[src^="https://ad-emea.doubleclick.net"]']={'*display':'none'} # sorry LinkedIn but they're getting really too cluttered for giant-print navigation
   emptyLink("input.post-link + a.post-link-close","Cancel posting link",css,printOverride) ; emptyLink("a.cancel-file-upload","Cancel file upload",css,printOverride) # I think (not sure how this is supposed to work)
+  # Hacks for StackOverflow/etc:
+  emptyLink('a[title="delete this comment"]',"Delete this comment",css,printOverride)
+  emptyLink('a[title="expand to show all comments on this post"]',"Expand all comments",css,printOverride)
   # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
   if pixelSize:
     css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"}
