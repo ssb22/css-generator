@@ -650,6 +650,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#main div#cnt div#rcnt div.col div#ifb div.rg_meta,div#main div#cnt div#rcnt div.col div#ifb div.rg_bb_i div.rg_bb_i_meta']={"*display":"none"} # image search
   css['div#mngb > div#gb > div.gb_Sb,body#gsr.srp > div#mngb']={"*display":"none"} # other graphical clutter they added 2014-09 and 2014-10
   css['div#gbqfbw > button#gbqfb > span.gbqfi:empty']={'*display':'none'} # 2549-pixel high image on Android shop that messes up scrolling 2016-08
+  css['div.kv > cite + div.action-menu.ab_ctl > a[aria-label="Result details"]'] = {'*display':'none'} # it's supposed to just reveal the "Cached" or "Similar" options, but these should be displayed anyway with our CSS so it's a non-functional unlabelled link: save confusion
   # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi, .diff-*)
   k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem"
   css[k] = {"color":colour["italic"]}
@@ -940,7 +941,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
   printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']=printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':'#000080'}
-  emptyLink('a[aria-label="Result details"] > span.mn-dwn-arw',r"\2193",css,printOverride,False) # in some Google search results
   # Hacks for RoundCube-based webmail sites and some forums:
   for t in ["Reset search","Search modifiers","Show preview pane","Enlarge","Click here to give thanks to this post."]: emptyLink('a[title="'+t+'"]',t,css,printOverride) # (OK 'Enlarge' isn't RoundCube but is used on some MediaWiki sites)
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:before"]={"content":'" ("',"color":colour["coloured"]}
