@@ -1017,7 +1017,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body#viewsource span > span[id^=line]:before']={"*content":'" "',"*display":"block","*font-size":"0","*line-height":"0"} # force line break before line number
 
   css['h1:before']={"*content":'""'} # overrides large multi-icon image display in Tesco search results 2016-06 (if not logged in with accessibility mode set)
-  css['.basketDeliverySurcharge p:before, p.basketInfo:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
+  css['.basketDeliverySurcharge p:before, p.basketInfo:before, body#delivery div#homeDelivery *:after,body#delivery div#homeDelivery *:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
+  css['.header--sticky .primary-nav__item__panel, .header--sticky .utility-nav .utility-nav__list']={"*display":"block"}; css['div[dojotype="dojox.widget.AutoRotator"]'] = {"*display":"none"} # Not that Sainsbury's web developers were any more helpful.  This fixes their broken scrolling 2016-10.
+  css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
   
   css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em'} # Tsinghua online course login
 
