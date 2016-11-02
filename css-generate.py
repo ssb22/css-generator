@@ -652,11 +652,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#gbqfbw > button#gbqfb > span.gbqfi:empty']={'*display':'none'} # 2549-pixel high image on Android shop that messes up scrolling 2016-08
   css['div.kv > cite + div.action-menu.ab_ctl > a[aria-label="Result details"]'] = {'*display':'none'} # it's supposed to just reveal the "Cached" or "Similar" options, but these should be displayed anyway with our CSS so it's a non-functional unlabelled link: save confusion
   # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi, .diff-*) and GitHub (code-deletion, code-addition)
-  k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem, table.diff-table td.blob-code-deletion, table.diff-table td.blob-code-insertion"
+  k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem, table.diff-table td.blob-code-deletion span, table.diff-table td.blob-code-addition span"
   css[k] = {"color":colour["italic"]}
   printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
-  k='button[aria-label="Add line comment"] > svg.octicon-plus' ; css[k]={"*height":"0px","*width":"0px"} ; css[k+":after"]={"content":'"Comment"'} # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
+  css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; css['button[aria-label="Add line comment"]:after']={"content":'"Comment"'} # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
   # and media players:
   css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":r'"\21E8 Play"'}
   css["div.mwPlayerContainer div.play-btn span.ui-icon-pause:empty:after"]={"content":'"Pause"'}
