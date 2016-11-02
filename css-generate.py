@@ -638,6 +638,36 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Begin site-specific hacks
 
+  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False):
+   if omitEmpty: eList = [""]
+   else: eList = [":empty",":blank",":-moz-only-whitespace"]
+   for empty in eList:
+    # Fill in the text of an empty link according to
+    # context (making up for the fact that we're not
+    # displaying whatever CSS-oriented graphical thing
+    # the site is showing).  lType is the link in context
+    # and 'content' is our guess of what it should say.
+    if isRealLink: key = lType+":link"+empty
+    else: key = lType+empty
+    css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
+    if content: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
+    printOverride[key+":after"]={"color":"#000080"}
+    css[key+":before"]={"color":colour["link"]}
+    printOverride[key+":before"]={"color":"#000080"}
+    if isRealLink:
+      key = key.replace(":link",":visited")
+      css[key+":after"]={"color":colour["visited"]}
+      printOverride[key+":after"]={"color":"#000080"}
+      css[key+":before"]={"color":colour["visited"]}
+      printOverride[key+":before"]={"color":"#000080"}
+    else: # not isRealLink
+      css[key+":before"]["content"] = '"["'
+      css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
+      css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
+      for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
+      printOverride[key] = {"color":"#000080"}
+  css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
+
   # Hack for Google search results:
   css["g-img"]={"*display":"inline","*position":"static"}
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
@@ -656,7 +686,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[k] = {"color":colour["italic"]}
   printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
-  css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; css['button[aria-label="Add line comment"]:after']={"content":'"Comment"'} # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
+  css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; emptyLink('table.diff-table button[aria-label="Add line comment"]','C',css,printOverride,False,True) # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
   # and media players:
   css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":r'"\21E8 Play"'}
   css["div.mwPlayerContainer div.play-btn span.ui-icon-pause:empty:after"]={"content":'"Pause"'}
@@ -848,35 +878,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
   css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"*display":"none"}
   # Hack for some other sites that put nothing inside software download links:
-  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False):
-   if omitEmpty: eList = [""]
-   else: eList = [":empty",":blank",":-moz-only-whitespace"]
-   for empty in eList:
-    # Fill in the text of an empty link according to
-    # context (making up for the fact that we're not
-    # displaying whatever CSS-oriented graphical thing
-    # the site is showing).  lType is the link in context
-    # and 'content' is our guess of what it should say.
-    if isRealLink: key = lType+":link"+empty
-    else: key = lType+empty
-    css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
-    if content: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
-    printOverride[key+":after"]={"color":"#000080"}
-    css[key+":before"]={"color":colour["link"]}
-    printOverride[key+":before"]={"color":"#000080"}
-    if isRealLink:
-      key = key.replace(":link",":visited")
-      css[key+":after"]={"color":colour["visited"]}
-      printOverride[key+":after"]={"color":"#000080"}
-      css[key+":before"]={"color":colour["visited"]}
-      printOverride[key+":before"]={"color":"#000080"}
-    else: # not isRealLink
-      css[key+":before"]["content"] = '"["'
-      css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
-      css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
-      for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
-      printOverride[key] = {"color":"#000080"}
-  css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
   emptyLink("div.jsDropdownMenu.downloadDropdown > a.secondaryButton.dropdownHandle > span.buttonIcon.download","Download",css,printOverride,False)
   emptyLink("a.shareButton > span",None,css,printOverride,False,True);emptyLink("div.standardModal-content > div.itemInfoContainer > div.itemFinderLink > a.copyLink[title=\"Copy Link\"] > span","Copy Link",css,printOverride,False);css["div.itemInfoContainer > div.itemFinderLink, div.itemFinderLink > div.shareLinkContainer,input.shareLink[readonly]"]={"*width":"100%"}
   emptyLink("a[title~=download]","Download",css,printOverride)
