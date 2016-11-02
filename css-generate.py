@@ -865,6 +865,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#materialNav > nav > h1 + ul.directory > li > a > span.title + span.details'] = {'float':'right'}
   # if pixelSize: css[exclude_ie_below_9+"input#site + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
+  css["body > input#site + div#wrapper div#content figure > img"]={"*max-width":"100%"}
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
