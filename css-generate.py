@@ -638,7 +638,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Begin site-specific hacks
 
-  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False):
+  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False,isInsideRealLink=False):
    if omitEmpty: eList = [""]
    else: eList = [":empty",":blank",":-moz-only-whitespace"]
    for empty in eList:
@@ -650,7 +650,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if isRealLink: key = lType+":link"+empty
     else: key = lType+empty
     css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
-    if content: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
+    if content:
+      if isInsideRealLink: css[key+":after"]["content"]='"'+content+'"'
+      else: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
     printOverride[key+":after"]={"color":"#000080"}
     css[key+":before"]={"color":colour["link"]}
     printOverride[key+":before"]={"color":"#000080"}
@@ -661,7 +663,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[key+":before"]={"color":colour["visited"]}
       printOverride[key+":before"]={"color":"#000080"}
     else: # not isRealLink
-      css[key+":before"]["content"] = '"["'
+      if not isInsideRealLink: css[key+":before"]["content"] = '"["'
       css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
       css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
       for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
@@ -943,7 +945,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
   css["div.sidebar-wrapper > ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
-  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,False) ; css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"} # both for vtiger CRM 6.5.0
+  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,False,isInsideRealLink=True) ; css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"} # both for vtiger CRM 6.5.0
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
   printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']=printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':'#000080'}
