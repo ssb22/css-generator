@@ -736,13 +736,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki .mw-highlight .nf']={"color":colour["bold"]} # function name
   css['body.mediawiki .mw-highlight .nt']={"color":colour["italic"]} # tag name(?) (in XML etc)
   css['body.mediawiki .mw-highlight .na']={"color":colour["bold"]} # attribute name
-  css['body.mediawiki .mw-highlight .cm']={"color":colour["coloured"]} # comment
+  css['body.mediawiki .mw-highlight .cm,body.mediawiki .mw-highlight .c1,body.mediawiki .mw-highlight .c']={"color":colour["coloured"]} # comment
   css['body.mediawiki .mw-highlight .cp']={"color":colour["headings"]} # preprocessor
   css['body.mediawiki .mw-highlight .s']={"background":colour["highlight"]} # string
   css['body.mediawiki .mw-highlight .se']={"background":colour["highlight"],"color":colour["bold"]} # string escape character
   css['body.mediawiki .mw-highlight .cpf']={"background":colour["highlight"]} # #include parameter (treated like string in some editors)
   css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
-  # TODO: p = punc, o = operator; cp = preprocessor; others?
+  # TODO: p = punc, o = operator; mi = integer; nv = variable name; nb; others?
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
