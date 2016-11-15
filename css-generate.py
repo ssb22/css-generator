@@ -991,6 +991,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
     css['button.twite__share-button,button.twite__share-button + div.twite__panel']={"display":"none"} # BBC 2016: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
     css['form[action^="https://ssl.bbc.co.uk"] > button.p-f-button']={'display':'none'} # doesn't work very well anyway and takes up too much room
+  css['body#schedules-day div.programmes-page li#on-now']={"border":"blue solid"}
 
   # alternative to <wbr/> :
   css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
