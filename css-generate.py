@@ -946,7 +946,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.sidebar-wrapper > ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
 
-  # For Jenkins 1.624:
+  # For Jenkins 1.624 (not quite working yet):
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid"}
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: hidden\"]"]={"*display":"none"}
   emptyLink("div#menuSelector",r"\2193+",css,printOverride,False)
