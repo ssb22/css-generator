@@ -945,7 +945,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
   css["div.sidebar-wrapper > ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
-  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,False,isInsideRealLink=True) ; css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"} # both for vtiger CRM 6.5.0
+
+  # For vtiger CRM 6.5.0:
+  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,False,isInsideRealLink=True)
+  css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"}
+  for n in ['listView','relatedList']:
+    for t in ["Previous","Next"]:
+      emptyLink("button#"+n+t+"PageButton.btn > span",t+" page",css,printOverride,False)
+  emptyLink("button.dropdown-toggle.btn > i","Toggle",css,printOverride,False)
+
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
   printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']=printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':'#000080'}
