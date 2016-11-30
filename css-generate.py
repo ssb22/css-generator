@@ -946,6 +946,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.sidebar-wrapper > ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
 
+  # For Jenkins 1.624:
+  css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid"}
+  css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: hidden\"]"]={"*display":"none"}
+  emptyLink("div#menuSelector",r"\2193+",css,printOverride,False)
+  css["body#jenkins div#breadcrumb-menu.yui-overlay.visible"]={"*position":"absolute","*border":"blue solid"}
+  css["body#jenkins div#breadcrumb-menu.yui-overlay-hidden"]={"*display":"none"}
   # For vtiger CRM 6.5.0:
   emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,False,isInsideRealLink=True)
   css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"}
