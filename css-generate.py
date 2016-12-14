@@ -941,17 +941,18 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
   doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   for w in [12,16,17,18,20,24,26,28,30,36,44,48]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
-  css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
+  css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
   css["div.sidebar-wrapper > ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
 
-  # For Jenkins 1.624 (not quite working yet):
+  # For Jenkins 1.624 (some of it not quite working yet):
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid"}
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: hidden\"]"]={"*display":"none"}
   emptyLink("div#menuSelector",r"\2193+",css,printOverride,False)
   css["body#jenkins div#breadcrumb-menu.yui-overlay.visible"]={"*position":"absolute","*border":"blue solid"}
   css["body#jenkins div#breadcrumb-menu.yui-overlay-hidden"]={"*display":"none"}
+  css["body#jenkins a > img[alt^=\"Failed\"]:before"]={"*content":'"Failed: "'} ; css["body#jenkins a > img[alt^=\"Success\"]:before"]={"*content":'"Success: "'} # (why on earth does the JS *remove* the title attribute when the mouse enters?)
   # For vtiger CRM 6.5.0:
   emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,False,isInsideRealLink=True)
   css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"}
@@ -1036,10 +1037,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.line-gutter-backdrop + table span.html-attribute-name, body#viewsource span.attribute-name']={"color":colour["bold"]}
   css['body > div.line-gutter-backdrop + table span.html-attribute-value, body#viewsource a.attribute-value:not([href])']={"color":colour["italic"]}
   css['body > div.line-gutter-backdrop + table span.html-comment, body#viewsource span.comment']={"color":colour["form_disabled"]}
-  css['body#viewsource span > span[id^=line]:before']={"*content":'" "',"*display":"block","*font-size":"0","*line-height":"0"} # force line break before line number
+  css['body#viewsource span > span[id^=\"line\"]:before']={"*content":'" "',"*display":"block","*font-size":"0","*line-height":"0"} # force line break before line number
 
   css['h1:before']={"*content":'""'} # overrides large multi-icon image display in Tesco search results 2016-06 (if not logged in with accessibility mode set)
-  css['.basketDeliverySurcharge p:before, p.basketInfo:before, body#delivery div#homeDelivery *:after,body#delivery div#homeDelivery *:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
+  css['.basketDeliverySurcharge p:before, p.basketInfo:before, body#delivery div#homeDelivery *:after,body#delivery div#homeDelivery *:before, p.productStatus > span.inBasket:before, div.sideBasketHeader > div.action > h2:before, form#fMaxiBasket > div#errorWrapper > div.errors > div.errorContainer:before, form#fMaxiBasket > div#errorWrapper > div.errors > div.errorContainer *:before, div.checkoutContainer > form#fOrder *:before, div#checkoutConfirmationContainer div.content:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
+  css['div.productLists > ul.products > li.whyNotTry']={'*display':'none'} # 'whyNotTry'? hey Tesco, whyNotTry testing your site with low-vision CSS? :-) Then you might realise the end-2016 variation of that 'whyNotTry' gave 10 screenfuls of useless icons.  Sorry to hide your promotions but if they're THAT much of a mess you'd make more profit without them.
   css['.header--sticky .primary-nav__item__panel, .header--sticky .utility-nav .utility-nav__list']={"*display":"block"}; css['div[dojotype="dojox.widget.AutoRotator"]'] = {"*display":"none"} # Not that Sainsbury's web developers were any more helpful.  This fixes their broken scrolling 2016-10.
   css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
   
