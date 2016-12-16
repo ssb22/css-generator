@@ -639,6 +639,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Begin site-specific hacks
 
   def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False,isInsideRealLink=False):
+   assert not ',' in lType
+   if isInsideRealLink: isRealLink = False # overrides
    if omitEmpty: eList = [""]
    else: eList = [":empty",":blank",":-moz-only-whitespace"]
    for empty in eList:
@@ -839,12 +841,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
       css["body.HomePage > div#regionMain > div.wrapper > div.wrapperShadow > div#slider > div#slideMain"]={"width":"1px","height":"1px","overflow":"hidden"} # can't get those kind of JS image+caption sliders to work well in large print so might be better off cutting them out (TODO somehow relocate to end of page?) (anyway, do height=width=1 because display:none or height=width=0 seems to get some versions of WebKit in a loop and visibility:hidden doesn't always work)
   # and not just if pixelSize (because these icons aren't necessarily visible with our colour changes) -
-  css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuNavigation.iconOnly > a:empty:after"]={"content":'"Navigation"',"text-transform":"none"}
-  css[exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a:empty:after"]={"content":'"Next hit"',"text-transform":"none"}
-  css[exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuToday > a.todayNav > span.icon:empty:after"]={"content":'"Today"',"text-transform":"none"}
-  css[exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuPublications > a > span.icon:empty:after"]={"content":'"Publications"',"text-transform":"none"}
-  css[exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome > a > span.icon:empty:after"]={"content":'"Home"',"text-transform":"none"}
-  css[exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome + li > a > span.icon:empty:after"]={"content":'"Bbl"',"text-transform":"none"}
+  emptyLink(exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon","Navigation",css,printOverride,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"li#menuNavigation.iconOnly > a","Navigation",css,printOverride)
+  emptyLink(exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a > span.icon","Next hit",css,printOverride,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a","Next hit",css,printOverride)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuToday > a.todayNav > span.icon","Today",css,printOverride,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuPublications > a > span.icon","Publications",css,printOverride,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > div#menuHome > a[aria-label=\"home\"] > span.icon","Home",css,printOverride,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav div#compactSearch span.searchIcon.menuButton > span.icon","Search",css,printOverride,False)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome > a > span.icon","Home",css,printOverride,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome + li > a > span.icon","Bbl",css,printOverride,isInsideRealLink=True)
   css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:after, div#regionHeader menu li#menuSynchronizeSwitch a:after, div#wrapper div#primaryNav > ul.menu > li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after"]={"content":'"Sync"',"text-transform":"none"}
   css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a:empty:after"]={"content":'"Preferences"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after"]={"content":'"<- Prev"',"text-transform":"none"}
@@ -954,7 +960,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body#jenkins div#breadcrumb-menu.yui-overlay-hidden"]={"*display":"none"}
   css["body#jenkins a > img[alt^=\"Failed\"]:before"]={"*content":'"Failed: "'} ; css["body#jenkins a > img[alt^=\"Success\"]:before"]={"*content":'"Success: "'} # (why on earth does the JS *remove* the title attribute when the mouse enters?)
   # For vtiger CRM 6.5.0:
-  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,False,isInsideRealLink=True)
+  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,isInsideRealLink=True)
   css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"}
   for n in ['listView','relatedList']:
     for t in ["Previous","Next"]:
