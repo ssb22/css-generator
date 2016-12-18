@@ -276,6 +276,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths, so set "auto" instead
+    "*-moz-column-count":"1","*column-count":"1",
+    "*-webkit-column-count":"1",
     }
   for css3Thing,value in [
       # Get rid of "flip boxes"...
