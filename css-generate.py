@@ -751,7 +751,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
   # Hack for some authoring tools that use <FONT COLOR=..> to indicate special emphasis
-  css["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"]"]={"color":colour["coloured"]}
+  css["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"],span[style=\"color:rgb(255,0,0)\"]"]={"color":colour["coloured"]}
   printOverride["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"]"]={"color":"black"} # TODO: shade of grey?
   # and others that use span class="Apple-style-span"
   css["span.Apple-style-span"]={"color":colour["coloured"]}
