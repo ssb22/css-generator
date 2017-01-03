@@ -957,7 +957,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # For Hatjitsu (team estimation):
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards"]={"*border":"thin red solid"}
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card"]={"border":"green solid","*padding":"1em"}
-  css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card--selected"]={"border":"blue solid"}
+  css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card.card--selected"]={"border":"blue solid"}
   # For Jenkins 1.624 (some of it not quite working yet):
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid"}
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: hidden\"]"]={"*display":"none"}
