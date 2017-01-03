@@ -951,9 +951,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for w in [12,16,17,18,20,24,26,28,30,36,44,48]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
-  css["div.sidebar-wrapper > ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
+  css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
-
+  css["div.issues-listing div.state.state-closed"]={'color':colour["coloured"],'border':'red solid','font-weight':'bold'} # GitHub: make it slightly more obvious if we're looking at a closed ticket
+  # For Hatjitsu (team estimation):
+  css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards"]={"*border":"thin red solid"}
+  css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card"]={"border":"green solid","*padding":"1em"}
+  css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card--selected"]={"border":"blue solid"}
   # For Jenkins 1.624 (some of it not quite working yet):
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid"}
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: hidden\"]"]={"*display":"none"}
