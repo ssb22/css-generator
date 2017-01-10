@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-16.  Version 0.9853"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9854"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -246,6 +246,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-webkit-font-smoothing":"none", # font smoothing doesn't work so well on large-print low-resolution dark-background displays...
     "*-moz-osx-font-smoothing":"auto","*font-smooth":"never", # -moz-osx-font-smoothing overrides font-smooth on Firefox 25+; "never" would be better, but at least Ffx 29 doesn't support it and falls back to the SITE's spec :-( (greyscale is worse than auto in large print low resolution)
     "*-webkit-text-stroke":"0",
+    "*-webkit-animation":"none","*-o-animation":"none","*-moz-animation":"none","*animation":"none",
+    "*-webkit-animation-name":"none","*-o-animation-name":"none","*-moz-animation-name":"none","*animation-name":"none",
     "*position":"static",
     "*visibility":"visible /* because we're forcing position to static, we must also force visibility to visible otherwise will get large gaps.  Unfortunately some authors use visibility:hidden when they should be using display:none, and CSS does not provide a way of saying '[visibility=hidden] {display:none}' */",
     "*float":"none","*clear":"none",
@@ -636,7 +638,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for aside in ['aside','figure']: css[aside]['border']="thin "+colour["italic"]+" solid" # might help sometimes
   css['body > pre:only-child']={'*white-space':'pre-line','*font-family':serif_fonts} # this might make Gopher pages easier to read in Firefox's "OverbiteFF" (unless ASCII art is in use); NB on some firefox versions it slows down the loading of text/plain URLs and chrome://browser/skin/browser.css etc
   
-  for pt in '::-webkit-input-placeholder,:-moz-placeholder,::-moz-placeholder,:ms-input-placeholder,::placeholder'.split(","): css[pt] = {"color":colour["form_disabled"]}
+  for pt in '::-webkit-input-placeholder,:-moz-placeholder,::-moz-placeholder,:ms-input-placeholder,::placeholder,:placeholder-shown'.split(","): css[pt] = {"color":colour["form_disabled"]}
 
   # Begin site-specific hacks
 
@@ -884,6 +886,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls"]={"background":"transparent"}
     css["div#yt-masthead > div.yt-masthead-logo-container, div#yt-masthead-content > form#masthead-search > button.yt-uix-button.yt-uix-button-default"]={"display":"none"}
     css['div.guide-item-container > ul.guide-user-links.yt-box > li[role="menuitem"], div.guide-channels-content > ul#guide-channels > li[role="menuitem"]']={"display":"inline-block"}
+  emptyLink("div.welcome-wrapper > nav > div.container > div.navbar-header > button.navbar-toggle > span:first-child","Toggle navigation",css,printOverride,False)
+  emptyLink("div.btn-group > button#hideNames > i.fa-eye-slash","Hide names",css,printOverride,False)
+  emptyLink("div.btn-group > button#showNames > i.fa-eye","Show names",css,printOverride,False)
   # hack for MusOpen:
   css["a.download-icon span.icon-down:empty:after"]={"content":'"Download"',"color":colour["link"]}
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
@@ -948,7 +953,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.ui-draggable > div.ui-dialog-titlebar']={'cursor':'move'}
   def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
   doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
-  for w in [12,16,17,18,20,24,26,28,30,36,44,48,100]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
+  for w in [12,15,16,17,18,20,24,26,28,30,36,44,48,100]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
   css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
