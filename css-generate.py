@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9854"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9855"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1170,6 +1170,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   if webkitScreenOverride:
     outfile.write("} @media screen and (-webkit-min-device-pixel-ratio:0) {\n") # TODO: tv,handheld,projection?
     printCss(webkitScreenOverride,outfile,debugStopAfter=0)
+    outfile.write("::-webkit-input-placeholder { -webkit-text-fill-color: "+colour["form_disabled"]+" !important; }\n") # bug workaround for Safari 10's Webkit (not present on Safari 6 etc): -webkit-text-fill-color in a DIV element overrides that in ::-webkit-input-placeholder, so better re-specify here
   geckoScreenOverride.update(webkitGeckoScreenOverride)
   if geckoScreenOverride:
     outfile.write("} @media screen and (-moz-images-in-menus:0) {\n") # TODO: tv,handheld,projection?
