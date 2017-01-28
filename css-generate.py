@@ -941,6 +941,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink(jjc+"li.verseOutline a.outToggle > span","Outline",css,printOverride,False) # TODO: why won't this match?
   emptyLink("a#jsGalleryNextBtn > div.nextArrow","Next",css,printOverride,False)
   emptyLink("a#jsGalleryPrevBtn > div.prevArrow","Previous",css,printOverride,False)
+  emptyLink('button[title^="Compose"] > span.compose-email-icon',"Compose",css,printOverride,False)
+  emptyLink('button > span.previous-email-icon',"Previous",css,printOverride,False)
+  emptyLink('button > span.next-email-icon',"Next",css,printOverride,False)
+  emptyLink('button > span.print-icon',"Print",css,printOverride,False)
+  emptyLink('button[title^="Reply"] > span.reply-icon',"Reply",css,printOverride,False)
+  emptyLink('button[title^="Reply"] > span.reply-all-icon',"Reply to All",css,printOverride,False)
+  emptyLink('button[title^="Forward"] > span.forward-icon',"Forward",css,printOverride,False)
+  emptyLink('button > span.delete-icon',"Delete",css,printOverride,False)
   css["div#screenReaderNavLinkTop > p,div#primaryNav > nav > ul > li"]={"*display":"inline"} # save a bit of vertical space
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
   css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
