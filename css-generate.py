@@ -939,6 +939,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[jjc+"nav div#documentNavigation div.navVerses ul.verses li.verse"]={"display":"inline","margin":"0 0.1ex"}
   emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,False)
   emptyLink(jjc+"li.verseOutline a.outToggle > span","Outline",css,printOverride,False) # TODO: why won't this match?
+  emptyLink("a#jsGalleryNextBtn > div.nextArrow","Next",css,printOverride,False)
+  emptyLink("a#jsGalleryPrevBtn > div.prevArrow","Previous",css,printOverride,False)
   css["div#screenReaderNavLinkTop > p,div#primaryNav > nav > ul > li"]={"*display":"inline"} # save a bit of vertical space
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
   css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
