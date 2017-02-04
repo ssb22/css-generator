@@ -749,6 +749,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki .mw-highlight .cpf']={"background":colour["highlight"]} # #include parameter (treated like string in some editors)
   css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
   # TODO: p = punc, o = operator; mi = integer; nv = variable name; nb; others?
+  css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
