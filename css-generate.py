@@ -379,7 +379,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Galeon 1.25: we also have to exclude "body" and "div" for some reason
   # TODO: is it REALLY a good idea to leave 'div' on this list?
   for e in "pre,input,textarea,body,div".split(","): del css[e]["*white-space"]
-  for e in "font,code".split(","): css["pre "+e]={"*white-space":"inherit"} # some mailing lists etc have "font" within "pre", and some sites have "code" within "pre"
+  for e in "font,code,span".split(","): css["pre "+e]={"*white-space":"inherit"} # some mailing lists etc have "font" within "pre", and some sites have "code" within "pre"
   
   # Monospaced elements
   for t in "pre,code,tt,kbd,var".split(","): css[t]["*font-family"]="monospace"
@@ -735,21 +735,31 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki table tr div[style^="position:absolute"]']={"*position":"absolute","background-color":"transparent"}
   css['body.mediawiki table tr div[style^="position:relative"]']={"*position":"relative","*display":"inline-block"} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
   css['body.mediawiki table tr div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
-  # and syntax highlighting of code:
-  css['body.mediawiki .mw-highlight .k']={"color":colour["italic"]} # keyword
-  css['body.mediawiki .mw-highlight .kt']={"color":colour["italic"]} # keyword type
-  css['body.mediawiki .mw-highlight .n']={"color":colour["bold"]} # (variable) name
-  css['body.mediawiki .mw-highlight .nf']={"color":colour["bold"]} # function name
-  css['body.mediawiki .mw-highlight .nt']={"color":colour["italic"]} # tag name(?) (in XML etc)
-  css['body.mediawiki .mw-highlight .na']={"color":colour["bold"]} # attribute name
-  css['body.mediawiki .mw-highlight .cm,body.mediawiki .mw-highlight .c1,body.mediawiki .mw-highlight .c']={"color":colour["coloured"]} # comment
-  css['body.mediawiki .mw-highlight .cp']={"color":colour["headings"]} # preprocessor
-  css['body.mediawiki .mw-highlight .s']={"background":colour["highlight"]} # string
+  css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
+  
+  # Syntax highlighting of code in MediaWiki etc:
+  shl_keyword = {"color":colour["italic"]}
+  shl_varname = {"color":colour["bold"]}
+  shl_comment = {"color":colour["coloured"]}
+  shl_preproc = {"color":colour["headings"]}
+  shl_string = {"background":colour["highlight"]}
+  css['body.mediawiki .mw-highlight .k'] = shl_keyword # keyword
+  css['pre > code > span.kwd'] = shl_keyword # StackOverflow keyword
+  css['body.mediawiki .mw-highlight .kt'] = shl_keyword # keyword type
+  css['body.mediawiki .mw-highlight .n']=shl_varname # (variable) name
+  css['pre > code > span.pln'] = shl_varname # StackOverflow name
+  css['body.mediawiki .mw-highlight .nf']=shl_varname # function name
+  css['body.mediawiki .mw-highlight .nt']=shl_keyword # tag name(?) (in XML etc)
+  css['body.mediawiki .mw-highlight .na']=shl_varname # attribute name
+  css['body.mediawiki .mw-highlight .cm,body.mediawiki .mw-highlight .c1,body.mediawiki .mw-highlight .c']=shl_comment # comment
+  css['pre > code > span.com'] = shl_comment # StackOverflow comment
+  css['body.mediawiki .mw-highlight .cp']=shl_preproc # preprocessor
+  css['body.mediawiki .mw-highlight .s']=shl_string # string
+  css['pre > code > span.str'] = shl_string # StackOverflow string
   css['body.mediawiki .mw-highlight .se']={"background":colour["highlight"],"color":colour["bold"]} # string escape character
-  css['body.mediawiki .mw-highlight .cpf']={"background":colour["highlight"]} # #include parameter (treated like string in some editors)
+  css['body.mediawiki .mw-highlight .cpf']=shl_string # #include parameter (treated like string in some editors)
   css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
   # TODO: p = punc, o = operator; mi = integer; nv = variable name; nb; others?
-  css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
