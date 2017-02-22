@@ -379,7 +379,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Galeon 1.25: we also have to exclude "body" and "div" for some reason
   # TODO: is it REALLY a good idea to leave 'div' on this list?
   for e in "pre,input,textarea,body,div".split(","): del css[e]["*white-space"]
-  for e in "font,code,span".split(","): css["pre "+e]={"*white-space":"inherit"} # some mailing lists etc have "font" within "pre", and some sites have "code" within "pre"
+  for e in "font,code,tt,span".split(","): css["pre "+e]={"*white-space":"inherit"} # some mailing lists etc have "font" within "pre", and some sites have "code" within "pre"
   
   # Monospaced elements
   for t in "pre,code,tt,kbd,var".split(","): css[t]["*font-family"]="monospace"
