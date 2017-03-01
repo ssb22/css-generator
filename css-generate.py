@@ -640,6 +640,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   for pt in '::-webkit-input-placeholder,:-moz-placeholder,::-moz-placeholder,:ms-input-placeholder,::placeholder,:placeholder-shown'.split(","): css[pt] = {"color":colour["form_disabled"]}
 
+  # Don't blur GIFs and PNGs if showing images in high DPI (taken from https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering)
+  css['img[src$=".gif"], img[src$=".png"]'] = { 'image-rendering': '-moz-crisp-edges', 'image-rendering':'-o-crisp-edges','image-rendering':'-webkit-optimize-contrast','image-rendering':'crisp-edges','-ms-interpolation-mode':'nearest-neighbor' }
+
   # Begin site-specific hacks
 
   def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False,isInsideRealLink=False):
