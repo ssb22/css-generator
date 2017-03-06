@@ -825,9 +825,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if pixelSize:
       css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
       css[jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"fixed","z-index":"9"}
-      # css[jjc+"div#primaryNav div,"+jjc+"div#publicationNavigation div"]={"display":"block"} # please don't flash it on and off
-      # css[jjc+"div#primaryNav li"]={"display":"list-item"} # ditto
-      # .. actually they're somehow making primaryNav & secondaryNav multi-column.  How??
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
       css["body > input#site + div#wrapper > div#header, body > input#site + div#wrapper > div#regionHeader"]={
@@ -835,6 +832,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "position":"fixed","top":"0px","left":"auto",
         "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
         "width":"30%", # not fixed+100% or PgDn will go wrong
+        "max-width":"30%", # how are they managing to make it multi-column ??!?
         "overflow":"auto","border":"blue solid","z-index":"1"}
       css[jumpjsContent]={"margin-right":"31%","z-index":"0"} # to match the 30% (i.e. take 70%, actually 69%)
       css[jjc+"div#secondaryNavContent"]={"*display":"block"} # not None, even if the screen SEEMS to be too small, because we've changed the layout
