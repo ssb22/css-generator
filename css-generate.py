@@ -823,7 +823,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[jumpjsTooltip+","+jjc+"div#message,"+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"border":"thin solid "+colour["italic"]}
   for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
   if pixelSize:
-      css[jumpjsTooltip+","+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"absolute","z-index":"9"}
+      css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
+      css[jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"fixed","z-index":"9"}
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
       css["body > input#site + div#wrapper > div#header, body > input#site + div#wrapper > div#regionHeader"]={
