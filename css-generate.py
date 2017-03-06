@@ -825,8 +825,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if pixelSize:
       css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
       css[jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"fixed","z-index":"9"}
-      css[jjc+"div#primaryNav div,"+jjc+"div#publicationNavigation div"]={"display":"block"} # please don't flash it on and off
-      css[jjc+"div#primaryNav li"]={"display":"list-item"} # ditto
+      # css[jjc+"div#primaryNav div,"+jjc+"div#publicationNavigation div"]={"display":"block"} # please don't flash it on and off
+      # css[jjc+"div#primaryNav li"]={"display":"list-item"} # ditto
+      # .. actually they're somehow making primaryNav & secondaryNav multi-column.  How??
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
       css["body > input#site + div#wrapper > div#header, body > input#site + div#wrapper > div#regionHeader"]={
