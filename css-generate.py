@@ -820,10 +820,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   jjc = "body > input#site + div#wrapper "
   jumpjsContent = jjc+"div#content,"+jjc+"div#message"
   jumpjsTooltip = 'div > div.tooltip.dir-ltr[dir="ltr"]' # TODO: ? div[style^="position: absolute"] > div > div.tooltip
-  css[jumpjsTooltip+","+jjc+"div#message"]={"border":"thin solid "+colour["italic"]}
+  css[jumpjsTooltip+","+jjc+"div#message,"+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"border":"thin solid "+colour["italic"]}
   for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
   if pixelSize:
-      css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
+      css[jumpjsTooltip+","+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"absolute","z-index":"9"}
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
       css["body > input#site + div#wrapper > div#header, body > input#site + div#wrapper > div#regionHeader"]={
