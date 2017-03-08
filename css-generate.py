@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9855"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9856"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -278,6 +278,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths, so set "auto" instead
+    "*-webkit-flex-basis":"auto","*-moz-flex-basis":"auto","*-ms-flex-basis":"auto",
     "*-moz-column-count":"1","*column-count":"1",
     "*-webkit-column-count":"1",
     }
@@ -684,6 +685,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   css['img[src^="/images/nav_logo"][alt="Google"]']={"*display":"none"}
   css['div.gb_tc.gb_uc.gb_Vb:empty,div.gb_uc.gb_vc.gb_Wb:empty,span.gb_0a:empty']={"*display":"none"} # TODO: if gb = Great Britain then we might need to rewrite this to cover other countries.  The div has a :before rule with image content, takes up lots of screen space and is not functional. (2016-10)
+  css['div.sbibtd > div#sfdiv.sbibod > button.sbico-c > span.sbico._wtf._Qtf']={"*display":"none"}
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
   for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
   css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight"]} # suggestions cursor 2015-04
@@ -853,7 +855,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "overflow":"auto", # just in case
         "z-index":"3", # ditto
       }
-      css[jjc+"div.navPosition"]={"display":"block"} # as above, don't flash on/off
+      css[jjc+"div.navPosition,"+jjc+"div#primaryNav > div"]={"display":"block"} # as above, don't flash on/off (and don't use inline-block as it creates too much horizontal scrolling)
       css[jjc+"div#regionHeader div.navPosition > div.scrollPositionDisplay"]={
         "position":"static", # as it's inside regionHeader; no point putting it bottom/right or it won't be visible (clipped by regionHeader)
         "width":"100%", # not 30% because this time it's of regionHeader not of screen
@@ -1003,6 +1005,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     for t in ["Previous","Next"]:
       emptyLink("button#"+n+t+"PageButton.btn > span",t+" page",css,printOverride,False)
   emptyLink("button.dropdown-toggle.btn > i","Toggle",css,printOverride,False)
+
+  css['body.md-skin div#wrapper div.shifts-wrapper div.day-wrapper > button.shift']={'*display':'inline'}
+  css['body.md-skin div#wrapper div.shifts-wrapper div.day-wrapper > button.shift + div.separator']={'*display':'none'}
+  css['body.md-skin div#wrapper div.shifts-wrapper div#shiftModal img']={'*max-width':'100%','*max-height':'9em'}
 
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
