@@ -843,7 +843,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[jjc + "div#secondaryNav"]={"position":"fixed", # or double-scroll JS fails
                  "bottom":"0px","top":"auto",
                  "right":"0px","left":"auto",
-                 "width":"30%","height":"60%","border":"blue solid","overflow":"auto","z-index":"2"}
+                 "width":"30%","height":"60%","border":"blue solid","overflow":"auto","z-index":"2",
+                 "display":"flex","flex-direction":"row","flex-wrap":"wrap", # same as above
+      }
       css["body > div#wrapper div#content div#navScrollPositionFloating"]={
         "display":"block", # don't flash on/off
       }
@@ -855,7 +857,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "border":"thin blue solid",
         "overflow":"auto", # just in case
         "z-index":"3", # ditto
-        "display":"flex","flex-direction":"row","flex-wrap":"wrap", # same as above
       }
       css[jjc+"div.navPosition,"+jjc+"div#primaryNav > div"]={"display":"block"} # as above, don't flash on/off (and don't use inline-block as it creates too much horizontal scrolling)
       css[jjc+"div#regionHeader div.navPosition > div.scrollPositionDisplay"]={
