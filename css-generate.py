@@ -834,7 +834,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "position":"fixed","top":"0px","left":"auto",
         "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
         "width":"30%", # not fixed+100% or PgDn will go wrong
-        "overflow":"auto","border":"blue solid","z-index":"1"}
+        "overflow":"auto","border":"blue solid","z-index":"1",
+        "display":"flex","flex-direction":"row","flex-wrap":"wrap", # seems this is the only way of ensuring no horizontal scroll on Firefox 47 2017-03 (not sure how their JS messes us up otherwise but it does)
+      }
       # css["body > input#site + div#wrapper > div#regionHeader div"]={"display":"block"} # not inline-block: vertical scrolling please, not horizontal: we've changed the layout # -> this STILL doesn't work in Firefox !! still horizontal scrolling and awkward to get to the scroll bar.
       css[jumpjsContent]={"margin-right":"31%","z-index":"0"} # to match the 30% (i.e. take 70%, actually 69%)
       css[jjc+"div#secondaryNavContent"]={"*display":"block"} # not None, even if the screen SEEMS to be too small, because we've changed the layout
@@ -847,13 +849,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       }
       css[jjc+"div#content div#navScrollPositionFloating,"+jjc+"div.navPosition > div.scrollPositionDisplay"]={
         "position":"fixed", # don't 'pop up' using display toggle and disrupt the vertical positioning of the entire text due to our position:static override
-        "display":"block", # don't flash on/off
         "top":"auto", # because we're using bottom:0px (overriding the popup location)
         "bottom":"0px","right":"0px",
         "width":"30%", # to match the above
         "border":"thin blue solid",
         "overflow":"auto", # just in case
         "z-index":"3", # ditto
+        "display":"flex","flex-direction":"row","flex-wrap":"wrap", # same as above
       }
       css[jjc+"div.navPosition,"+jjc+"div#primaryNav > div"]={"display":"block"} # as above, don't flash on/off (and don't use inline-block as it creates too much horizontal scrolling)
       css[jjc+"div#regionHeader div.navPosition > div.scrollPositionDisplay"]={
