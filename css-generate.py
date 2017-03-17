@@ -1096,6 +1096,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.productLists > ul.products > li.whyNotTry']={'*display':'none'} # 'whyNotTry'? hey Tesco, whyNotTry testing your site with low-vision CSS? :-) Then you might realise the end-2016 variation of that 'whyNotTry' gave 10 screenfuls of useless icons.  Sorry to hide your promotions but if they're THAT much of a mess you'd make more profit without them.
   css['.header--sticky .primary-nav__item__panel, .header--sticky .utility-nav .utility-nav__list']={"*display":"block"}; css['div[dojotype="dojox.widget.AutoRotator"]'] = {"*display":"none"} # Not that Sainsbury's web developers were any more helpful.  This fixes their broken scrolling 2016-10.
   css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
+
+  css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
   
   css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em'} # Tsinghua online course login
 
