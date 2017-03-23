@@ -809,6 +809,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[','.join(x+l for x in make_like_link)] = css[exclude_ie_below_9+"a:link"+l]
       printOverride[','.join(x+l for x in make_like_link)] = printOverride[exclude_ie_below_9+"a:link"+l]
   css['img[src="img/otterlogo.jpg"][width="100%"]']={'*display':'none'} # ott.cl.cam.ac.uk
+  # and ds-print top-up 2017:
+  css['body#ext-element-1 div.x-boundlist-floating']={'*position':'relative'}
 
   # hack for MHonarc and similar setups that put full-sized images into clickable links
   # (see comments on max-width above; doesn't seem to be a problem in this instance)
