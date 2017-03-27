@@ -1010,6 +1010,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     for t in ["Previous","Next"]:
       emptyLink("button#"+n+t+"PageButton.btn > span",t+" page",css,printOverride,False)
   emptyLink("button.dropdown-toggle.btn > i","Toggle",css,printOverride,False)
+  # For Atlassan:
+  css["span.aui-avatar img"]={"*width":"24px","*height":"24px"}
 
   css['body.md-skin div#wrapper div.shifts-wrapper div.day-wrapper > button.shift']={'*display':'inline'}
   css['body.md-skin div#wrapper div.shifts-wrapper div.day-wrapper > button.shift + div.separator']={'*display':'none'}
