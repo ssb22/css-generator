@@ -1058,6 +1058,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['img[src*="/transparent.png"]']={'display':'none'}
     # + for sites that embed their news in Twitter format:
     css["body > div.twitter-timeline,body > div.twitter-tweet"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
+    # + more 'news' fixing:
+    css["div.main > article > header + div > div.js-right-rail"]={"*display":"none"} # Huffington 2017: runaway JS trying to populate it and crashing Firefox
     # + for BBC radio player:
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
     css['button.twite__share-button,button.twite__share-button + div.twite__panel']={"display":"none"} # BBC 2016: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
