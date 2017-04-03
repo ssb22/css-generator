@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9856"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9857"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1217,7 +1217,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   for d,mediaHack in [ # TODO: tv,handheld,projection on these?
       (webkitScreenOverride,"screen and (-webkit-min-device-pixel-ratio:0)"), # must be first (see below)
       (geckoScreenOverride,"screen and (-moz-images-in-menus:0)"),
-      (msieScreenOverride,r"screen\0"), # MSIE 8-10 (11+/Edge says Webkit)
+      (msieScreenOverride,r"screen\0"), # MSIE 8-10 (TODO: 11?  Edge says Webkit)
       (msieScreenOverride,r"screen\9"), # MSIE 6-7
   ]:
     if d or not doneWebkit:
