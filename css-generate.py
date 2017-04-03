@@ -193,6 +193,7 @@ sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TOD
 # You will see which one that is from the debug messages
 # it prints on standard output (these will appear instead of
 # the HTML index of stylesheets that is usually generated).
+chop_extra_verification = True # If True, we'll take an extra step to verify each chop result (by checking we get the opposite in the inverse set) before further subdivisions
 
 # For more desperate debugging cases, you can try:
 #    python css-generate.py desperate-debug
@@ -249,7 +250,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-webkit-animation":"none","*-o-animation":"none","*-moz-animation":"none","*animation":"none",
     "*-webkit-animation-name":"none","*-o-animation-name":"none","*-moz-animation-name":"none","*animation-name":"none",
     "*position":"static",
-    "*visibility":"visible /* because we're forcing position to static, we must also force visibility to visible otherwise will get large gaps.  Unfortunately some authors use visibility:hidden when they should be using display:none, and CSS does not provide a way of saying '[visibility=hidden] {display:none}' */",
+    "*visibility":"visible", # because we're forcing position to static, we must also force visibility to visible otherwise will get large gaps.  Unfortunately some authors use visibility:hidden when they should be using display:none, and CSS does not provide a way of saying '[visibility=hidden] {display:none}'
     "*float":"none","*clear":"none",
     "*min-height":"0px",
     "*max-height":"none",
@@ -257,11 +258,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*min-width":"0px",
     "*text-decoration":"none",
     "text-shadow":"none",
-    "*text-align":"left /* not full justification */",
+    "*text-align":"left", # not full justification
     "*margin":"0px",
     "*padding":"0px",
     "*text-indent":"0px",
-    "*white-space":"normal /* don't \"nowrap\" */",
+    "*white-space":"normal", # not "nowrap"
     "*cursor":"auto",
     "*overflow":"visible", # the default.  NOT "auto" - it may put the scroll bar of a table off-screen at the bottom.  If (e.g.) "pre" overflows, we want the whole window to be scrollable to see it.
     
@@ -279,8 +280,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths, so set "auto" instead
     "*-webkit-flex-basis":"auto","*-moz-flex-basis":"auto","*-ms-flex-basis":"auto",
-    "*-moz-column-count":"1","*column-count":"1",
-    "*-webkit-column-count":"1",
+    "*-moz-column-count":"1", # see below for column-count (NOT webkit, Chrome/57 bug)
     }
   for css3Thing,value in [
       # Get rid of "flip boxes"...
@@ -309,13 +309,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   exclude_ie_below_9 = ":not(:empty) " # IE8 (and non-CSS3 browsers) don't support :not
   
   css={} ; printOverride = {}
-  webkitScreenOverride = {} ; geckoScreenOverride = {}
-  webkitGeckoScreenOverride = {}
+  webkitScreenOverride = {} ; geckoScreenOverride = {} ; msieScreenOverride = {}
+  webkitGeckoScreenOverride = {} ; webkitMsieScreenOverride = {} ; geckoMsieScreenOverride = {}
   for e in mostElements+rubyElements:
     css[e]=defaultStyle.copy()
     printOverride[e] = {"color":"black","background":"white"}.copy()
     if pixelSize: printOverride[e]["font-size"] = "12pt" # TODO: option?
-
+    geckoMsieScreenOverride[e] = {"*column-count":"1"} # not Webkit (PageUp/PageDown bug in Chrome57 etc)
   # but there are some exceptions:
 
   for e in rubyElements:
@@ -342,10 +342,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["frame"]={}
   for e in ["frame","iframe"]: css[e]["*overflow"]="auto" # to override 'scrolling=no' which can go wrong in large print (but this override doesn't always work)
 
-  css["sup"]["*vertical-align"] = "super /* in case authors try to do it with font size instead */"
+  css["sup"]["*vertical-align"] = "super" # in case authors try to do it with font size instead
   css["sub"]["*vertical-align"] = "sub"
 
-  css["marquee"]["*-moz-binding"]="/* make sure firefox doesn't scroll marquee elements */ none"
+  css["marquee"]["*-moz-binding"]="none" # don't scroll marquee elements
   css["marquee"]["*display"]="block"
 
   css["center"]["*text-align"] = "center"
@@ -356,7 +356,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Margin exceptions:
 
-  css["body"]["*margin"]="/* keep away from window borders */ 1ex %.1fpx 1ex %.1fpx" % (pixelSize*5/18.0,pixelSize*5/18.0)
+  css["body"]["*margin"]="1ex %.1fpx 1ex %.1fpx" % (pixelSize*5/18.0,pixelSize*5/18.0) # keep away from window borders
 
   for i in "p,multicol,listing,plaintext,xmp,pre".split(","): css[i]["*margin"]="1em 0"
   
@@ -547,10 +547,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
   "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center","article","span","aside","figure","figcaption","time"
   ]
-  firstLetterBugs_other=[
-  "a", # causes problems in IE
-  ]
-  assert not(any(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_other for x in firstLetterBugs_multiple) or any(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_other for x in firstLetterBugs_geckoOnly) or any(x in firstLetterBugs_other for x in firstLetterBugs_webkitOnly)), "Error: firstLetterBugs item in more than one category"
+  firstLetterBugs_msie=["a"]
+  assert not(any(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_multiple) or any(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_geckoOnly) or any(x in firstLetterBugs_msie for x in firstLetterBugs_webkitOnly)), "Error: firstLetterBugs item in more than one category"
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
   "input","select","option","textarea","table","colgroup","col","img",
@@ -567,9 +565,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # If IE7 seems to be getting first lines and first letters wrong, check that Ignore Document Colours is NOT set - "document" can include parts of the CSS.  and try toggling high-contrast mode twice.)
   for e in mostElements:
     if not e in firstLetterBugs_multiple:
-      if e in firstLetterBugs_geckoOnly: dictToAddTo = webkitScreenOverride
-      elif e in firstLetterBugs_webkitOnly: dictToAddTo = geckoScreenOverride
-      elif e in firstLetterBugs_other: dictToAddTo = webkitGeckoScreenOverride
+      if e in firstLetterBugs_geckoOnly: dictToAddTo = webkitScreenOverride # or webkitMsieScreenOverride, but would have to test MSIE versions
+      elif e in firstLetterBugs_webkitOnly: dictToAddTo = geckoScreenOverride # or geckoMsieScreenOverride, but would have to test MSIE versions
+      elif e in firstLetterBugs_msie: dictToAddTo = webkitGeckoScreenOverride
       else: dictToAddTo = css
       dictToAddTo[e+":first-letter"]=inheritDic.copy()
     if not e in firstLineBugs: css[e+":first-line"]=inheritDic.copy()
@@ -1059,7 +1057,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # + for sites that embed their news in Twitter format:
     css["body > div.twitter-timeline,body > div.twitter-tweet"]={"overflow-y":"auto","height":"100%"} # in case the overflow:auto override to iframe's scrolling=no isn't working
     # + more 'news' fixing:
-    css["div#main > article > header + div > div.js-right-rail, body > div.asset_inserts + div + div.main > header.js-header, body > div.asset_inserts + div.main > header.js-header"]={"*display":"none"} # Huffington 2017: runaway JS trying to populate it and crashing Firefox
+    css["div#main > article > header + div > div.js-right-rail, body > div.asset_inserts + div + div.main > header.js-header, body > div.asset_inserts + div.main > header.js-header"]={"display":"none"} # Huffington 2017: runaway JS overpopulating it and crashing Firefox (I don't know why this rule still doesn't fix it in Chrome)
     # + for BBC radio player:
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
     css['button.twite__share-button,button.twite__share-button + div.twite__panel']={"display":"none"} # BBC 2016: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
@@ -1208,15 +1206,26 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
       else: del printOverride[k][attr] # TODO: shouldn't happen?
     if not printOverride[k]: del printOverride[k]
   printCss(printOverride,outfile,debugStopAfter=0)
+  # Browser-specific screen overrides:
   webkitScreenOverride.update(webkitGeckoScreenOverride)
-  if webkitScreenOverride:
-    outfile.write("} @media screen and (-webkit-min-device-pixel-ratio:0) {\n") # TODO: tv,handheld,projection?
-    printCss(webkitScreenOverride,outfile,debugStopAfter=0)
-    outfile.write("::-webkit-input-placeholder { -webkit-text-fill-color: "+colour["form_disabled"]+" !important; }\n") # bug workaround for Safari 10's Webkit (not present on Safari 6 etc): -webkit-text-fill-color in a DIV element overrides that in ::-webkit-input-placeholder, so better re-specify here
+  webkitScreenOverride.update(webkitMsieScreenOverride)
   geckoScreenOverride.update(webkitGeckoScreenOverride)
-  if geckoScreenOverride:
-    outfile.write("} @media screen and (-moz-images-in-menus:0) {\n") # TODO: tv,handheld,projection?
-    printCss(geckoScreenOverride,outfile,debugStopAfter=0)
+  geckoScreenOverride.update(geckoMsieScreenOverride)
+  msieScreenOverride.update(webkitMsieScreenOverride)
+  msieScreenOverride.update(geckoMsieScreenOverride)
+  doneWebkit = 0
+  for d,mediaHack in [ # TODO: tv,handheld,projection on these?
+      (webkitScreenOverride,"screen and (-webkit-min-device-pixel-ratio:0)"), # must be first (see below)
+      (geckoScreenOverride,"screen and (-moz-images-in-menus:0)"),
+      (msieScreenOverride,r"screen\0"), # MSIE 8-10 (11+/Edge says Webkit)
+      (msieScreenOverride,r"screen\9"), # MSIE 6-7
+  ]:
+    if d or not doneWebkit:
+      outfile.write("} @media "+mediaHack+" {\n")
+      printCss(d,outfile,debugStopAfter=0)
+      if not doneWebkit:
+        outfile.write("::-webkit-input-placeholder { -webkit-text-fill-color: "+colour["form_disabled"]+" !important; }\n") # bug workaround for Safari 10's Webkit (not present on Safari 6 etc): -webkit-text-fill-color in a DIV element overrides that in ::-webkit-input-placeholder, so better re-specify here (making sure it's at the end)
+        doneWebkit=1
   outfile.write("}\n")
 
   return ret
@@ -1225,12 +1234,23 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
   # returns start,end of problem, and any remaining chop_results after narrowing down to 1 item (so can pass the rest to a sublist)
   if problem_end==-1: problem_end=len(items)
   if problem_end==problem_start+1:
-    if chop_results and chop_results[0]=="1": print "Warning: Problem persisted when removed whole item, so removing parts of it is not likely to be useful"
+    if chop_results and chop_results[0]=="1": assert 0, "Binary chop: Problem persisted when removed whole remaining suspect item (with %d chops remaining). Maybe this isn't a problem that's due to just one thing." % (len(chop_results)-1)
     return problem_start,problem_end,chop_results[1:] # [1:] because important to drop 1 result (expected 'problem didn't persist when removing whole item', then try subdividing and check further results)
   problem_mid = (problem_end-problem_start)/2+problem_start
-  if not chop_results: return problem_start,problem_mid,chop_results # try disabling 1st half, if problem persists then recurse on 2nd half, else recurse on 1st half.
-  if chop_results[0]=="1": return debug_binary_chop(items,chop_results[1:],problem_mid,problem_end)
-  else: return debug_binary_chop(items,chop_results[1:],problem_start,problem_mid)
+  if not chop_results: return problem_start,problem_mid,"" # try disabling 1st half
+  if chop_extra_verification:
+    if len(chop_results)==1:
+      # verify that disabling 2nd half instead gets opposite result
+      return problem_mid,problem_end,""
+    if chop_results[0]==chop_results[1]: # shouldn't happen
+      assert 0, "Binary chop: chop_extra_verification failed; maybe this isn't a problem we can pin down to just one thing."
+    chop_results = chop_results[0]+chop_results[2:] # for code below to work
+  if chop_results[0]=="1":
+    # problem persisted when 1st half disabled, so recurse on 2nd half
+    return debug_binary_chop(items,chop_results[1:],problem_mid,problem_end)
+  else:
+    # problem did not persist when 1st half disabled, so recurse on 1st half
+    return debug_binary_chop(items,chop_results[1:],problem_start,problem_mid)
 
 from textwrap import fill
 def printCss(css,outfile,debugStopAfter=0):
@@ -1260,7 +1280,7 @@ def printCss(css,outfile,debugStopAfter=0):
       ds2,de2,binary_chop_results = debug_binary_chop(attrib_val_elemList[disable_start][1],binary_chop_results)
       print "Binary chop: From attribute %s=%s, disabling these elements: %s" % (attrib_val_elemList[disable_start][0][0],attrib_val_elemList[disable_start][0][1],", ".join(attrib_val_elemList[disable_start][1][ds2:de2]))
       del attrib_val_elemList[disable_start][1][ds2:de2]
-      if binary_chop_results: print "Binary chop: You have supplied too many chop results.  Back off a bit and see the last few debug prints."
+      if binary_chop_results: assert 0, "Binary chop: You have supplied %d too many chop results.  Back off a bit and see the last few debug prints." % (len(binary_chop_results))
     else:
       print "Binary chop: Disabling these attributes: ","; ".join([("%s=%s"%(k,v)) for (k,v),e in attrib_val_elemList[disable_start:disable_end]])
       del attrib_val_elemList[disable_start:disable_end]
@@ -1406,7 +1426,7 @@ elif "desperate-debug" in sys.argv:
     debugStopAfter += 1
 elif "chop" in sys.argv:
   do_binary_chop = True
-  if not sys.argv[-1] == "chop": binary_chop_results = sys.argv[-1]
+  binary_chop_results = "".join(sys.argv[sys.argv.index("chop")+1:])
   scheme,suffix,colour = colour_schemes_to_generate[0]
   filename="%d%s.css" % (chop_pixel_size,suffix)
   do_one_stylesheet(chop_pixel_size,colour,filename)
