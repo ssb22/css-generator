@@ -837,7 +837,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "overflow":"auto","border":"blue solid","z-index":"1",
         "display":"flex","flex-direction":"row","flex-wrap":"wrap", # seems this is the only way of ensuring no horizontal scroll on Firefox 47 2017-03 (not sure how their JS messes us up otherwise but it does)
       }
-      # css["body > input#site + div#wrapper > div#regionHeader div"]={"display":"block"} # not inline-block: vertical scrolling please, not horizontal: we've changed the layout # -> this STILL doesn't work in Firefox !! still horizontal scrolling and awkward to get to the scroll bar.
       css[jumpjsContent]={"margin-right":"31%","z-index":"0"} # to match the 30% (i.e. take 70%, actually 69%)
       css[jjc+"div#secondaryNavContent"]={"*display":"block"} # not None, even if the screen SEEMS to be too small, because we've changed the layout
       css[jjc + "div#secondaryNav"]={"position":"fixed", # or double-scroll JS fails
