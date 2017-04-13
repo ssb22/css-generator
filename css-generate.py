@@ -359,7 +359,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body"]["*margin"]="1ex %.1fpx 1ex %.1fpx" % (pixelSize*5/18.0,pixelSize*5/18.0) # keep away from window borders
 
   for i in "p,multicol,listing,plaintext,xmp,pre".split(","): css[i]["*margin"]="1em 0"
-  css["li > p:first-child"]={"*margin-top":"0"}
+  css["li > p:first-child"]={"*margin-top":"0"} # I'm not sure P is intended to go inside LI like this (especially when there's only one paragraph), but GitHub does it as of 2017 so I suppose we should try to cope (positioning of the circle is still a bit sub-optimal though)
   
   listStuff="ul,dir,menu,dl,li".split(",") # not ol, leave that as margin 0px - see ol > li below
   for l in listStuff:
