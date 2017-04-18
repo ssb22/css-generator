@@ -1060,7 +1060,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div#main > article > header + div > div.js-right-rail, body > div.asset_inserts + div + div.main > header.js-header, body > div.asset_inserts + div.main > header.js-header"]={"display":"none"} # Huffington 2017: runaway JS overpopulating it and crashing Firefox (I don't know why this rule still doesn't fix it in Chrome)
     # + for BBC radio player:
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
-    css['button.twite__share-button,button.twite__share-button + div.twite__panel']={"display":"none"} # BBC 2016: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
+    css['button.twite__share-button,button.twite__share-button + div.twite__panel,a.twite__share-button']={"display":"none"} # BBC 2016/17: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
     css['form[action^="https://ssl.bbc.co.uk"] > button.p-f-button']={'display':'none'} # doesn't work very well anyway and takes up too much room
   css['body#schedules-day div.programmes-page li#on-now']={"border":"blue solid"}
 
