@@ -681,6 +681,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Hack for Google search results:
   css["g-img"]={"*display":"inline","*position":"static"}
+  css["g-inner-card"]={"background":colour["background"]}
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
   css['img[src^="/images/nav_logo"][alt="Google"]']={"*display":"none"}
   css['div.gb_tc.gb_uc.gb_Vb:empty,div.gb_uc.gb_vc.gb_Wb:empty,span.gb_0a:empty']={"*display":"none"} # TODO: if gb = Great Britain then we might need to rewrite this to cover other countries.  The div has a :before rule with image content, takes up lots of screen space and is not functional. (2016-10)
