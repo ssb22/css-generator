@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9858"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9859"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -519,6 +519,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride["input[type=reset]"]={"background":printButtonBackground}
   for f in ["select","input","textarea","button"]:
     k = "html "+f+'[disabled]' # must include 'html' so more specific than above (TODO: or :not(:empty) if got enough CSS?)
+    if f=='input': k += ", html "+f+'[readonly]'
     css[k]={"background":colour["form_disabled"]}
     printOverride[k]={"background":printButtonBackground} # TODO: or something else?
   
@@ -539,6 +540,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   firstLetterBugs_multiple=[
   "input","select","option","textarea","table","colgroup","col","img", # probably best to avoid these
    "div", # Gecko messes up textarea when enter multiple paragraphs; Safari has text selection visibility problem see below
+   "svg", # doesn't make sense, and can cause confusion
   ]
   firstLetterBugs_geckoOnly=[
     # none here for now
@@ -552,6 +554,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   assert not(any(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_multiple) or any(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_geckoOnly) or any(x in firstLetterBugs_msie for x in firstLetterBugs_webkitOnly)), "Error: firstLetterBugs item in more than one category"
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
+    "svg", # doesn't make sense, and can cause confusion
   "input","select","option","textarea","table","colgroup","col","img",
   "td","th", # causes problems on Firefox 2 if there's a form inside
   "a", # causes problems in IE
@@ -983,7 +986,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.audio > div.play[rv-on-click]:empty:before']={'content':'"\21E8 Play"'}
   css['div.audio > div.pause[rv-on-click]:empty:before']={'content':'"Pause"'}
   css['body > div.ui-draggable > div.ui-dialog-titlebar']={'cursor':'move'}
-  def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*width":"%dpx"%width}
+  def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*max-height":"%dpx"%height,"*width":"%dpx"%width,"*max-width":"%dpx"%width} # setting max as well seems to partially work around some Safari 6.1 SVG bugs
   doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   for w in [12,15,16,17,18,20,24,26,28,30,36,44,48,100]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
@@ -1078,7 +1081,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#ReflowTestContainer[style^="width: 1px"] > div#ReflowTestNode']={"*width":"200px"}
   css['div#ReflowTestContainer[style^="width: 1px"] > div#ReflowTestNode > div.ReflowTextInnerNode']={"*width":"10%"}
   # w3schools, since it's often coming up in search results -
-  for tht in ["Chrome","Internet Explorer","Firefox","Safari","Opera"]: css['th[title="'+tht+'"]:empty:after']={'*content':'"'+tht+'"'}
+  for tht in ["Chrome","Internet Explorer","Internet Explorer / Edge","Firefox","Safari","Opera"]: css['th[title="'+tht+'"]:empty:after']={'*content':'"'+tht+'"'}
 
   # practicalmandarin and other sites designed by some company: please don't jump around when we're in large print
   css['header.sticky-header']={'*display':'block'}
@@ -1112,6 +1115,31 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Internet Archive:
   css["div#position > div#wbCalendar > div#calUnder.calPosition"]={"display":"none"}
   css["a.year-label.activeHighlight:link"]={"background":colour['highlight']}
+
+  # FontAwesome by Dave Gandy (used on some sites)
+  # has accessibility options but these rules apply when they're not turned on:
+  if pixelSize:
+    for s,r in [("search","Search"),
+                  ("user","User"),
+                  ("sign-out","Sign out"),
+                  ("twitter","Twitter"),
+                  ("facebook","Facebook"),
+                  ("google-plus","Google+"),
+                  ("weixin","WeChat"),
+                  ("trash","Delete"),
+                  ("trash-o","Delete"),
+                  ("paperclip","Attach"),
+                  ("mail-reply","Reply"),
+                  ("pencil","Edit"), # usually
+                  ("times","X"),
+                  ("check","OK"),
+                  ]:
+      for thing in ["a","button"]:
+          emptyLink(thing+" > i.fa.fa-"+s,r,css,printOverride,isInsideRealLink=True)
+          css[thing+" > i.fa.fa-"+s+":empty:before"]["content"]='""' # in case the font didn't load
+    # and if that doesn't work, try bringing in the icon font if it's there:
+    css["a > i.fa:empty:before,button > i.fa:empty:before"]={"font-family":"FontAwesome, "+serif_fonts}
+  emptyLink("a.overlay-close","Close",css,printOverride)
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
