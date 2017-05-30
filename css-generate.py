@@ -245,7 +245,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-border-radius":"0.05em",
     "*-webkit-border-radius":"0.05em",
     "*-webkit-font-smoothing":"none", # font smoothing doesn't work so well on large-print low-resolution dark-background displays...
-    "*-moz-osx-font-smoothing":"auto","*font-smooth":"never", # -moz-osx-font-smoothing overrides font-smooth on Firefox 25+; "never" would be better, but at least Ffx 29 doesn't support it and falls back to the SITE's spec :-( (greyscale is worse than auto in large print low resolution)
+    "*-moz-osx-font-smoothing":"auto","*font-smooth":"never", # -moz-osx-font-smoothing overrides font-smooth on Firefox 25+; "never" would be better, but at least Ffx 29 and 45.9-ESR doesn't support it and falls back to the SITE's spec :-( (greyscale is worse than auto in large print low resolution)
     "*-webkit-text-stroke":"0",
     "*-webkit-animation":"none","*-o-animation":"none","*-moz-animation":"none","*animation":"none",
     "*-webkit-animation-name":"none","*-o-animation-name":"none","*-moz-animation-name":"none","*animation-name":"none",
