@@ -245,7 +245,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*-moz-border-radius":"0.05em",
     "*-webkit-border-radius":"0.05em",
     "*-webkit-font-smoothing":"none", # font smoothing doesn't work so well on large-print low-resolution dark-background displays...
-    "*-moz-osx-font-smoothing":"auto","*font-smooth":"never", # -moz-osx-font-smoothing overrides font-smooth on Firefox 25+; "never" would be better, but at least Ffx 29 and 45.9-ESR doesn't support it and falls back to the SITE's spec :-( (greyscale is worse than auto in large print low resolution)
+    "*-moz-osx-font-smoothing":"auto","*font-smooth":"never", # -moz-osx-font-smoothing overrides font-smooth on Firefox 25+; "never" would be better, but at least Ffx 29 and 45.9-ESR doesn't support it and falls back to the SITE's spec :-( (greyscale is worse than auto in large print low resolution) (only auto and greyscale are supported in firefox-45.0esr/layout/style/nsCSSProps.cpp, see gfx/thebes/gfxMacFont.cpp the only way to turn it off is if it's 12pt or smaller and you've said so in Apple Preferences and enabled about:config's gfx.use_text_smoothing_setting; still no good for over 12pt)
     "*-webkit-text-stroke":"0",
     "*-webkit-animation":"none","*-o-animation":"none","*-moz-animation":"none","*animation":"none",
     "*-webkit-animation-name":"none","*-o-animation-name":"none","*-moz-animation-name":"none","*animation-name":"none",
