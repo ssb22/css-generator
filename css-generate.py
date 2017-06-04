@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9859"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.986"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -235,6 +235,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*font-weight":"normal",
     "*font-variant":"normal",
     "*font-size-adjust":"none",
+    "*zoom":"normal", # MSIE thing; some other browsers understand it too; can give websites another chance to shrink the text if we don't set it here
     "background-image":"none",
     "*letter-spacing":"normal",
     "*line-height":"normal",
