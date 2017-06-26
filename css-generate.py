@@ -595,10 +595,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[":root:not(HTML):not(page) slider:not(:empty)"]={"background":"#301090"}
 
   checkbox_scale = int(pixelSize/16)
-  if checkbox_scale > 1:
-    v = "scale(%d,%d)" % (checkbox_scale,checkbox_scale)
-    css["input[type=checkbox]"]={"-ms-transform":v,"-moz-transform":v,"-webkit-transform":v,"-o-transform":"scale(%d)" % checkbox_scale,"margin":"%dpx"%(checkbox_scale*6)}
-
+  if checkbox_scale > 1: css["input[type=checkbox]"]={"transform":"scale(%d,%d)" % (checkbox_scale,checkbox_scale),"margin":"%dpx"%(checkbox_scale*6)} # margin not padding (browser problems)
   if pixelSize:
     # In many versions of firefox, a <P ALIGN=center> with an <IFRAME> inside it will result in the iframe being positioned over the top of the main text if the P's text-align is overridden to "left".  But missing out text-align could allow websites to do full justification.  However it seems OK if we override iframe's display to "block" (this may make some layouts slightly less brief, but iframes usually need a line of their own anyway)
     css["iframe"]["*display"]="block"
@@ -1292,7 +1289,7 @@ def printCss(css,outfile,debugStopAfter=0):
   rDic={} # maps (attrib,val) to a list of elements that have it
   for elem,attribValDict in css.items():
     # add aliases before starting
-    for master,alias in [("background","background-color"),("color","-webkit-text-fill-color")]:
+    for master,alias in [("background","background-color"),("color","-webkit-text-fill-color"),("transform","-ms-transform"),("transform","-moz-transform"),("transform","-webkit-transform"),("transform","-o-transform")]:
       if attribValDict.has_key(master) and not attribValDict.has_key(alias): attribValDict[alias]=attribValDict[master]
     # end of adding aliases
     for i in attribValDict.items():
