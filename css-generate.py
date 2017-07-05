@@ -281,6 +281,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths, so set "auto" instead
     "*-webkit-flex-basis":"auto","*-moz-flex-basis":"auto","*-ms-flex-basis":"auto",
+    "*flex-direction":"none", # bug workaround for some versions of Webkit (flex-direction: row is default but it causes things to disappear e.g. on Docker documentation 2017-07)
     "*-moz-column-count":"1", # see below for column-count (NOT webkit, Chrome/57 bug)
     }
   for css3Thing,value in [
