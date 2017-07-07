@@ -1406,6 +1406,7 @@ newDiv.appendChild(document.createElement('BR'));
 newDiv.appendChild(document.createTextNode('Then press '));
 var cssLink=document.createElement("A");
 var bookmarkletLink=document.createElement("A");
+cssLink.class=bookmarkLink.class="ssbOk";
 // to reduce confusion, deleted "view or", and set it to 'attachment' in .htaccess
 cssLink.appendChild(document.createTextNode("save stylesheet's code"));
 bookmarkletLink.appendChild(document.createTextNode("Try stylesheet"));
@@ -1415,7 +1416,7 @@ newDiv.appendChild(cssLink);
 newDiv.appendChild(document.createTextNode("."));
 newDiv.appendChild(document.createElement("BR"));
 newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page"""+exception+r""" provided the site does not use a Content-Security-Policy header to block third-party stylesheets (browsers are supposed to exempt 'bookmarklets' from this but many don't). Anyway, due to some sites' patchy use of CSS priorities, your override is likely to work better if set it as a user-supplied stylesheet "));
-e=document.createElement("A"); e.href="#inst"; e.appendChild(document.createTextNode("as described below")); newDiv.appendChild(e);
+e=document.createElement("A"); e.class="ssbOk"; e.href="#inst"; e.appendChild(document.createTextNode("as described below")); newDiv.appendChild(e);
 newDiv.appendChild(document.createTextNode("."));
 //newDiv.appendChild(document.createTextNode(" (which also means you won't have to press it each time and it will continue to work if this website moves, or becomes unavailable due to local firewall rules etc). The 'bookmarklet' approach is best for short-term use (public terminals etc) or testing."));
 var base=document.location.href; var i;
