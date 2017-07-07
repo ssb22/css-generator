@@ -1406,7 +1406,7 @@ newDiv.appendChild(document.createElement('BR'));
 newDiv.appendChild(document.createTextNode('Then press '));
 var cssLink=document.createElement("A");
 var bookmarkletLink=document.createElement("A");
-cssLink.class=bookmarkLink.class="ssbOk";
+cssLink.class=bookmarkletLink.class="ssbOk";
 // to reduce confusion, deleted "view or", and set it to 'attachment' in .htaccess
 cssLink.appendChild(document.createTextNode("save stylesheet's code"));
 bookmarkletLink.appendChild(document.createTextNode("Try stylesheet"));
