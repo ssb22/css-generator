@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.986"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9861"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -279,8 +279,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*hyphens":"manual",
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
-    "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths, so set "auto" instead
-    "*-webkit-flex-basis":"auto","*-moz-flex-basis":"auto","*-ms-flex-basis":"auto",
+    "*flex":"0 0 auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths
+    "*-webkit-flex":"0 0 auto","*-moz-flex":"0 0 auto","*-ms-flex":"0 0 auto",
     "*-moz-column-count":"1", # see below for column-count (NOT webkit, Chrome/57 bug)
     }
   for css3Thing,value in [
@@ -1051,7 +1051,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('a[title="expand to show all comments on this post"]',"Expand all comments",css,printOverride)
   # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
   if pixelSize:
-    css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"}
+    css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"} # TODO: is this still needed?
     css["div.slider-body div"]={"display":"block","-webkit-box-orient":"inline-axis","-moz-box-orient":"inline-axis","box-orient":"inline-axis" } # not webkit-box
     css['iframe[title^="Facebook Cross Domain"]']={'display':'none'}
     css['iframe[height="90"][scrolling="no"]']={'display':'none'}
