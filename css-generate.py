@@ -280,7 +280,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
     "*flex":"0 0 auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths
-    "*-webkit-flex":"0 0 auto","*-moz-flex":"0 0 auto","*-ms-flex":"0 0 auto",
     "*-moz-column-count":"1", # see below for column-count (NOT webkit, Chrome/57 bug)
     }
   for css3Thing,value in [
@@ -838,7 +837,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
         "width":"30%", # not fixed+100% or PgDn will go wrong
         "overflow":"auto","border":"blue solid","z-index":"1",
-        "display":"flex","flex-direction":"row","flex-wrap":"wrap", # seems this is the only way of ensuring no horizontal scroll on Firefox 47 2017-03 (not sure how their JS messes us up otherwise but it does)
+        "display":"flex","flex":"auto","flex-direction":"row","flex-wrap":"wrap", # seems this is the only way of ensuring no horizontal scroll on Firefox 47 2017-03 (not sure how their JS messes us up otherwise but it does)
       }
       css[jumpjsContent]={"margin-right":"31%","z-index":"0"} # to match the 30% (i.e. take 70%, actually 69%)
       css[jjc+"div#secondaryNavContent"]={"*display":"block"} # not None, even if the screen SEEMS to be too small, because we've changed the layout
@@ -846,7 +845,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                  "bottom":"0px","top":"auto",
                  "right":"0px","left":"auto",
                  "width":"30%","height":"60%","border":"blue solid","overflow":"auto","z-index":"2",
-                 "display":"flex","flex-direction":"row","flex-wrap":"wrap", # same as above
+                 "display":"flex","flex":"auto","flex-direction":"row","flex-wrap":"wrap", # same as above
       }
       css["body > div#wrapper div#content div#navScrollPositionFloating"]={
         "display":"block", # don't flash on/off
@@ -1140,6 +1139,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # and if that doesn't work, try bringing in the icon font if it's there:
     css["a > i.fa:empty:before,button > i.fa:empty:before"]={"font-family":"FontAwesome, "+serif_fonts}
   emptyLink("a.overlay-close","Close",css,printOverride)
+  css["div.col-body"]={"*display":"block"} # Docker (not display: flex)
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
@@ -1290,7 +1290,7 @@ def printCss(css,outfile,debugStopAfter=0):
   rDic={} # maps (attrib,val) to a list of elements that have it
   for elem,attribValDict in css.items():
     # add aliases before starting
-    for master,alias in [("background","background-color"),("color","-webkit-text-fill-color"),("transform","-ms-transform"),("transform","-moz-transform"),("transform","-webkit-transform"),("transform","-o-transform")]:
+    for master,alias in [("background","background-color"),("color","-webkit-text-fill-color"),("transform","-ms-transform"),("transform","-moz-transform"),("transform","-webkit-transform"),("transform","-o-transform"),("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
       if attribValDict.has_key(master) and not attribValDict.has_key(alias): attribValDict[alias]=attribValDict[master]
     # end of adding aliases
     for i in attribValDict.items():
