@@ -821,7 +821,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.jsAutoCompleteSelector[style~="relative;"]'] = {'*position':'relative','border':'blue solid'}
   
   # hack for sites that use jump.js with nav boxes
-  jjc = "body > input#site + div#wrapper "
+  jjc = "body > input#site + input + div#wrapper "
   jumpjsContent = jjc+"div#content,"+jjc+"div#message"
   jumpjsTooltip = 'div > div.tooltip.dir-ltr[dir="ltr"]' # TODO: ? div[style^="position: absolute"] > div > div.tooltip
   css[jumpjsTooltip+","+jjc+"div#message,"+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"border":"thin solid "+colour["italic"]}
@@ -831,7 +831,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"fixed","z-index":"9"}
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
-      css["body > input#site + div#wrapper > div#header, body > input#site + div#wrapper > div#regionHeader"]={
+      css["body > input#site + input + div#wrapper > div#header, body > input#site + input + div#wrapper > div#regionHeader"]={
         "height":"40%", # no more or scroll-JS is too far wrong
         "position":"fixed","top":"0px","left":"auto",
         "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
@@ -898,9 +898,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
-  # if pixelSize: css[exclude_ie_below_9+"input#site + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
+  # if pixelSize: css[exclude_ie_below_9+"input#site + input + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
-  css["body > input#site + div#wrapper div#content figure > img"]={"*max-width":"100%"}
+  css["body > input#site + input + div#wrapper div#content figure > img"]={"*max-width":"100%"}
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
