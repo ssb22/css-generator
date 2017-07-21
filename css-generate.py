@@ -1140,7 +1140,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # and if that doesn't work, try bringing in the icon font if it's there:
     css["a > i.fa:empty:before,button > i.fa:empty:before"]={"font-family":"FontAwesome, "+serif_fonts}
   emptyLink("a.overlay-close","Close",css,printOverride)
-  css["div.col-body"]={"*display":"block"} # Docker (not display: flex)
+  css["div.col-body,div.jsSimpleModalContainer"]={"*display":"block"} # Docker,jw (not display: flex)
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
