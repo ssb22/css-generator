@@ -297,7 +297,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # combinations.  NB however we don't list ALL elements in
   # mostElements (see code later).
   mostElements="a,blockquote,caption,center,cite,code,col,colgroup,html,iframe,pre,body,div,p,input,select,option,textarea,table,tr,td,th,h1,h2,h3,h4,h5,h6,font,basefont,small,big,span,ul,ol,li,i,em,s,strike,nobr,tt,samp,kbd,b,strong,dl,dt,dd,blink,button,address,dfn,form,marquee,fieldset,legend,listing,abbr,q,menu,dir,multicol,img,plaintext,xmp,label,sup,sub,u,var,acronym,object,embed,canvas,video".split(",")
-  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,time,del,ins,svg,output,thead,tbody".split(",")
+  html5Elements = "article,aside,bdi,command,details,summary,figure,figcaption,footer,header,hgroup,main,mark,meter,nav,progress,section,date,time,del,ins,svg,output,thead,tbody".split(",") # (not sure about 'date' but it's used by some sites)
   rubyElements = "ruby,rt,rp,rb".split(",") # NOT counted in mostElements
   html5Elements += ['text','text > tspan'] # used within svg, sometimes for nothing more than effect (unfortunately there doesn't seem to be a way of ensuring the containing svg is displayed large enough, but truncation is better than having the text go underneath other elements)
   mostElements += html5Elements
