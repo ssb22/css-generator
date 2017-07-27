@@ -902,7 +902,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # if pixelSize: css[exclude_ie_below_9+"input#site + input + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   css["body > input#site + input + div#wrapper div#content figure > img"]={"*max-width":"100%"}
-  emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,omitEmpty=True,isInsideRealLink=False) # TODO: narrow down the selector so 'a' does not have 'href' etc?
+  emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
