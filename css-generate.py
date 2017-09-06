@@ -1144,6 +1144,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("a.overlay-close","Close",css,printOverride)
   css["div.col-body,div.jsSimpleModalContainer"]={"*display":"block"} # Docker,jw (not display: flex)
 
+  css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"]']={"*display":"none"}
+
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
   css['input:-webkit-autofill']={'-webkit-text-fill-color':'blue'} # the background of these things is fixed to bright yellow, so we'd better make sure our webkit-text-fill-color override doesn't apply in this context
