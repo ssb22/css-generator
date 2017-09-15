@@ -548,7 +548,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   firstLetterBugs_webkitOnly=[
   # The following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
-    "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","center","article","span","aside","figure","figcaption","time","em"
+    "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","footer","center","article","span","aside","figure","figcaption","time","em"
   ]
   firstLetterBugs_msie=["a"]
   assert not(any(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_multiple) or any(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_geckoOnly) or any(x in firstLetterBugs_msie for x in firstLetterBugs_webkitOnly)), "Error: firstLetterBugs item in more than one category"
