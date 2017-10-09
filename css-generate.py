@@ -960,6 +960,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink(jjc+"div#regionHeader > div#publicationNavigation > div.studyPaneToggle > span.icon","Toggle study pane",css,printOverride,False) # (TODO: on some versions this is effective only if the browser window exceeds a certain width)
   if pixelSize:
     css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane"]={"position":"fixed","bottom":"0px","left":"30%","height":"30%","border":"magenta solid","overflow":"auto","z-index":"4"}
+    css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane > div"]={"display":"flex","flex":"auto","flex-direction":"row","flex-wrap":"wrap"} # workaround for site's Javascript on Firefox accidentally turning it into horizontal-only multicol scroll
     css[jjc+".pub-int ruby"]={"padding":"0 0.35em"}
     css[jjc+"nav div#documentNavigation div.navVerses ul.verses li.verse"]={"display":"inline","margin":"0 0.1ex"}
   emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,False)
