@@ -800,7 +800,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['body.camcors-small div.span12 > div > table'] = {"border":"thin blue solid","margin-bottom":"1ex"} # show difference (important for selection mechanism to make sense)
     css['body.camcors-small input.gwt-TextBox'] = {"width":"2em"} # otherwise they are too wide and affect the whole div
     css['body.camcors-small div.span12 > div > table > tbody > tr > td > div > div > table > tbody > tr > td[align="right"] > div > div.gwt-Label'] = {"display":"none"} # otherwise the "non-supervision hours disabled by college" message can get too wide which affects the whole div
-  make_like_link = ["div.GFTJ4-XN2 > a.gwt-Anchor","body.camcors-small a.gwt-Anchor"] # CamCORS
+  make_like_link = ["a.gwt-Anchor"] # CamCORS (and other sites that use the same toolkit)
   # (CamCORS hacks end here)
   make_like_link += ["ul.sidebar-navigation > li.sidebar-navigation-item > div.sidebar-navigation-item-header > div.columns:not(:empty)",'a[data-target]'] # ott.cl.cam.ac.uk
   css[','.join(make_like_link)] = css["a:link "] ; css[','.join(x+":hover" for x in make_like_link)] = css["a:link:hover "]
@@ -1105,6 +1105,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.basketDeliverySurcharge p:before, p.basketInfo:before, body#delivery div#homeDelivery *:after,body#delivery div#homeDelivery *:before, p.productStatus > span.inBasket:before, div.sideBasketHeader > div.action > h2:before, form#fMaxiBasket > div#errorWrapper > div.errors > div.errorContainer:before, form#fMaxiBasket > div#errorWrapper > div.errors > div.errorContainer *:before, div.checkoutContainer > form#fOrder *:before, div#checkoutConfirmationContainer div.content:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
   css['div.productLists > ul.products > li.whyNotTry']={'*display':'none'} # 'whyNotTry'? hey Tesco, whyNotTry testing your site with low-vision CSS? :-) Then you might realise the end-2016 variation of that 'whyNotTry' gave 10 screenfuls of useless icons.  Sorry to hide your promotions but if they're THAT much of a mess you'd make more profit without them.
   css['body#favourites div#favouritesHub div#hubTopWrap']={'*display':'none'} # Tesco gets it wrong again: 'favourites' is the wrong word for 'usuals' (if I have to buy cold medicine, that doesn't mean I LIKE the stuff) but more to the point we don't want 10+ screens of extra links (each with overspill images full of supposedly-hidden icons) before getting to the list
+  emptyLink('a[title="Basket"] span.icon-cart',"Basket",css,printOverride,isInsideRealLink=True) # Tesco 2017-10
   css['.header--sticky .primary-nav__item__panel, .header--sticky .utility-nav .utility-nav__list']={"*display":"block"}; css['div[dojotype="dojox.widget.AutoRotator"]'] = {"*display":"none"} # Not that Sainsbury's web developers were any more helpful.  This fixes their broken scrolling 2016-10.
   css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
   css['div.headerContainer > div#searchResultsDidNotFind:before']={"*content":'""'} # more Tesco image madness
@@ -1113,6 +1114,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
   
   css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em'} # Tsinghua online course login
+  css['body.question-page script + div.message-dismissable[style^="position: absolute"]']={'*position':'absolute','border':'blue solid','padding':'1em'} # StackExchange "insufficient reputation to comment" etc
 
   css['div#wrap > div.__iklan + header#masthead + main#content > article[id^="single-post"] > div.container > div.entry-main > aside.entry-sidebar'] = {"display":"none"} # zap an ever-expanding "sidebar" that never lets you get to the article
   
