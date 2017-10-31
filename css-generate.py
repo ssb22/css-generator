@@ -766,6 +766,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki .mw-highlight .cpf']=shl_string # #include parameter (treated like string in some editors)
   css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
   # TODO: p = punc, o = operator; mi = integer; nv = variable name; nb; others?
+  css['div.highlight > pre > span.c1']=shl_comment # tornadoweb etc
+  css['div.highlight > pre > span.kn,div.highlight > pre > span.k']=shl_keyword
+  css['div.highlight > pre > span.n,div.highlight > pre > span.nn']=shl_varname
+  css['div.highlight > pre > span.s1,div.highlight > pre > span.s2']=shl_string
+  # TODO: p = punc, sd = docstring
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
