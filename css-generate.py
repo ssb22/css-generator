@@ -771,6 +771,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.highlight > pre span.n,div.highlight > pre span.nn']=shl_varname
   css['div.highlight > pre span.s1,div.highlight > pre span.s2,div.highlight > pre span.sd,div.highlight > pre span.si']=shl_string
   # TODO: p = punc (and do we differentiate sd=docstring, si=% formatter)
+  css['pre > code.hljs > span.hljs-keyword'] = shl_keyword
+  css['pre > code.hljs > span.hljs-string'] = shl_string
+  css['pre > code.hljs > span.hljs-comment'] = shl_comment
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
