@@ -768,6 +768,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki .mw-highlight .se']={"background":colour["highlight"],"color":colour["bold"]} # string escape character
   css['body.mediawiki .mw-highlight .cpf']=shl_string # #include parameter (treated like string in some editors)
   css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
+  css['a.disabled > span.buttonText']={"color":colour["form_disabled"]}
   # TODO: p = punc, o = operator; mi = integer; nv = variable name; nb; others?
   css['div.highlight > pre span.c1']=shl_comment # tornadoweb etc
   css['div.highlight > pre span.kn,div.highlight > pre span.k']=shl_keyword
