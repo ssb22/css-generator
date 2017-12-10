@@ -1169,6 +1169,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.col-body,div.jsSimpleModalContainer"]={"*display":"block"} # Docker,jw (not display: flex)
 
   css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"],li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/placeholder.png"]']={"*display":"none"}
+  css['div#wrapper > div#regionMain img.thumbnail']={"*max-width":"1em"}
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
