@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9861"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-17.  Version 0.9862"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -915,6 +915,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[jjc+"span.pageNum[data-no]"]={'display':'none'}
   css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
+  css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'} ; css['nav ul.books']={'*display':'block'} # not flex, won't work here
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
   # if pixelSize: css[exclude_ie_below_9+"input#site + input + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
@@ -1173,7 +1174,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # End site-specific hacks
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
-  css['input:-webkit-autofill']={'-webkit-text-fill-color':'blue'} # the background of these things is fixed to bright yellow, so we'd better make sure our webkit-text-fill-color override doesn't apply in this context
+  css['input:-webkit-autofill,audio']={'-webkit-text-fill-color':'initial'} # make sure our webkit-text-fill-color override doesn't apply in contexts where we can't set the background
   # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
   css["html:not(:empty)"]={"*overflow":"visible"}
   # speed up scrolling on Midori (from their FAQ), also avoid colour problems in other browsers on some sites:
