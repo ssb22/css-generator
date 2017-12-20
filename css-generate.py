@@ -915,7 +915,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[jjc+"span.pageNum[data-no]"]={'display':'none'}
   css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
-  css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'} ; css['nav ul.books']={'*display':'block'} # not flex, won't work here
+  css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'} ; css['div#materialNav nav nav ul.books,div#materialNav nav nav ul.books > li.book']={'*display':'block'} # not flex, won't work here
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
   # if pixelSize: css[exclude_ie_below_9+"input#site + input + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
