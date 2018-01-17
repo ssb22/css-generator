@@ -20,7 +20,7 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9863"
 # as of v0.9782.  Versions prior to that were not kept, but
 # you might be able to find some on Internet Archive.
 # To check out the repository, you can do:
-# git clone git@github.com:ssb22/css-generator.git
+# git clone https://github.com/ssb22/css-generator.git
 # or
 # svn co http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
 
