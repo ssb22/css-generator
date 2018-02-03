@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9863"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9864"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -321,8 +321,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     geckoMsieScreenOverride[e] = {"*column-count":"1"} # not Webkit (PageUp/PageDown bug in Chrome57 etc)
   # but there are some exceptions:
 
-  for e in rubyElements:
-    del css[e]["*text-align"] ; del css[e]["*line-height"]
+  for e in rubyElements: del css[e]["*text-align"]
 
   for t in ["textarea","html","body","input"]:
     css[t]["*overflow"] = "auto"
