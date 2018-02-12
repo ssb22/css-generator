@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9864"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9865"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -784,6 +784,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.dp-highlighter > ol span.keyword'] = shl_keyword
   css['div.dp-highlighter > ol span.special'] = shl_varname
   # TODO: number
+  css['td.blob-code > span.pl-k'] = shl_keyword
+  css['td.blob-code > span.pl-c'] = shl_comment
+  css['td.blob-code > span.pl-v,td.blob-code > span.pl-smi'] = shl_varname
+  css['td.blob-code > span.pl-s'] = shl_string
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
