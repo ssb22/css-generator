@@ -785,7 +785,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.dp-highlighter > ol span.special'] = shl_varname
   # TODO: number
   css['td.blob-code > span.pl-k'] = shl_keyword
-  css['td.blob-code > span.pl-c'] = shl_comment
+  css['td.blob-code > span.pl-c, td.blob-code > span.pl-c > span'] = shl_comment
   css['td.blob-code > span.pl-v,td.blob-code > span.pl-smi'] = shl_varname
   css['td.blob-code > span.pl-s'] = shl_string
   
