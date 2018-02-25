@@ -1137,6 +1137,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
   css['div.headerContainer > div#searchResultsDidNotFind:before']={"*content":'""'} # more Tesco image madness
   css['body#delivery div#homeDelivery div#deliverySlots td.reserved div.slotDescription']={"border":"thick solid green"} # (and try to make that a bit clearer)
+  css['div#main.has-trolley']={ # Tesco 2018-02:
+    "*display":"block", # not flex
+    "*max-width":"100%"}
+  css['div.tabs > ul.tabs-header-container > li.tabheader.active > a h2, div.tabs > ul.tabs-header-container > li.tabheader.active > a span']={'color':colour["text"]} # Tesco 2018-02 again (confusing non-functional link as current tab)
 
   css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
   
