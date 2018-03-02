@@ -975,7 +975,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('a.navButton.nextNav > div.buttonShell',"Next",css,printOverride,False)
   emptyLink('a[title="PREVIOUS"]',"Previous",css,printOverride,True)
   emptyLink('a[title="NEXT"]',"Next",css,printOverride,True)
-  emptyLink("div.iconOnly > span.share + span.buttonText",None,css,printOverride,False,True)
+  emptyLink("div.iconOnly + span.share + span.buttonText",None,css,printOverride,False,True)
   # emptyLink('div.toolbar > a.jsZoomIn.zoomIn',"Zoom in",css,printOverride,False);emptyLink('div.toolbar > a.jsZoomOut.zoomOut',"Zoom out",css,printOverride,False) # TODO: somehow let these work? (apparently it's all CSS tricks and we're overriding it)
   emptyLink('div.toolbar > a.jsCloseModal',"Close",css,printOverride,False)
   css["div.galleryCarouselItems"]={"*white-space":"normal"} # not 'nowrap'
