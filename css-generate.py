@@ -747,7 +747,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki table tr div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
   css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
   
-  # Syntax highlighting of code in MediaWiki etc:
+  # Syntax highlighting of code on various platforms:
   shl_keyword = {"color":colour["italic"]}
   shl_varname = {"color":colour["bold"]}
   shl_comment = {"color":colour["coloured"]}
@@ -779,6 +779,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre > code.hljs > span.hljs-keyword'] = shl_keyword
   css['pre > code.hljs > span.hljs-string'] = shl_string
   css['pre > code.hljs > span.hljs-comment'] = shl_comment
+  css['pre.code > span.com'] = shl_comment
+  css['pre.code > span.str'] = shl_string
+  css['pre.code > span.kwd'] = shl_keyword
+  css['pre.code > span.pln'] = shl_varname
   css['div.dp-highlighter > ol span.comment'] = shl_comment
   css['div.dp-highlighter > ol span.string'] = shl_string
   css['div.dp-highlighter > ol span.keyword'] = shl_keyword
