@@ -746,6 +746,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki table tr div[style^="position:relative"]']={"*position":"relative","*display":"inline-block"} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
   css['body.mediawiki table tr div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
   css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
+  css['body.mediawiki div.chess-board > div[style^="position:absolute"]']={"*position":"absolute"}
+  css['body.mediawiki div.chess-board > div > a.image:before, body.mediawiki div.chess-board > div > a.image:after']={"content":'""'} # overriding our [..]
   
   # Syntax highlighting of code on various platforms:
   shl_keyword = {"color":colour["italic"]}
