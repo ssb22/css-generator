@@ -1149,6 +1149,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*max-width":"100%"}
   css['div.tabs > ul.tabs-header-container > li.tabheader.active > a h2, div.tabs > ul.tabs-header-container > li.tabheader.active > a span']={'color':colour["text"]} # Tesco 2018-02 again (confusing non-functional link as current tab)
   css['ul.product-list div.inputControl-wrapper']={'*display':'block'} # not flex, Tesco 2018-04
+  css['div.tile-content > div.tile-content--upper, div.full-trolley--grid > div.full-trolley--content']={'*display':'block'} # not flex, Tesco 2018-05
 
   css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
   
