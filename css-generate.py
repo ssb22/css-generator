@@ -445,11 +445,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     printOverride[i+" span"]={"color":"black"}
     css[i].update(css[i+" span"])
   for i in "b,strong".split(","):
-    css[i+" span"]={
+    css[i+" span,"+i+" kbd"]={
       "*font-weight":"bold",
       "color":colour["bold"]}
-    printOverride[i+" span"]={"color":"black"}
-    css[i].update(css[i+" span"])
+    printOverride[i+" span,"+i+" kbd"]={"color":"black"}
+    css[i].update(css[i+" span,"+i+" kbd"])
   css["acronym"]["color"]=colour["bold"]
   css["abbr"]["color"]=colour["bold"]
   # Some browsers might start styling abbr by default but not acronym.  Some older browsers might understand acronym title= but not abbr title=, so some sites might try to use acronym= for backward compatibility, but given that this must be for nonessential information anyway (as many simpler browsers don't support either) it probably makes sense to prefer abbr now (if it might be displayed by default on a greater number of modern browsers) unless the webmaster wants to emulate the browser in CSS.
