@@ -994,6 +994,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane > div"]={"display":"flex","flex":"auto","flex-direction":"row","flex-wrap":"wrap"} # workaround for site's Javascript on Firefox accidentally turning it into horizontal-only multicol scroll
     css[jjc+".pub-int ruby"]={"padding":"0 0.35em"}
     css[jjc+"nav div#documentNavigation div.navVerses ul.verses li.verse"]={"display":"inline","margin":"0 0.1ex"}
+    css['div#regionMain div.sbNavBarControls,div#regionMain div.sbNavBarControls div,div#regionMain div.sbNavBarControls h4']={"display":"block"} # not flex
+    css['a[data-book-id],a.chapter']={"display":"inline-block"}
+    css['div#regionMain a[data-book-id] span.fullName + span.longAbbrName, div#regionMain a[data-book-id] span.fullName + span.longAbbrName + span.abbrName, div#regionMain a[data-book-id] > div.tocIcons']={"display":"none"}
   emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,False)
   emptyLink(jjc+"li.verseOutline a.outToggle > span","Outline",css,printOverride,False) # TODO: why won't this match?
   emptyLink("a#jsGalleryNextBtn > div.nextArrow","Next",css,printOverride,False)
