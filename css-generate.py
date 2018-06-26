@@ -1105,6 +1105,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['button.twite__share-button,button.twite__share-button + div.twite__panel,a.twite__share-button']={"display":"none"} # BBC 2016/17: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
     css['form[action^="https://ssl.bbc.co.uk"] > button.p-f-button']={'display':'none'} # doesn't work very well anyway and takes up too much room
   css['body#schedules-day div.programmes-page li#on-now']={"border":"blue solid"}
+  css['button.smp__blocklink div.smp__overlay div.smp__message div.smp__cta span.smp__messagetext']={"background":colour["button"],"border":"red solid","margin":"1em"} # 2018 "listen now" button (easy to miss)
+  css['div#msi-modal div.msi-modal__body div.msi-modal__wrap']={"position":"fixed","top":"0px","z-index":"999","border":"solid magenta"} # 2018 sign-in box (don't miss this or nothing works)
+  css['button.p_iplayerIcon span.p_hiddenElement']={"display":"block","background":colour["button"],"border":"red solid","margin":"1em"} # and the button once you've signed in (don't hide this please!)
+  css['div.episode-playout div.smp iframe']={"overflow-y":"auto","height":"9em","*filter":"none","*opacity":"1","*-moz-opacity":"1"} # more space please so we can see the button
 
   # alternative to <wbr/> :
   css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
