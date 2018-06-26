@@ -1030,6 +1030,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
   css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
+  css["div.issues-other-filters div.dropdown button.dropdown-menu-toggle span.dropdown-toggle-text svg,a#logo span.logo-text svg,body.ui-indigo div.nav-sidebar a div.nav-icon-container svg"]={"display":"none"} # Gitlab 2018
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css["div.issues-listing div.state.state-closed"]={'color':colour["coloured"],'border':'red solid','font-weight':'bold'} # GitHub: make it slightly more obvious if we're looking at a closed ticket
   # For Hatjitsu (team estimation):
