@@ -17,10 +17,16 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9865"
 # versions are being kept in the E-GuideDog SVN repository on
 # http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
 # and on GitHub at https://github.com/ssb22/css-generator
+# and on GitLab at https://gitlab.com/ssb22/css-generator
+# and on BitBucket https://bitbucket.org/ssb22/css-generator
 # as of v0.9782.  Versions prior to that were not kept, but
 # you might be able to find some on Internet Archive.
 # To check out the repository, you can do:
 # git clone https://github.com/ssb22/css-generator.git
+# or
+# git clone https://gitlab.com/ssb22/css-generator.git
+# or
+# git clone https://bitbucket.org/ssb22/css-generator.git
 # or
 # svn co http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
 
