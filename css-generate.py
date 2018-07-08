@@ -655,8 +655,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Begin site-specific hacks
 
-  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False,isInsideRealLink=False):
+  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False,isInsideRealLink=False,undo=False):
    assert not ',' in lType
+   assert not (undo and content)
    if isInsideRealLink: isRealLink = False # overrides
    if omitEmpty: eList = [""]
    else: eList = [":empty",":blank",":-moz-only-whitespace"]
@@ -668,26 +669,39 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # and 'content' is our guess of what it should say.
     if isRealLink: key = lType+":link"+empty
     else: key = lType+empty
-    css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
+    if undo: css[key+":before"],css[key+":after"]={},{}
+    else: css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
     if content:
       if isInsideRealLink: css[key+":after"]["content"]='"'+content+'"'
       else: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
-    elif not isInsideRealLink: css[key+":after"]["content"]='"]"'
-    printOverride[key+":after"]={"color":"#000080"}
-    css[key+":before"]={"color":colour["link"]}
-    printOverride[key+":before"]={"color":"#000080"}
+    elif not isInsideRealLink:
+      if undo: css[key+":after"]["content"]='""'
+      else: css[key+":after"]["content"]='"]"'
+    if not undo:
+      printOverride[key+":after"]={"color":"#000080"}
+      css[key+":before"]={"color":colour["link"]}
+      printOverride[key+":before"]={"color":"#000080"}
     if isRealLink:
       key = key.replace(":link",":visited")
-      css[key+":after"]={"color":colour["visited"]}
-      printOverride[key+":after"]={"color":"#000080"}
-      css[key+":before"]={"color":colour["visited"]}
-      printOverride[key+":before"]={"color":"#000080"}
+      if not undo:
+        css[key+":after"]={"color":colour["visited"]}
+        printOverride[key+":after"]={"color":"#000080"}
+        css[key+":before"]={"color":colour["visited"]}
+        printOverride[key+":before"]={"color":"#000080"}
     else: # not isRealLink
-      if not isInsideRealLink: css[key+":before"]["content"] = '"["'
-      css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
-      css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
-      for ll in ["",":before",":after"]: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
+      if not isInsideRealLink:
+        if undo: css[key+":before"]["content"] = '""'
+        else: css[key+":before"]["content"] = '"["'
+      if undo:
+        css[key]={"text-decoration":"none","cursor":"auto","color":colour["text"]}
+      else:
+        css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
+        css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
+      for ll in ["",":before",":after"]:
+        if undo: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["background"]}
+        else: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
       printOverride[key] = {"color":"#000080"}
+
   css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
 
   # Hack for Google search results:
@@ -938,6 +952,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   css["body > input#rubyAvailable + div#wrapper div#content figure > img"]={"*max-width":"100%"}
   emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
+  emptyLink("div.downloadContent div.downloadOptions div.fileTypeButtonContainer a.fileType.current span.buttonText",None,css,printOverride,False,omitEmpty=True,undo=True)
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,isInsideRealLink=True)
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
