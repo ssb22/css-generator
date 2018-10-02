@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9865"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9866"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -93,7 +93,7 @@ colour_schemes_to_generate = [
   
   ("green on black","green",
    {"text":"#00FF00","background":"black",
-    "headings":"#40C080","link":"#0040FF",
+    "headings":"#40C080","link":"#008AFF",
     "hover":"#400000","visited":"#00FFFF",
     "bold":"#80FF80","italic":"white",
     "button":"#600040",
@@ -341,9 +341,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # del css["body"]["*overflow"] # Do not set both "body" and "html" in IE7 - it disables keyboard-only scrolling!
   del css["input"]["*overflow"] # for IE 6 and possibly 8 overprinting too-long input type="text" with a horizontal scrollbar
 
-  for e in ["object","embed","img"]:
-    del css[e]["*width"], css[e]["*height"] # object/embed should not be forced to 'auto' as that can sometimes break Flash applications (when the Flash application is actually useful), and if img is 'auto' then that can break on some versions of IE
-  css[exclude_ie_below_9+"img"]={"*width":"auto","*height":"auto"} # but we can at least add it back on other browsers (TODO: which versions of IE were affected?) - we DO need to specify this, to cope with sites that do silly things like set image height to something e+7 pixels and expect layering to compensate
+  for e in [ # remove height:auto and width:auto from:
+      "object","embed", # should not be forced to 'auto' as that can sometimes break Flash applications (when the Flash application is actually useful)
+      "img", # can break on some versions of IE (is added back in for other browsers below)
+      "input", # can result in 0 on some versions of Gecko (Firefox 60-62 are affected, at least with checkboxes and radio buttons)
+      ]:
+    del css[e]["*width"], css[e]["*height"]
+  css[exclude_ie_below_9+"img"]={"*width":"auto","*height":"auto"} # but we can at least add img back on non-IE browsers (TODO: which versions of IE were affected?) - we DO need to specify this, to cope with sites that do silly things like set image height to something e+7 pixels and expect layering to compensate
 
   css["textarea"]["*width"]="100%" # not "auto", as that can cause Firefox to sometimes indent the textarea's contents off-screen
 
@@ -602,7 +606,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[":root:not(HTML):not(page) slider:not(:empty)"]={"background":"#301090"}
 
   checkbox_scale = int(pixelSize/16)
-  if checkbox_scale > 1: css["input[type=checkbox]"]={"transform":"scale(%d,%d)" % (checkbox_scale,checkbox_scale),"margin":"%dpx"%(checkbox_scale*6)} # margin not padding (browser problems)
+  for iType in ["checkbox","radio"]:
+    iKey = "input[type="+iType+"]"
+    if checkbox_scale > 1: css[iKey]={"transform":"scale(%d,%d)" % (checkbox_scale,checkbox_scale),"margin":"%dpx"%(checkbox_scale*6)} # margin not padding (browser problems)
+    else: css[iKey]={}
+    css[iKey]['-webkit-appearance']=iType
   if pixelSize:
     # In many versions of firefox, a <P ALIGN=center> with an <IFRAME> inside it will result in the iframe being positioned over the top of the main text if the P's text-align is overridden to "left".  But missing out text-align could allow websites to do full justification.  However it seems OK if we override iframe's display to "block" (this may make some layouts slightly less brief, but iframes usually need a line of their own anyway)
     css["iframe"]["*display"]="block"
@@ -625,9 +633,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['select']['-webkit-appearance']='listbox' # workaround for Midori Ubuntu bug 1024783
   css['select']['background']=colour['selectbox']
   printOverride['select']['background']=printButtonBackground # TODO: or something else?
-
-  css['input[type=radio]']={'-webkit-appearance':'radio'}
-  css['input[type=checkbox]']={'-webkit-appearance':'checkbox'}
 
   if "alt-backgrounds" in colour:
     css['td:nth-child(odd),div:nth-child(odd)'] = {"background":colour["alt-backgrounds"][0]}
