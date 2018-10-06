@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9866"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9867"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -429,7 +429,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # for e in mostElements: css[e]["*max-width"]=("%.1fpx" % min(1200,pixelSize*470/18))
 
   # Links stuff - must be before bold/italic colour overrides:
-  for linkInside in ",font,big,small,basefont,br,b,i,u,em,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(",")+rubyElements:
+  for linkInside in ",font,big,small,basefont,br,b,i,u,em,cite,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(",")+rubyElements:
     for type in [":link",":visited","[onclick]",
                  ".button", # used by some JS applications
                  ]:
@@ -1226,6 +1226,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#wrapper > div#regionMain img.thumbnail']={"*max-width":"1em"}
 
   # End site-specific hacks
+  css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
   css['input:-webkit-autofill,audio']={'-webkit-text-fill-color':'initial'} # make sure our webkit-text-fill-color override doesn't apply in contexts where we can't set the background
   # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
@@ -1374,7 +1375,15 @@ def printCss(css,outfile,debugStopAfter=0):
   rDic={} # maps (attrib,val) to a list of elements that have it
   for elem,attribValDict in css.items():
     # add aliases before starting
-    for master,alias in [("background","background-color"),("color","-webkit-text-fill-color"),("transform","-ms-transform"),("transform","-moz-transform"),("transform","-webkit-transform"),("transform","-o-transform"),("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
+    for master,alias in [
+        ("background","background-color"),
+        ("color","-webkit-text-fill-color"),
+        ("color","fill"), # for SVG
+        ("transform","-ms-transform"),
+        ("transform","-moz-transform"),
+        ("transform","-webkit-transform"),
+        ("transform","-o-transform"),
+        ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
       if attribValDict.has_key(master) and not attribValDict.has_key(alias): attribValDict[alias]=attribValDict[master]
     # end of adding aliases
     for i in attribValDict.items():
