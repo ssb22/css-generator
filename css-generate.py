@@ -1488,7 +1488,7 @@ var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/(windo
   for scheme,suffix,colour in colour_schemes_to_generate: print "e=document.createElement('OPTION'); e.value='"+suffix+"'; e.appendChild(document.createTextNode('"+scheme+"')); colourSelect.appendChild(e);"
   alternate_server_for_https_requests = os.environ.get('CSS_HTTPS_SERVER',None) # for the bookmarklet, if you want to apply it on https pages (which means the CSS itself must be served from https) and your main website isn't on an HTTPS-capable server but there's a secondary (lower-bandwidth) one you can use just for that use-case
   def tryStylesheetJS(hrefExpr):
-    r = "var e=document.createElement('link'); e.id0='ssb22css'; e.rel='stylesheet'; e.href="+hrefExpr+"; if(!document.getElementsByTagName('head')) document.body.appendChild(document.createElement('head')); var h=document.getElementsByTagName('head')[0]; if(h.lastChild && h.lastChild.id0=='ssb22css') h.removeChild(h.lastChild); h.appendChild(e);"
+    r = "var e=document.createElement('link');e.id0='ssb22css';e.rel='stylesheet';e.href="+hrefExpr+";if(!document.getElementsByTagName('head'))document.body.appendChild(document.createElement('head'));var h=document.getElementsByTagName('head')[0];if(h.lastChild&&h.lastChild.id0=='ssb22css')h.removeChild(h.lastChild);h.appendChild(e);" # try to avoid spaces because they get written as %20 in the bookmarklet
     if alternate_server_for_https_requests:
       r = "var c="+hrefExpr+","+r[4:].replace(hrefExpr,"location.protocol=='https:'?'"+alternate_server_for_https_requests+r"'+c.slice(c.search(/[^/]*\\.css/)).replace('.css',''):c",1)
     return r
@@ -1518,7 +1518,7 @@ for(i=base.length-1; i; i--) if(base.charAt(i)=='/') break;
 base=base.substring(0,i)+"/";
 function update() {
   cssLink.href=base+sizeSelect.options[sizeSelect.selectedIndex].value+colourSelect.options[colourSelect.selectedIndex].value+".css";
-  bookmarkletLink.href="javascript:"""+tryStylesheetJS("""'"+cssLink.href+"'""")+"""function returnvoid(){} returnvoid();";
+  bookmarkletLink.href="javascript:"""+tryStylesheetJS("""'"+cssLink.href+"'""")+"""function makevoid(){}makevoid()";
 }
 sizeSelect.onchange=update; colourSelect.onchange=update; update();
 e=document.getElementById('pregen_download'); e.parentNode.replaceChild(newDiv,e);
