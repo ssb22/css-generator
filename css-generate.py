@@ -730,6 +730,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
   css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; emptyLink('table.diff-table button[aria-label="Add line comment"]','C',css,printOverride,False,True) # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
+  css['button.more-actions-toggle > span.icon > svg']={'width':'1em','height':'1em'}
   # and media players:
   css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":r'"\21E8 Play"'}
   css["div.mwPlayerContainer div.play-btn span.ui-icon-pause:empty:after"]={"content":'"Pause"'}
@@ -810,6 +811,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre.code > span.str'] = shl_string
   css['pre.code > span.kwd'] = shl_keyword
   css['pre.code > span.pln'] = shl_varname
+  css['pre.code > span.c'] = shl_comment
+  css['pre.code > span.c1'] = shl_comment
+  css['pre.code > span.s'] = shl_string
+  css['pre.code > span.k'] = shl_keyword
+  css['pre.code > span.n'] = shl_varname
   css['div.dp-highlighter > ol span.comment'] = shl_comment
   css['div.dp-highlighter > ol span.string'] = shl_string
   css['div.dp-highlighter > ol span.keyword'] = shl_keyword
