@@ -820,6 +820,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre.code-source > code span.syntax-string'] = shl_string
   css['pre.code-source > code span.syntax-comment'] = shl_comment
   css['pre.code-source > code span.syntax-title'] = shl_varname
+  css['pre.code-source > code span.syntax-built_in'] = shl_varname
   css['div.dp-highlighter > ol span.comment'] = shl_comment
   css['div.dp-highlighter > ol span.string'] = shl_string
   css['div.dp-highlighter > ol span.keyword'] = shl_keyword
