@@ -1195,6 +1195,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.tabs > ul.tabs-header-container > li.tabheader.active > a h2, div.tabs > ul.tabs-header-container > li.tabheader.active > a span']={'color':colour["text"]} # Tesco 2018-02 again (confusing non-functional link as current tab)
   css['ul.product-list div.inputControl-wrapper']={'*display':'block'} # not flex, Tesco 2018-04
   css['div.tile-content > div.tile-content--upper, div.full-trolley--grid > div.full-trolley--content']={'*display':'block'} # not flex, Tesco 2018-05
+  css['a.brand-logo-link[href^="/groceries/"] > svg']={'*display':'none'} # Tesco 2018-11: yes we know whose website we're on: we don't need a logo that takes 2 screens to scroll through, thanks anyway...
 
   css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
   
