@@ -830,6 +830,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['td.blob-code > span.pl-c, td.blob-code > span.pl-c > span'] = shl_comment
   css['td.blob-code > span.pl-v,td.blob-code > span.pl-smi'] = shl_varname
   css['td.blob-code > span.pl-s'] = shl_string
+  css['pre > span.enscript-comment'] = shl_comment
+  css['pre > span.enscript-reference'] = shl_preproc
+  css['pre > span.enscript-string'] = shl_string
+  css['pre > span.enscript-function-name'] = shl_varname
+  css['pre > span.enscript-keyword'] = shl_keyword
+  css['pre > span.enscript-type'] = shl_keyword
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
