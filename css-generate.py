@@ -835,7 +835,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre > span.enscript-string'] = shl_string
   css['pre > span.enscript-function-name'] = shl_varname
   css['pre > span.enscript-keyword'] = shl_keyword
-  css['pre > span.enscript-type'] = shl_keyword
+  css['pre > span.enscript-type'] = shl_varname
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
