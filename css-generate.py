@@ -1245,6 +1245,21 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body.page-template div.toggles > div.nav-toggle:before']={'content':'"Toggle navigation: "',"color":colour["link"],"text-decoration":"underline","cursor":"pointer"} # some 'blog' templates contain just bars done as 3 styled empty DIVs
 
+  # Why do all these 'news' sites keep using display: flex?
+  # Don't they know it causes paragraphs not to wrap, and
+  # we have to scroll left/right far too much :-(
+  css['div.content-wrap']={'*display':'block'} # not flex please techcrunch
+  css['section']['*display']="block" # not flex please businessinsider
+  css['section > div']={'*display':'block'} # not flex please atlassian
+  css["main, body > div.base-layout"]={"*display":"block"} # not flex please chess.com
+  css['div[style*="flex"]']={'*display':'block'} # not flex please chessbase
+  # TODO: is there a more general way of addressing these
+  # (and the Tesco etc ones above) w/out Web Adjuster?
+  # Just set div *max-width 100% ? would need overflow:auto (see
+  # comments above on max-width) so be careful.
+  # (Just set div,section *display block could be a problem with display:none)
+  # Pity CSS selectors can't query for an otherwise-applied CSS property to override
+
   # End site-specific hacks
   css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
