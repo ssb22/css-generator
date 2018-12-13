@@ -1132,6 +1132,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hacks for StackOverflow/etc:
   emptyLink('a[title="delete this comment"]',"Delete this comment",css,printOverride)
   emptyLink('a[title="expand to show all comments on this post"]',"Expand all comments",css,printOverride)
+  css["body > div.container"]={"*display":"block"} # not flex
   # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
   if pixelSize:
     css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"} # TODO: is this still needed?
@@ -1245,6 +1246,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body.page-template div.toggles > div.nav-toggle:before']={'content':'"Toggle navigation: "',"color":colour["link"],"text-decoration":"underline","cursor":"pointer"} # some 'blog' templates contain just bars done as 3 styled empty DIVs
 
+  css['.fixable_fixed']={"*display":"static"} # Quora
+
   # Why do all these 'news' sites keep using display: flex?
   # Don't they know it causes paragraphs not to wrap, and
   # we have to scroll left/right far too much :-(
@@ -1254,7 +1257,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["main, body > div.base-layout"]={"*display":"block"} # not flex please chess.com
   css['div[style*="flex"]']={'*display':'block'} # not flex please chessbase
   # TODO: is there a more general way of addressing these
-  # (and the Tesco etc ones above) w/out Web Adjuster?
+  # (plus other "not flex" display rules), w/out Web Adjuster?
   # Just set div *max-width 100% ? would need overflow:auto (see
   # comments above on max-width) so be careful.
   # (Just set div,section *display block could be a problem with display:none)
