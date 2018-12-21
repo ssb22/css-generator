@@ -1256,7 +1256,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['section > div']={'*display':'block'} # not flex please atlassian
   css["main, body > div.base-layout"]={"*display":"block"} # not flex please chess.com
   css['div[style*="flex"]']={'*display':'block'} # not flex please chessbase
+  css['div.responsivegrid div']={'*display':'block'} # not flex please dropbox
+  css['div.layout-block'={'*display':'block'} # not flex please makeuseof
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
+  css['body > div.container > div.row']={'*display':'block'}
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
   # Just set div *max-width 100% ? would need overflow:auto (see
