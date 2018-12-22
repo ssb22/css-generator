@@ -1257,7 +1257,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["main, body > div.base-layout"]={"*display":"block"} # not flex please chess.com
   css['div[style*="flex"]']={'*display':'block'} # not flex please chessbase
   css['div.responsivegrid div']={'*display':'block'} # not flex please dropbox
-  css['div.layout-block'={'*display':'block'} # not flex please makeuseof
+  css['div.layout-block']={'*display':'block'} # not flex please makeuseof
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['body > div.container > div.row']={'*display':'block'}
   # TODO: is there a more general way of addressing these
