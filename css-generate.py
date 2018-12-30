@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9867"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9868"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1459,7 +1459,7 @@ def printCss(css,outfile,debugStopAfter=0):
     addIn([x for x in elemList if ':-moz' in x]) # just in case
     addIn([x for x in elemList if ':-webkit' in x]) # just in case
     addIn([x for x in elemList if ':ms-' in x]) # just in case
-    addIn([x for x in elemList if not '*' in x and not '>' in x and not ':empty' in x and not ':not' in x and not '[' in x]) # with IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list, so we need to separate these out
+    addIn([x for x in elemList if not '*' in x and not '>' in x and not ':empty' in x and not ':not' in x and not '[' in x and not '+' in x]) # with IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list, so we need to separate these out
     addIn([x for x in elemList if not ':not' in x]) # for later versions of IE
     addIn(elemList) # everything else
     for eList in elemLists:
