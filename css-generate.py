@@ -1132,7 +1132,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hacks for StackOverflow/etc:
   emptyLink('a[title="delete this comment"]',"Delete this comment",css,printOverride)
   emptyLink('a[title="expand to show all comments on this post"]',"Expand all comments",css,printOverride)
-  css["body > div.container"]={"*display":"block"} # not flex
+  css["body > div.container, body.question-page div.grid, body.question-page div.post-layout, body.question-page ul.comments-list .comment"]={"*display":"block"} # not flex
   # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
   if pixelSize:
     css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"} # TODO: is this still needed?
