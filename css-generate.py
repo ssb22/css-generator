@@ -1267,6 +1267,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # (Just set div,section *display block could be a problem with display:none)
   # Pity CSS selectors can't query for an otherwise-applied CSS property to override
 
+  css['div.quoted-text']={'border':'thin grey solid'} # may help on some forum sites
+
   # End site-specific hacks
   css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
