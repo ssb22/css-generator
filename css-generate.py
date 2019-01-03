@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-18.  Version 0.9868"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9869"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1260,7 +1260,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.responsivegrid div']={'*display':'block'} # not flex please dropbox
   css['div.layout-block']={'*display':'block'} # not flex please makeuseof
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
-  css['body > div.container > div.row']={'*display':'block'}
+  css['body > div.container > div.row, body > div.flex-container']={'*display':'block'}
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
   # Just set div *max-width 100% ? would need overflow:auto (see
