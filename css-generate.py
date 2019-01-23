@@ -279,6 +279,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*filter":"none","*-webkit-filter":"none","*-moz-filter":"none","*-o-filter":"none","*-ms-filter":"none",
     "*opacity":"1",
     "*-moz-opacity":"1",
+    "*mask-image":"none","*-webkit-mask-image":"none",
     
     "-moz-appearance":"none", # DON'T * this, it can lead to white-on-white situations so we need it for colour changes not just size changes
 
