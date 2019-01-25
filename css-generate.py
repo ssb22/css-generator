@@ -1262,7 +1262,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.layout-block']={'*display':'block'} # not flex please makeuseof
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
-  css['article, article > div.flex-wrap, body > div.container > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment']={'*display':'block'} # not flex please (various sites)
+  css['article, article div.flex-wrap, article div.row, body > div.container > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment']={'*display':'block'} # not flex please (various sites)
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
   # Just set div *max-width 100% ? would need overflow:auto (see
