@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9869"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.987"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -180,6 +180,7 @@ cjk_fonts = "Lantinghei SC, AppleGothic"
 # Other Mac CJK fonts to be aware of: MingLiU prefers full 'Traditional' forms of characters where Trad/Simp has same Unicode value (e.g. U+8D77 'qi3' has an extra vertical stroke making the 'ji' component look more like a 'si'); renders OK on Mac OS 10.9 at 20px without antialias, but might not always be present (the ttf is installed to /Library/Fonts/Microsoft by MS Office and is not present on machines without MS Office).  Arial Unicode MS (present on both 10.7 and 10.9) has some issues with baselines not lining up e.g. in the word 'zhen1li3' U+771F U+7406; it prefers Simplifed Chinese forms (e.g. U+8D77 uses 'ji', and U+95E8 is the Chinese rather than the Japanese simplification).  GB18030 Bitmap (NISC18030) might work at 16px, 32px etc, but scales badly to other sizes.  "Hei" has irregular stroke widths in 10.9 20px no-antialias, but otherwise OK
 serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", serif" # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
 sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
+pinyin_fonts = "Gandhari, DejaVu Sans, Lucida Sans Unicode, Times New Roman, serif" # try to get clear tone marks
 
 # ---- End of options (but read on for debugging) ----
 
@@ -329,6 +330,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # but there are some exceptions:
 
   for e in rubyElements: del css[e]["*text-align"]
+  css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
 
   for t in ["textarea","html","body","input"]:
     css[t]["*overflow"] = "auto"
