@@ -778,7 +778,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
   css['body.mediawiki div.chess-board > div[style^="position:absolute"]']={"*position":"absolute"}
   css['body.mediawiki div.chess-board > div > a.image:before, body.mediawiki div.chess-board > div > a.image:after']={"content":'""'} # overriding our [..]
-  css['a > div']={"*padding":"0px"} # WikiMedia some site notices (the div is set to display inline, and adding padding to inline elements can cause overprinting)
+  css['a:link div']={"*padding":"0px"} # WikiMedia some site notices (the div is set to display inline, and adding padding to inline elements can cause overprinting)
   
   # Syntax highlighting of code on various platforms:
   shl_keyword = {"color":colour["italic"]}
