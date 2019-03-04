@@ -778,6 +778,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
   css['body.mediawiki div.chess-board > div[style^="position:absolute"]']={"*position":"absolute"}
   css['body.mediawiki div.chess-board > div > a.image:before, body.mediawiki div.chess-board > div > a.image:after']={"content":'""'} # overriding our [..]
+  css['a > div']={"*padding":"0px"} # WikiMedia some site notices (the div is set to display inline, and adding padding to inline elements can cause overprinting)
   
   # Syntax highlighting of code on various platforms:
   shl_keyword = {"color":colour["italic"]}
@@ -1265,6 +1266,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment']={'*display':'block'} # not flex please (various sites)
+  css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
   # Just set div *max-width 100% ? would need overflow:auto (see
