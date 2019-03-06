@@ -1251,7 +1251,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body.page-template div.toggles > div.nav-toggle:before']={'content':'"Toggle navigation: "',"color":colour["link"],"text-decoration":"underline","cursor":"pointer"} # some 'blog' templates contain just bars done as 3 styled empty DIVs
 
-  css['.fixable_fixed']={"*display":"static"} # Quora
+  css['.fixable_fixed']={"*display":"block","*position":"static"} # Quora (needed especially if using CSS bookmarklet instead of proper installation)
 
   # Why do all these 'news' sites keep using display: flex?
   # Don't they know it causes paragraphs not to wrap, and
@@ -1265,7 +1265,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.layout-block']={'*display':'block'} # not flex please makeuseof
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
-  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment']={'*display':'block'} # not flex please (various sites)
+  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
