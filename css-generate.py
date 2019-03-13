@@ -1263,6 +1263,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div[style*="flex"]']={'*display':'block'} # not flex please chessbase
   css['div.responsivegrid div']={'*display':'block'} # not flex please dropbox
   css['div.layout-block']={'*display':'block'} # not flex please makeuseof
+  css['div.story-body-supplemental']={'*display':'block'} # not flex please New York Times
+  css['section div.grd div.row']={'*display':'block'} # not flex please Microsoft Support
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body']={'*display':'block'} # not flex please (various sites)
@@ -1279,6 +1281,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#mobileNavTopBar div.navBarControls span.navBarButton-icon, button.accordionButton > span.accordionButton-text + span.accordionButton-icon, div.articleFooterLinks nav a span.buttonIcon, div.articleShareLinks span.buttonIcon, button#mobileTOCHandle span.mobilePaneControl-icon, div.downloadLinks span.buttonIcon svg, button.jsCloseModal span.closeModal svg, div.fileContainer a span svg, span.buttonIcon[aria-hidden="true"]']={'*display':'none'} # TODO: why do these add 300px+ Y when we've included the 24px svg in doHeightWidth
   css['div.vjs-audio iframe.vjs-resize-manager']={'*display':'none'}
   css['div.standardModal-flexWrapper, div.standardModal, div.standardModal-toolbar']={'*display':'block'} # not flex
+
+  css['div.play > div.input > textarea.code']={'*height':'15em','*margin-left':'1em'} # golang package examples
 
   # End site-specific hacks
   css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
