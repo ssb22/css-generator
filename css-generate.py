@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.987"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9871"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -180,7 +180,7 @@ cjk_fonts = "Lantinghei SC, AppleGothic"
 # Other Mac CJK fonts to be aware of: MingLiU prefers full 'Traditional' forms of characters where Trad/Simp has same Unicode value (e.g. U+8D77 'qi3' has an extra vertical stroke making the 'ji' component look more like a 'si'); renders OK on Mac OS 10.9 at 20px without antialias, but might not always be present (the ttf is installed to /Library/Fonts/Microsoft by MS Office and is not present on machines without MS Office).  Arial Unicode MS (present on both 10.7 and 10.9) has some issues with baselines not lining up e.g. in the word 'zhen1li3' U+771F U+7406; it prefers Simplifed Chinese forms (e.g. U+8D77 uses 'ji', and U+95E8 is the Chinese rather than the Japanese simplification).  GB18030 Bitmap (NISC18030) might work at 16px, 32px etc, but scales badly to other sizes.  "Hei" has irregular stroke widths in 10.9 20px no-antialias, but otherwise OK
 serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", serif" # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
 sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
-pinyin_fonts = "Gandhari, DejaVu Sans, Lucida Sans Unicode, Times New Roman, serif" # try to get clear tone marks
+pinyin_fonts = "Gandhari Unicode, Lucida Sans Unicode, Times New Roman, DejaVu Sans, serif" # try to get clear tone marks (but DejaVu Sans must be low priority because it results in disappearing text on some buggy Safari versions under Mac OS 10.7, regardless of whether or not the ttf has been installed)
 
 # ---- End of options (but read on for debugging) ----
 
@@ -953,6 +953,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav div#compactSearch span.searchIcon.menuButton > span.icon","Search",css,printOverride,False)
   emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome > a > span.icon","Home",css,printOverride,isInsideRealLink=True)
   emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome + li > a > span.icon","Bbl",css,printOverride,isInsideRealLink=True)
+  emptyLink("div#wrapper div#documentMenuButton > span.icon","Show...",css,printOverride,False)
+  emptyLink("div#wrapper div#documentMenuButton > span.rubyIndicator > span.icon","Romanisation...",css,printOverride,False)
+  emptyLink("button#fontSizeSmaller > span.icon","smaller",css,printOverride,False) # probably won't work if we're fixing the size in user CSS, but display anyway to avoid completely empty "Show..." sections if no other functions are shown
+  emptyLink("button#fontSizeLarger > span.icon","bigger",css,printOverride,False)
   css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:after, div#regionHeader menu li#menuSynchronizeSwitch a:after, div#wrapper div#primaryNav ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after, div#wrapper div#toolbarFrame ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after"]={"content":'"Sync"',"text-transform":"none"}
   css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a:empty:after"]={"content":'"Preferences"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after"]={"content":'"<- Prev"',"text-transform":"none"}
