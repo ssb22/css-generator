@@ -841,6 +841,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre > span.enscript-function-name'] = shl_varname
   css['pre > span.enscript-keyword'] = shl_keyword
   css['pre > span.enscript-type'] = shl_varname
+  css['pre > span.comment'] = shl_comment
+  css['pre > span.ln'] = shl_preproc
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
@@ -1271,7 +1273,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['section div.grd div.row']={'*display':'block'} # not flex please Microsoft Support
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
-  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd']={'*display':'block'} # not flex please (various sites)
+  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
