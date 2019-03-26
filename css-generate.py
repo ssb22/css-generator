@@ -1076,7 +1076,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.audio > div.pause[rv-on-click]:empty:before']={'content':'"Pause"'}
   css['body > div.ui-draggable > div.ui-dialog-titlebar']={'cursor':'move'}
   css['img.emoji[src$=".svg"]']={"*height":"1em","*max-height":"1em","*width":"1em","*max-width":"1em"}
-  def doHeightWidth(height,width): css['img[width="%d"][height="%d"],svg[viewBox="0 0 %d %d"],symbol[viewBox="0 0 %d %d"]' % (width,height,width,height,width,height)]={"*height":"%dpx"%height,"*max-height":"%dpx"%height,"*width":"%dpx"%width,"*max-width":"%dpx"%width} # setting max as well seems to partially work around some Safari 6.1 SVG bugs
+  def doHeightWidth(height,width): css['img[width="%d"][height="%d"],svg[viewBox="0 0 %d %d"]' % (width,height,width,height)]={"*height":"%dpx"%height,"*max-height":"%dpx"%height,"*width":"%dpx"%width,"*max-width":"%dpx"%width} # setting max as well seems to partially work around some Safari 6.1 SVG bugs
   doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   doHeightWidth(24,32) # some cl.cam pages
   doHeightWidth(24,18) # some Tesco pages 2017-11
@@ -1084,7 +1084,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
   css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
-  css["div.issues-other-filters div.dropdown button.dropdown-menu-toggle span.dropdown-toggle-text svg,a#logo span.logo-text svg,body.ui-indigo div.nav-sidebar a div.nav-icon-container svg,body.ui-indigo a.toggle-sidebar-button svg,body.ui-indigo div.breadcrumbs-links svg.breadcrumbs-list-angle,body.ui-indigo svg.caret-down"]={"display":"none"} # Gitlab 2018
+  css["div.issues-other-filters div.dropdown button.dropdown-menu-toggle span.dropdown-toggle-text svg,a#logo span.logo-text svg,body.ui-indigo div.nav-sidebar a div.nav-icon-container svg,body.ui-indigo a.toggle-sidebar-button svg,body.ui-indigo div.breadcrumbs-links svg.breadcrumbs-list-angle,body.ui-indigo svg.caret-down"]={"*display":"none"} # GitLab 2018
+  css["a.note-emoji-button > svg.s16, button > svg.s16"]={"*height":"16px","*width":"16px"} # GitLab 2019
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css["div.issues-listing div.state.state-closed"]={'color':colour["coloured"],'border':'red solid','font-weight':'bold'} # GitHub: make it slightly more obvious if we're looking at a closed ticket
   # For Hatjitsu (team estimation):
@@ -1271,7 +1272,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.layout-block']={'*display':'block'} # not flex please makeuseof
   css['div.story-body-supplemental']={'*display':'block'} # not flex please New York Times
   css['section div.grd div.row']={'*display':'block'} # not flex please Microsoft Support
-  css["body > header.navbar, body > header.navbar > div.navbar-right > ul, body > header.navbar > div.navbar-right > ul li"]={"*display":"block"} # not flex please GitLab
+  css["body > header.navbar, body > header.navbar > div.navbar-right > ul, body > header.navbar > div.navbar-right > ul li, div.detail-page-header"]={"*display":"block"} # not flex please GitLab
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex']={'*display':'block'} # not flex please (various sites)
