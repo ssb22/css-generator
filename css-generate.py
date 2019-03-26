@@ -1086,6 +1086,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css["div.issues-other-filters div.dropdown button.dropdown-menu-toggle span.dropdown-toggle-text svg,a#logo span.logo-text svg,body.ui-indigo div.nav-sidebar a div.nav-icon-container svg,body.ui-indigo a.toggle-sidebar-button svg,body.ui-indigo div.breadcrumbs-links svg.breadcrumbs-list-angle,body.ui-indigo svg.caret-down"]={"*display":"none"} # GitLab 2018
   css["a.note-emoji-button > svg.s16, button > svg.s16"]={"*height":"16px","*width":"16px"} # GitLab 2019
+  css["form.new-note div.md-area a.zen-control"]={"*display":"none"} # GitLab 2019
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css["div.issues-listing div.state.state-closed"]={'color':colour["coloured"],'border':'red solid','font-weight':'bold'} # GitHub: make it slightly more obvious if we're looking at a closed ticket
   # For Hatjitsu (team estimation):
