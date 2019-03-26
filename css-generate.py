@@ -1076,7 +1076,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.audio > div.pause[rv-on-click]:empty:before']={'content':'"Pause"'}
   css['body > div.ui-draggable > div.ui-dialog-titlebar']={'cursor':'move'}
   css['img.emoji[src$=".svg"]']={"*height":"1em","*max-height":"1em","*width":"1em","*max-width":"1em"}
-  def doHeightWidth(height,width): css['img[width="%d"][height="%d"]' % (width,height)]=css['svg[viewBox="0 0 %d %d"]' % (width,height)]={"*height":"%dpx"%height,"*max-height":"%dpx"%height,"*width":"%dpx"%width,"*max-width":"%dpx"%width} # setting max as well seems to partially work around some Safari 6.1 SVG bugs
+  def doHeightWidth(height,width): css['img[width="%d"][height="%d"],svg[viewBox="0 0 %d %d"],symbol[viewBox="0 0 %d %d"]' % (width,height,width,height,width,height)]={"*height":"%dpx"%height,"*max-height":"%dpx"%height,"*width":"%dpx"%width,"*max-width":"%dpx"%width} # setting max as well seems to partially work around some Safari 6.1 SVG bugs
   doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
   doHeightWidth(24,32) # some cl.cam pages
   doHeightWidth(24,18) # some Tesco pages 2017-11
