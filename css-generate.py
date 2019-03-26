@@ -1271,6 +1271,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.layout-block']={'*display':'block'} # not flex please makeuseof
   css['div.story-body-supplemental']={'*display':'block'} # not flex please New York Times
   css['section div.grd div.row']={'*display':'block'} # not flex please Microsoft Support
+  css["body > header.navbar, body > header.navbar > div.navbar-right > ul, body > header.navbar > div.navbar-right > ul li"]={"*display":"block"} # not flex please GitLab
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex']={'*display':'block'} # not flex please (various sites)
