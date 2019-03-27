@@ -842,6 +842,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre > span.enscript-keyword'] = shl_keyword
   css['pre > span.enscript-type'] = shl_varname
   css['pre > span.comment'] = shl_comment
+  css['pre > span.keyword'] = shl_keyword
+  css['pre > span.variable'] = shl_varname
+  css['pre > span.string'] = shl_string
   css['pre > span.ln'] = shl_preproc
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
@@ -1089,6 +1092,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["form.new-note div.md-area a.zen-control"]={"*display":"none"} # GitLab 2019
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css["div.issues-listing div.state.state-closed"]={'color':colour["coloured"],'border':'red solid','font-weight':'bold'} # GitHub: make it slightly more obvious if we're looking at a closed ticket
+  css["summary > svg.icon-chevon-down-mktg, details > summary > svg[viewBox=\"0 0 14 8\"]"]={'*display':'none'} # sorry GitHub, it's way too big when in giant print (and don't know why doHeightWidth isn't fixing these)
   # For Hatjitsu (team estimation):
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards"]={"*border":"thin red solid"}
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card"]={"border":"green solid","*padding":"1em"}
@@ -1274,6 +1278,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.story-body-supplemental']={'*display':'block'} # not flex please New York Times
   css['section div.grd div.row']={'*display':'block'} # not flex please Microsoft Support
   css["body > header.navbar, body > header.navbar > div.navbar-right > ul, body > header.navbar > div.navbar-right > ul li, div.detail-page-header"]={"*display":"block"} # not flex please GitLab
+  css['div.container div.row']={'*display':'block'} # not flex please Jenkins docs
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex']={'*display':'block'} # not flex please (various sites)
