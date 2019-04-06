@@ -331,6 +331,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   for e in rubyElements: del css[e]["*text-align"]
   css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
+  css["ruby + ruby"]={"*margin-left":"0.9ex"}
 
   for t in ["textarea","html","body","input"]:
     css[t]["*overflow"] = "auto"
