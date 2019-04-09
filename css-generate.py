@@ -331,7 +331,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   for e in rubyElements: del css[e]["*text-align"]
   css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
-  css["ruby + ruby"]={"*margin-left":"0.9ex"}
+  del css["rt"]["*padding"] # some sites omit space between ruby elements and make up for it by setting padding on the rt elements: let that through
+  del css["ruby"]["*padding"];del css["rb"]["*padding"] # might as well do this too
 
   for t in ["textarea","html","body","input"]:
     css[t]["*overflow"] = "auto"
