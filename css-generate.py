@@ -1283,7 +1283,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.container div.row']={'*display':'block'} # not flex please Jenkins docs
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
-  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content']={'*display':'block'} # not flex please (various sites)
+  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
@@ -1291,6 +1291,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # comments above on max-width) so be careful.
   # (Just set div,section *display block could be a problem with display:none)
   # Pity CSS selectors can't query for an otherwise-applied CSS property to override
+
+  css['body.article-type-article#body .apester-layer']={'*display':'none'} # sorry The Independent, your delayed 'register' popup is not very accessible (2019-04)
 
   css['div.quoted-text']={'border':'thin grey solid'} # may help on some forum sites
 
