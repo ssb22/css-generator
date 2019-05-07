@@ -1178,6 +1178,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
   # also use of 'q' adding duplicate quotes:
   css['div#regionMain > div.wrapper div#content div#article > article q.scrp:before, div#regionMain > div.wrapper div#content div#article > article q.scrp:after']={'content':'""'}
+
+  css['div#menuHome > a:link > span.icon:empty:before']={'content':'"Home"'}
+  css['#standardSearch .searchControlContainer .searchButton'] = {'*width':'auto'} # site was somehow overriding it to a pixel width on Safari 6, cutting off the larger text
   
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
