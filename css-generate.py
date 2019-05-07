@@ -1181,7 +1181,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['div#menuHome > a:link > span.icon:empty:before']={'content':'"Home"'}
   css['#standardSearch .searchControlContainer .searchButton'] = {'*width':'auto'} # site was somehow overriding it to a pixel width on Safari 6, cutting off the larger text
-  
+  emptyLink("div#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,False)
+  emptyLink("div#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,False)
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
   
