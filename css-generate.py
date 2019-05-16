@@ -1264,7 +1264,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("a.overlay-close","Close",css,printOverride)
   css["div.col-body,div.jsSimpleModalContainer"]={"*display":"block"} # Docker,jw (not display: flex)
 
-  css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"],li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/placeholder.png"]']={"*display":"none"}
+  css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"],li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/placeholder.png"],div.tooltip div.tooltipList li > a.cardContainer > div.cardThumbnail, div.tooltip div.tooltipList li > a.cardContainer > div.cardChevron']={"*display":"none"}
+  css['div.tooltip > div.tooltipHeader > div']={"*display":"inline-block"}
+  emptyLink('div.tooltip > div.tooltipHeader > div.tooltipClose > div.closeBtn > span.icon','X',css,printOverride,False)
   css['div#wrapper > div#regionMain img.thumbnail']={"*max-width":"1em"}
 
   css['body.page-template div.toggles > div.nav-toggle:before']={'content':'"Toggle navigation: "',"color":colour["link"],"text-decoration":"underline","cursor":"pointer"} # some 'blog' templates contain just bars done as 3 styled empty DIVs
