@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9871"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9872"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -662,6 +662,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['img[src$=".gif"], img[src$=".png"]'] = { 'image-rendering': '-moz-crisp-edges', 'image-rendering':'-o-crisp-edges','image-rendering':'-webkit-optimize-contrast','image-rendering':'crisp-edges','-ms-interpolation-mode':'nearest-neighbor' }
 
   css['main']['*max-width']='100%' # work around too wide on some sites
+  css['input']['*max-width']='100%'
 
   # Begin site-specific hacks
 
