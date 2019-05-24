@@ -771,7 +771,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a:link.new, a:link.new i,a:link.new b"]={"color":colour["coloured"] } # (TODO use a different colour?)
   printOverride["a:link.new, a:link.new i,a:link.new b"]={"color":"black" } # TODO: shade of grey?
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
-  css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip, ul.ui-autocomplete, body.mediawiki > div.mwe-popups[role="tooltip"]']={"*position":"absolute","border":"blue solid"}
+  css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip,body.mediawiki .rt-tooltip, ul.ui-autocomplete, body.mediawiki > div.mwe-popups[role="tooltip"]']={"*position":"absolute","border":"blue solid"}
   css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
   css["body.mediawiki div.mwe-popups a.mwe-popups-extract"]={"text-decoration":"none","color":colour["text"]} # don't underline if they present it as a very long link
   # and the map pins (TODO: this is still only approximate! pins tend to be a bit too far to the south-west; not sure why) :
