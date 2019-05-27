@@ -334,6 +334,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   del css["rt"]["*padding"] # some sites omit space between ruby elements and make up for it by setting padding on the rt elements: let that through
   del css["ruby"]["*padding"];del css["rb"]["*padding"] # might as well do this too
 
+  for w in ["*width","*height"]: del css["svg"][w] # 'auto' is very often wrong for svg, and some browsers' understanding of specificity results in our viewBox overrides not working if auto is set here
+
   for t in ["textarea","html","body","input"]:
     css[t]["*overflow"] = "auto"
   # 'html' is there for IE7.  But Firefox needs it to be 'visible'.  See hack at end.
