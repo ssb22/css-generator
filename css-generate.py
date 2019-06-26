@@ -1549,7 +1549,7 @@ def main():
           pxDesc = "%d pixels" % pixelSize
           saidPixels = True
       else: pxDesc = "unchanged"
-      toPrn="<li><a href=\"%s\">%s %s</a>" % (filename,pxDesc,scheme)
+      toPrn="<li><a href=\"%s\" download>%s %s</a>" % (filename,pxDesc,scheme)
       if not outHTML: pass
       elif i==len(colour_schemes_to_generate)-1: print toPrn+"</li>"
       else: print toPrn+","
@@ -1604,6 +1604,7 @@ for(i=base.length-1; i; i--) if(base.charAt(i)=='/') break;
 base=base.substring(0,i)+"/";
 function update() {
   cssLink.href=base+sizeSelect.options[sizeSelect.selectedIndex].value+colourSelect.options[colourSelect.selectedIndex].value+".css";
+  cssLink.download=sizeSelect.options[sizeSelect.selectedIndex].value+colourSelect.options[colourSelect.selectedIndex].value+".css";
   bookmarkletLink.href="javascript:"""+tryStylesheetJS("""'"+cssLink.href+"'""")+"""function makevoid(){}makevoid()";
 }
 sizeSelect.onchange=update; colourSelect.onchange=update; update();
