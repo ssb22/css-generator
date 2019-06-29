@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9872"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9873"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1292,6 +1292,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.container div.row']={'*display':'block'} # not flex please Jenkins docs
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
+  css['div#mobileNavTopBar div.navBarControls, div#regionMain ol.breadcrumbMenu, div#footerTop div.primaryNav, footer div#footer, article div.articleFileLinks']={'*display':'block'} # not flex please
   css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
   # TODO: is there a more general way of addressing these
