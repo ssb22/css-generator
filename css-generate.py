@@ -991,7 +991,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
   # if pixelSize: css[exclude_ie_below_9+"input#rubyAvailable + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
-  css["body > input#rubyAvailable + div#wrapper div#content figure > img"]={"*max-width":"100%"}
+  css["body > input#rubyAvailable + div#wrapper div#content figure > img, div.lsrBannerImage img"]={"*max-width":"100%"}
   emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
   emptyLink("div.downloadContent div.downloadOptions div.fileTypeButtonContainer a.fileType.current span.buttonText",None,css,printOverride,False,omitEmpty=True,undo=True)
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,isInsideRealLink=True)
