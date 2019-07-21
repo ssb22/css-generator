@@ -908,7 +908,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   # hack for sites that use jump.js with nav boxes
   jjc = "body > input#rubyAvailable + div#wrapper "
-  jumpjsContent = jjc+"div#content,"+jjc+"div#message"
+  jumpjsContent = jjc+"#content,"+jjc+"div#message"
   jumpjsTooltip = 'div > div.tooltip.dir-ltr[dir="ltr"]' # TODO: ? div[style^="position: absolute"] > div > div.tooltip
   css[jumpjsTooltip+","+jjc+"div#message,"+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"border":"thin solid "+colour["italic"]}
   for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
@@ -933,10 +933,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                  "width":"30%","height":"60%","border":"blue solid","overflow":"auto","z-index":"2",
                  "display":"flex","flex":"auto","flex-direction":"row","flex-wrap":"wrap", # same as above
       }
-      css["body > div#wrapper div#content div#navScrollPositionFloating"]={
+      css["body > div#wrapper #content div#navScrollPositionFloating"]={
         "display":"block", # don't flash on/off
       }
-      css[jjc+"div#content div#navScrollPositionFloating,"+jjc+"div.navPosition > div.scrollPositionDisplay"]={
+      css[jjc+"#content div#navScrollPositionFloating,"+jjc+"div.navPosition > div.scrollPositionDisplay"]={
         "position":"fixed", # don't 'pop up' using display toggle and disrupt the vertical positioning of the entire text due to our position:static override
         "top":"auto", # because we're using bottom:0px (overriding the popup location)
         "bottom":"0px","right":"0px",
@@ -983,7 +983,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.jsDownloadFileList ul.downloadItemSet > li.itemRow'] = { # confusion re is the Play button above or below the item: delineate them more clearly
     '*padding-top':'1em', # TODO: does this even work?
     'border':'thin blue solid'}
-  css['div#content > div#pubListResults > div#pubsViewResults > div.publication'] = {'border':'thin blue solid'}
+  css['#content > div#pubListResults > div#pubsViewResults > div.publication'] = {'border':'thin blue solid'}
   css[jjc+"span.pageNum[data-no]"]={'display':'none'}
   css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
@@ -991,7 +991,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
   # if pixelSize: css[exclude_ie_below_9+"input#rubyAvailable + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
-  css["body > input#rubyAvailable + div#wrapper div#content figure > img, div.lsrBannerImage img"]={"*max-width":"100%"}
+  css["body > input#rubyAvailable + div#wrapper #content figure > img, div.lsrBannerImage img"]={"*max-width":"100%"}
   emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
   emptyLink("div.downloadContent div.downloadOptions div.fileTypeButtonContainer a.fileType.current span.buttonText",None,css,printOverride,False,omitEmpty=True,undo=True)
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,isInsideRealLink=True)
@@ -1132,7 +1132,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:after"]={"content":'")"',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount"]={"color":colour["coloured"]}
   css["div#mailboxcontainer > div#folderlist-content ul#mailboxlist > li.mailbox"]={"*display":"inline","*border":"none"} # in case you have a lot of folders (seeing as they're displayed on every screen)
-  css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe,body.home > div.container > header#globalMasthead + div.clear + header#localMasthead + div.clear + div#frameStore > iframe,body.back > div#content > iframe#ifraResult,body.detailhost > table#detable td#drifdiv > iframe#drif"]={ # 'body.home' etc is for search.lib.cam.ac.uk
+  css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe,body.home > div.container > header#globalMasthead + div.clear + header#localMasthead + div.clear + div#frameStore > iframe,body.back > #content > iframe#ifraResult,body.detailhost > table#detable td#drifdiv > iframe#drif"]={ # 'body.home' etc is for search.lib.cam.ac.uk
       "*height":"25em","*overflow":"visible", # hopefully one of those will work
       "*filter":"none","*opacity":"1","*-moz-opacity":"1"}
   css["body.detailhost > table#detable,body.detailhost > table#detable td#drifdiv"]={"*width":"100%"} # also for search.lib.cam.ac.uk
@@ -1178,14 +1178,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.episode-playout div.smp iframe']={"overflow-y":"auto","height":"9em","*filter":"none","*opacity":"1","*-moz-opacity":"1"} # more space please so we can see the button
 
   # alternative to <wbr/> :
-  css['div#regionMain > div.wrapper div#content div#article > article p span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper div#content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
+  css['div#regionMain > div.wrapper #content div#article > article p span.wd.refID, div#regionMain > div.wrapper #content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper #content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
   # also use of 'q' adding duplicate quotes:
-  css['div#regionMain > div.wrapper div#content div#article > article q.scrp:before, div#regionMain > div.wrapper div#content div#article > article q.scrp:after']={'content':'""'}
+  css['div#regionMain > div.wrapper #content div#article > article q.scrp:before, div#regionMain > div.wrapper #content div#article > article q.scrp:after']={'content':'""'}
 
   css['div#menuHome > a:link > span.icon:empty:before']={'content':'"Home"'}
   css['#standardSearch .searchControlContainer .searchButton'] = {'*width':'auto'} # site was somehow overriding it to a pixel width on Safari 6, cutting off the larger text
-  emptyLink("div#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,False)
-  emptyLink("div#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,False)
+  emptyLink("#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,False)
+  emptyLink("#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,False)
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
   
