@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9873"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9874"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1229,6 +1229,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['ul.product-list div.inputControl-wrapper']={'*display':'block'} # not flex, Tesco 2018-04
   css['div.tile-content > div.tile-content--upper, div.full-trolley--grid > div.full-trolley--content']={'*display':'block'} # not flex, Tesco 2018-05
   css['a.brand-logo-link[href^="/groceries/"] > svg']={'*display':'none'} # Tesco 2018-11: yes we know whose website we're on: we don't need a logo that takes 2 screens to scroll through, thanks anyway...
+  css['body > div#content main div.component-tree div.recommender--wrapper']={'*display':'none'} # Tesco 2019-07 (there's a flex or something somewhere that's messing up my horizontal scrolling, and I couldn't find exactly which element it was so I'm just turning off the whole adverty construct, sorry)
+  css['div.slim-trade-banner--full-width']={'*display':'none'} # Tesco making the page too wide
+  css['div#card-section > iframe#bounty-iframe']={'*height':'20em'} # Tesco payment form is in a non-scrollable iframe 2019-07
+  css['body > div#bounty-app > form#bounty-form div.secure-payment span.secure-payment__icon, body > div#bounty-app > form#bounty-form div.secure-payment svg']={'*display':'none'} # otherwise it overprints Tesco's entire payment form with a solid box (2019-07).  I actually sent them a video of this one, but I doubt it will make it as far as the developer team.  (To reproduce the video you'll need to get version 0.9873 of this code, e.g. from https://raw.githubusercontent.com/ssb22/css-generator/2253417d45173df2594d4e8c1bc51822613c3f07/css-generate.py as obviously I added the above 3 lines to work around those particular problems but I expect there will be more problems next time because it seems they keep coming up with new ones.)
 
   css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
   
@@ -1294,6 +1298,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.container div.row']={'*display':'block'} # not flex please Jenkins docs
   css['div.Section-section,div.PostsPage-header']={'*display':'block'}
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
+  css['div#content > .row']={'*display':'block'} # not flex please OED
   css['div#mobileNavTopBar div.navBarControls, div#regionMain ol.breadcrumbMenu, div#footerTop div.primaryNav, footer div#footer, footer div#footer div.quickLinks ul, footer div#footer div.sitemapLinks, nav > ul.jsDropdownNav, article div.articleFileLinks']={'*display':'block'} # not flex please
   css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
