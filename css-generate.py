@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9874"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9875"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -851,6 +851,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre > span.variable'] = shl_varname
   css['pre > span.string'] = shl_string
   css['pre > span.ln'] = shl_preproc
+  css['.FileContents .u-pre span.com'] = shl_comment
+  css['.FileContents .u-pre span.kwd'] = shl_keyword
+  css['.FileContents .u-pre span.typ'] = shl_varname
+  css['.FileContents .u-pre span.str'] = shl_string
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
@@ -1300,7 +1304,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['div#content > .row']={'*display':'block'} # not flex please OED
   css['div#mobileNavTopBar div.navBarControls, div#regionMain ol.breadcrumbMenu, div#footerTop div.primaryNav, footer div#footer, footer div#footer div.quickLinks ul, footer div#footer div.sitemapLinks, nav > ul.jsDropdownNav, article div.articleFileLinks']={'*display':'block'} # not flex please
-  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment']={'*display':'block'} # not flex please (various sites)
+  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,div.ghacks-sidebared-content,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
