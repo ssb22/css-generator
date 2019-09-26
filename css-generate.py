@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9875"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9876"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -55,7 +55,10 @@ outHTML = True
 # Which pixel sizes to generate.
 # Size 0 means "unchanged" - it will disable the size
 # changes, and the layout changes that are meant for large
-# sizes.  This is for people who need only colour changes.
+# sizes.  This is for people who need only colour changes,
+# or for whom the browser's built-in zoom is sufficient
+# (e.g. on a large display and/or complex layouts that
+# aren't very-well dealt with by our layout changes).
 pixel_sizes_to_generate = [0,18,20,25,30,35,40,45,50,60,75,100]
 
 # Which pixel size to use with the "chop" and related debug options:
@@ -324,12 +327,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   webkitGeckoScreenOverride = {} ; webkitMsieScreenOverride = {} ; geckoMsieScreenOverride = {}
   for e in mostElements+rubyElements:
     css[e]=defaultStyle.copy()
-    printOverride[e] = {"color":"black","background":"white"}.copy()
+    if e=="img": printOverride[e] = {"color":"black","background-color":"white"}.copy()
+    else: printOverride[e] = {"color":"black","background":"white"}.copy()
     if pixelSize: printOverride[e]["font-size"] = "12pt" # TODO: option?
     geckoMsieScreenOverride[e] = {"*column-count":"1"} # not Webkit (PageUp/PageDown bug in Chrome57 etc)
   # but there are some exceptions:
 
   for e in rubyElements: del css[e]["*text-align"]
+  for k in css["img"].keys()[:]:
+    if k.startswith("background"): del css["img"][k] # e.g. WhatsApp emoji uses a single image with positioning (and we want this to work if size=unchanged)
   css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
   del css["rt"]["*padding"] # some sites omit space between ruby elements and make up for it by setting padding on the rt elements: let that through
   del css["ruby"]["*padding"];del css["rb"]["*padding"] # might as well do this too
@@ -505,7 +511,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
   # Images and buttons:
-  css["img"]["background"]=colour["image_transparency_compromise"]
+  css["img"]["background-color"]=colour["image_transparency_compromise"]
   
   # Exception needed for MediaWiki TeX images
   # (they tend to be transparent but with antialiasing that
@@ -596,6 +602,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if not e in firstLineBugs: css[e+":first-line"]=inheritDic.copy()
     for i in map(lambda x:exclude_ie_below_9+e+x,[":before",":after"]):
       css[i]=defaultStyle.copy()
+      if e=="img":
+        for k in css[i].keys()[:]:
+          if k.startswith("background"): del css[i][k]
       for mp in ["*margin","*padding"]:
         if not css.get(e,{}).get(mp,"")==css[i][mp]:
           del css[i][mp] # as not sure how browsers would treat a different margin/padding in :before/:after.  But DO keep these settings for the 0px elements, because we DON'T want sites overriding this and causing overprinting.
@@ -1294,6 +1303,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["main, body > div.base-layout"]={"*display":"block"} # not flex please chess.com
   css['div[style*="flex"]']={'*display':'block'} # not flex please chessbase
   css['div.responsivegrid div']={'*display':'block'} # not flex please dropbox
+  css['div.layout']={'*display':'block'} # not flex please Google Patents
   css['div.layout-block']={'*display':'block'} # not flex please makeuseof
   css['div.story-body-supplemental']={'*display':'block'} # not flex please New York Times
   css['div.article-wrapper,div.article-container']={'*display':'block'} # not flex please Forbes
@@ -1305,7 +1315,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['div#content > .row']={'*display':'block'} # not flex please OED
   css['div#mobileNavTopBar div.navBarControls, div#regionMain ol.breadcrumbMenu, div#footerTop div.primaryNav, footer div#footer, footer div#footer div.quickLinks ul, footer div#footer div.sitemapLinks, nav > ul.jsDropdownNav, article div.articleFileLinks']={'*display':'block'} # not flex please
-  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,div.ghacks-sidebared-content,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment,div.entry__content']={'*display':'block'} # not flex please (various sites)
+  css['article, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,div.ghacks-sidebared-content,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment,div.entry__content,div.MuiGrid-container']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
   css['div.swiper-wrapper,div.swiper-wrapper div'],css['div.widget__top-picks,svg.image-wrapper__placeholder']={'*display':'block'},{'*display':'none'} # this line makes some attempt to clean up SCMP's flex overuse 2019
   # TODO: is there a more general way of addressing these
@@ -1325,6 +1335,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['div.play > div.input > textarea.code']={'*height':'15em','*margin-left':'1em'} # golang package examples
 
+  if not colour["background"]=="white": css["body.web div#app div.landing-window div.landing-main div[data-ref]"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
+  css["body.web div#app div._37f_5"]={"display":"none"} # WhatsApp (especially in 0.css) supposed to be a translucent overlay or something but ends up blanking out the entire page
+  css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
+  css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
+  
   # End site-specific hacks
   css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
