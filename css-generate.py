@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9876"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9877"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1339,6 +1339,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.web div#app div._37f_5"]={"display":"none"} # WhatsApp (especially in 0.css) supposed to be a translucent overlay or something but ends up blanking out the entire page
   css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
   css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
+  css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
+  css['pre#editArea']={"border":"thin solid white"} # WeChat
   
   # End site-specific hacks
   css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
