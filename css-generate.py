@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9877"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9878"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -1335,12 +1335,31 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['div.play > div.input > textarea.code']={'*height':'15em','*margin-left':'1em'} # golang package examples
 
-  if not colour["background"]=="white": css["body.web div#app div.landing-window div.landing-main div[data-ref]"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
-  css["body.web div#app div._37f_5"]={"display":"none"} # WhatsApp (especially in 0.css) supposed to be a translucent overlay or something but ends up blanking out the entire page
-  css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
-  css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
-  css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
-  css['pre#editArea']={"border":"thin solid white"} # WeChat
+  if not pixelSize:
+    if not colour["background"]=="white": css["body.web div#app div.landing-window div.landing-main div[data-ref]"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
+    css["body.web div#app div._37f_5"]={"display":"none"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
+    css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
+    css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
+    css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
+    css['pre#editArea']={"border":"thin solid white"} # WeChat
+    # Zimbra: (works with size=unchanged)
+    css['table.ZToolbarButtonTable div.ImgDelete:empty:before']={'content':'"rm"'}
+    css['table.ZToolbarButtonTable div.ImgMoveToFolder:empty:before']={'content':'"mv"'}
+    css['table.ZToolbarButtonTable div.ImgPrint:empty:before']={'content':'"prn"'}
+    css['table.ZToolbarButtonTable div.ImgReply:empty:before']={'content':'"Rply"'}
+    css['table.ZToolbarButtonTable div.ImgReplyAll:empty:before']={'content':'"RAll"'}
+    css['table.ZToolbarButtonTable div.ImgForward:empty:before']={'content':'"Fwd"'}
+    css['table.ZToolbarButtonTable div.ImgJunkMail:empty:before']={'content':'"Junk"'}
+    css['table.ZToolbarButtonTable div.ImgTag:empty:before']={'content':'"Tag"'}
+    css['table.ZToolbarButtonTable div.ImgLeftArrow:empty:before']={'content':r'"\2190"'}
+    css['table.ZToolbarButtonTable div.ImgRightArrow:empty:before']={'content':r'"\2192"'}
+    css['div#z_shell div.Row-selected']={'border':'green solid'}
+    css['div#z_shell td > div.ImgTaskCheckbox:empty:before']={'content':r'"\2610"'}
+    css['div#z_shell td > div.ImgTaskCheckboxCompleted:empty:before']={'content':r'"\2611"'}
+    css['div#z_shell td > div.ImgFlagRed:empty:before']={'content':r'"\1F6A9"'} # U+1F6A9 red flag = \D83D\DEA9
+    css['div#z_shell td div.ImgMsgStatusRead:empty:before']={'content':'"R"'}
+    css['div#z_shell td div.ImgMsgStatusUnread:empty:before']={'content':'"N"'}
+    css['div#z_shell td > div.ImgTaskCheckbox:empty, div#z_shell td > div.ImgTaskCheckboxCompleted:empty, div#z_shell td > div.ImgFlagRed:empty, div#z_shell td div.ImgMsgStatusRead:empty, div#z_shell td div.ImgMsgStatusUnread:empty']={'width':'1em'}
   
   # End site-specific hacks
   css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
