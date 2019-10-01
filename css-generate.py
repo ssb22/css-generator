@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9878"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9879"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -864,6 +864,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.FileContents .u-pre span.kwd'] = shl_keyword
   css['.FileContents .u-pre span.typ'] = shl_varname
   css['.FileContents .u-pre span.str'] = shl_string
+  css['div.diff-content td.line_content span.k'] = shl_keyword
+  css['div.diff-content td.line_content span.n'] = shl_varname
+  css['div.diff-content td.line_content span.s'] = shl_string
+  css['div.diff-content td.line_content span.cp'] = shl_preproc
+  css['div.diff-content td.line_content span.c1'] = shl_comment
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
@@ -883,7 +888,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div#container div#result tt > i"]={"display":"table-header-group","text-align":"center"}
     css["div#container div#result tt > b, div#container div#result tt > acronym"]={"display":"table-row-group","text-align":"center"}
   # hack for messages on some sites
-  css["tr.new td"]={"border":"thick solid "+colour["coloured"]}
+  css["tr.new td"]={"border-left":"thick solid "+colour["coloured"]}
+  css["tr.new td"]={"border-right":"thick solid "+colour["coloured"]}
+  # and as that also matches GitLab diffs:
+  css["tr.old td"]={"border-left":"thin solid "+colour["coloured"]}
+  css["tr.old td"]={"border-right":"thin solid "+colour["coloured"]}
   # hack for (some versions of) phpBB
   css["ul.profile-icons li span"]={"*display":"inline"}
   # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
@@ -1362,7 +1371,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div#z_shell td > div.ImgTaskCheckbox:empty, div#z_shell td > div.ImgTaskCheckboxCompleted:empty, div#z_shell td > div.ImgFlagRed:empty, div#z_shell td div.ImgMsgStatusRead:empty, div#z_shell td div.ImgMsgStatusUnread:empty']={'width':'1em'}
   
   # End site-specific hacks
-  css["svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
+  css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
   css['input:-webkit-autofill,audio']={'-webkit-text-fill-color':'initial'} # make sure our webkit-text-fill-color override doesn't apply in contexts where we can't set the background
   # 'html' overflow should be 'visible' in Firefox, 'auto' in IE7.
