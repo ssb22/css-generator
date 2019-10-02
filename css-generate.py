@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9879"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.988"
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -929,7 +929,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.jsAutoCompleteSelector[style~="relative;"]'] = {'*position':'relative','border':'blue solid'}
   
   # hack for sites that use jump.js with nav boxes
-  jjc = "body > input#rubyAvailable + div#wrapper "
+  jjc = "body > script + div#wrapper "
   jumpjsContent = jjc+"#content,"+jjc+"div#message"
   jumpjsTooltip = 'div > div.tooltip.dir-ltr[dir="ltr"]' # TODO: ? div[style^="position: absolute"] > div > div.tooltip
   css[jumpjsTooltip+","+jjc+"div#message,"+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"border":"thin solid "+colour["italic"]}
@@ -939,7 +939,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"fixed","z-index":"9"}
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
-      css["body > input#rubyAvailable + div#wrapper > div#header, body > input#rubyAvailable + div#wrapper > div#regionHeader"]={
+      css["body > script + div#wrapper > div#header, body > script + div#wrapper > div#regionHeader"]={
         "height":"40%", # no more or scroll-JS is too far wrong
         "position":"fixed","top":"0px","left":"auto",
         "right":"0px", # right, not left, or overflow problems, + right helps w. tooltips
@@ -1011,9 +1011,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
   css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'} ; css['div#materialNav nav nav ul.books,div#materialNav nav nav ul.books > li.book']={'*display':'block'} # not flex, won't work here
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
-  # if pixelSize: css[exclude_ie_below_9+"input#rubyAvailable + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
+  # if pixelSize: css[exclude_ie_below_9+"script + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
-  css["body > input#rubyAvailable + div#wrapper #content figure > img, div.lsrBannerImage img"]={"*max-width":"100%"}
+  css["body > script + div#wrapper #content figure > img, div.lsrBannerImage img"]={"*max-width":"100%"}
   emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
   emptyLink("div.downloadContent div.downloadOptions div.fileTypeButtonContainer a.fileType.current span.buttonText",None,css,printOverride,False,omitEmpty=True,undo=True)
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,isInsideRealLink=True)
@@ -1351,7 +1351,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
     css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
     css['pre#editArea']={"border":"thin solid white"} # WeChat
-    # Zimbra: (works with size=unchanged)
+    # Zimbra: (works with size=unchanged, although in Firefox (at least v69)
+    # Compose doesn't work because their Javascript fails to find the correct
+    # div to change z-index (why don't they just use classes ??) : this seems
+    # to be a bug with Zimbra and Firefox, even when no user CSS is applied)
     css['table.ZToolbarButtonTable div.ImgDelete:empty:before']={'content':'"rm"'}
     css['table.ZToolbarButtonTable div.ImgMoveToFolder:empty:before']={'content':'"mv"'}
     css['table.ZToolbarButtonTable div.ImgPrint:empty:before']={'content':'"prn"'}
