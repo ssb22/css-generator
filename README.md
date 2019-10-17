@@ -1,4 +1,6 @@
 # css-generator
-Low-vision stylesheet generator from http://people.ds.cam.ac.uk/ssb22/css/
+Low-vision stylesheet generator from http://ssb22.user.srcf.net/css/
 
-(also mirrored at http://ssb22.gitlab.io/css/ as the Cambridge "DS-Web" server sometimes gets taken down for several days of maintenance)
+(also mirrored at http://ssb22.gitlab.io/css/ just in case)
+
+See that page for details.

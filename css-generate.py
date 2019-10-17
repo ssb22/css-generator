@@ -1,5 +1,6 @@
-#!/usr/bin/env python2
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.988"
+#!/usr/bin/env python
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.989"
+# Should run on either Python 2 or Python 3
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -223,6 +224,18 @@ chop_extra_verification = True # If True, we'll take an extra step to verify eac
 
 try: from css_generate_config import *
 except ImportError: pass
+
+try: reduce # Python 2
+except: # Python 3
+  from functools import reduce, cmp_to_key
+  _builtin_sorted = sorted
+  def sorted(l,theCmp): return _builtin_sorted(l,key=cmp_to_key(theCmp))
+  def cmp(a,b): return (a>b)-(a<b)
+try: bytes # Python 3 and newer Python 2
+except: bytes = str # older Python 2
+try: unicode # Python 2
+except: unicode = str # Python 3
+
 if type(colour_schemes_to_generate) in (str,unicode):
   import glob
   colour_schemes_to_generate = reduce(lambda x,y:x+eval(open(y).read()), glob.glob(colour_schemes_to_generate), [])
@@ -334,7 +347,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # but there are some exceptions:
 
   for e in rubyElements: del css[e]["*text-align"]
-  for k in css["img"].keys()[:]:
+  for k in list(css["img"].keys())[:]:
     if k.startswith("background"): del css["img"][k] # e.g. WhatsApp emoji uses a single image with positioning (and we want this to work if size=unchanged)
   css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
   del css["rt"]["*padding"] # some sites omit space between ruby elements and make up for it by setting padding on the rt elements: let that through
@@ -443,20 +456,20 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Links stuff - must be before bold/italic colour overrides:
   for linkInside in ",font,big,small,basefont,br,b,i,u,em,cite,strong,abbr,span,div,code,tt,samp,kbd,var,acronym,h1,h2,h3,h4,h5,h6".split(",")+rubyElements:
-    for type in [":link",":visited","[onclick]",
+    for lType in [":link",":visited","[onclick]",
                  ".button", # used by some JS applications
                  ]:
-      css["a"+type+" "+linkInside]={"color":colour["link"],"text-decoration":"underline","cursor":"pointer"}
-      printOverride["a"+type+" "+linkInside]={"color":"#000080"} # printing: links in blue might be useful for sending PDFs to others, but make it a dark blue so still readable if printed in black and white (don't try to ensure page is ALWAYS black and white: that can't be done w/out suppressing images.  User needs to suppress colour at print time.  But ensure legible choice of shading when that happens.)
-      css["a"+type+":hover "+linkInside]={"background":colour["hover"]}
-      css["a"+type+":active "+linkInside]={"color":"red","text-decoration":"underline","cursor":"pointer"}
-      if linkInside in ["b","i","em","u","strong"] and not css[linkInside]["color"]==colour["text"]: css["a"+type+" "+linkInside]["color"]=css[linkInside]["color"]
+      css["a"+lType+" "+linkInside]={"color":colour["link"],"text-decoration":"underline","cursor":"pointer"}
+      printOverride["a"+lType+" "+linkInside]={"color":"#000080"} # printing: links in blue might be useful for sending PDFs to others, but make it a dark blue so still readable if printed in black and white (don't try to ensure page is ALWAYS black and white: that can't be done w/out suppressing images.  User needs to suppress colour at print time.  But ensure legible choice of shading when that happens.)
+      css["a"+lType+":hover "+linkInside]={"background":colour["hover"]}
+      css["a"+lType+":active "+linkInside]={"color":"red","text-decoration":"underline","cursor":"pointer"}
+      if linkInside in ["b","i","em","u","strong"] and not css[linkInside]["color"]==colour["text"]: css["a"+lType+" "+linkInside]["color"]=css[linkInside]["color"]
     css["a:visited "+linkInside]["color"]=colour["visited"]
   # set cursor:pointer for links and ANYTHING inside them (including images etc).  The above cursor:auto should theoretically do the right thing anyway, but it seems that some versions of Firefox need help.
   for linkInside in mostElements+rubyElements:
-    for type in [":link",":visited","[onclick]"]:
-      key="a"+type+" "+linkInside
-      if not css.has_key(key): css[key]={}
+    for lType in [":link",":visited","[onclick]"]:
+      key="a"+lType+" "+linkInside
+      if not key in css: css[key]={}
       css[key]["cursor"]="pointer"
       if not linkInside in rubyElements: css[key]["*display"]="inline" # some sites have 'div' or do JS things with 'span'...
 
@@ -603,7 +616,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     for i in map(lambda x:exclude_ie_below_9+e+x,[":before",":after"]):
       css[i]=defaultStyle.copy()
       if e=="img":
-        for k in css[i].keys()[:]:
+        for k in list(css[i].keys())[:]:
           if k.startswith("background"): del css[i][k]
       for mp in ["*margin","*padding"]:
         if not css.get(e,{}).get(mp,"")==css[i][mp]:
@@ -640,13 +653,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["img[align=right]"]={"*float":"right"}
     
   # Selection (CSS3)
-  if colour.has_key("selection"):
+  if "selection" in colour:
     css["::selection"] = {"background":colour["selection"]}
     css["::-moz-selection"] = {"background":colour["selection"]}
 
   css['input[type=search]'] = {"-webkit-appearance":"textfield"} # searchbox forces background:white which may conflict with our foreground
   
   css['select']['-webkit-appearance']='listbox' # workaround for Midori Ubuntu bug 1024783
+  css['select']['-moz-appearance']='none' # ... but we don't want Firefox 69-etc to always use a white background
   css['select']['background']=colour['selectbox']
   printOverride['select']['background']=printButtonBackground # TODO: or something else?
 
@@ -656,7 +670,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if len(colour["alt-backgrounds"])>1:
       css['td:nth-child(even),div:nth-child(even)'] = {"background":colour["alt-backgrounds"][1]}
       printOverride['td:nth-child(even),div:nth-child(even)'] = {"background":"white"} # TODO: or another very light grey?
-    for k in css.keys():
+    for k in list(css.keys()):
       if css[k].get("background","")==colour["background"] and not k in ["html","body"]: css[k]["background"]="inherit"
 
   # Make definition lists a bit more legible, including when there is more than one definition for one term
@@ -771,7 +785,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div.MathJax_Display span.msubsup > span:only-child > span:first-child + span:not(:last-child)"]={"vertical-align":"super"} # TODO: can we do superscript + subscript as an inline-table? (but need a containing element?)
     css["div.MathJax_Display span.msubsup > span:only-child > span:first-child + span + span"]={"vertical-align":"sub"}
   # Following workaround is for MathJax scripts which insist on images when we have fonts (TODO: check for Unicode support?)  It doesn't work in IE9 or below (and possibly some other browsers) because it relies on setting img's content="" to enable the :before/:after; to be safe I'm doing this in only Webkit and Gecko for now.
-  for asc in range(0x20,0x7f)+[0xa0,0xd7]+range(0x2200,0x2294): # TODO: others?
+  for asc in list(range(0x20,0x7f))+[0xa0,0xd7]+list(range(0x2200,0x2294)): # TODO: others?
     if asc in [ord('"'),ord('\\')]: continue
     k = 'div.MathJax_Display img[src="http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/png/Main/Regular/476/%04X.png"]' % asc
     webkitGeckoScreenOverride[k]={"width":"0px",'content':'""',"vertical-align":"0px"} # (don't say display=none or that'll hide the :after as well)
@@ -782,7 +796,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a:link.new, a:link.new i,a:link.new b"]={"color":colour["coloured"] } # (TODO use a different colour?)
   printOverride["a:link.new, a:link.new i,a:link.new b"]={"color":"black" } # TODO: shade of grey?
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
-  css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip,body.mediawiki .rt-tooltip, ul.ui-autocomplete, body.mediawiki > div.mwe-popups']={"*position":"absolute","border":"blue solid"}
+  css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip,body.mediawiki .rt-tooltip, ul.ui-autocomplete, body.mediawiki div.mwe-popups']={"*position":"absolute","border":"blue solid"}
   css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
   css["body.mediawiki div.mwe-popups a.mwe-popups-extract"]={"text-decoration":"none","color":colour["text"]} # don't underline if they present it as a very long link
   # and the map pins (TODO: this is still only approximate! pins tend to be a bit too far to the south-west; not sure why) :
@@ -792,7 +806,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
   css['body.mediawiki div.chess-board > div[style^="position:absolute"]']={"*position":"absolute"}
   css['body.mediawiki div.chess-board > div > a.image:before, body.mediawiki div.chess-board > div > a.image:after']={"content":'""'} # overriding our [..]
-  css['a:link div']={"*padding":"0px"} # WikiMedia some site notices (the div is set to display inline, and adding padding to inline elements can cause overprinting)
+  css['a:link div']["*padding"]="0px" # WikiMedia some site notices (the div is set to display inline, and adding padding to inline elements can cause overprinting)
   
   # Syntax highlighting of code on various platforms:
   shl_keyword = {"color":colour["italic"]}
@@ -874,7 +888,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["ul#MUmyAccountOptions"]={"*display":"block"}
   # Hack for some authoring tools that use <FONT COLOR=..> to indicate special emphasis
   css["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"],span[style=\"color:rgb(255,0,0)\"]"]={"color":colour["coloured"]}
-  printOverride["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"]"]={"color":"black"} # TODO: shade of grey?
+  printOverride["font[color],span[style=\"color: rgb(128, 0, 0);\"],span[style=\"color:red\"],span[style=\"color:rgb(255,0,0)\"]"]={"color":"black"} # TODO: shade of grey?
   # and others that use span class="Apple-style-span"
   css["span.Apple-style-span"]={"color":colour["coloured"]}
   printOverride["span.Apple-style-span"]={"color":"black"} # TODO: shade of grey?
@@ -1045,7 +1059,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div.jsAudioPlayer > div.jsAudioPlayerInterface > "+jsPlayElem+".jsPlay.controlElem:empty:after"] = { "content": r'"\21E8 Play"', "color":colour["link"]}
     css["div.jsAudioPlayer > div.jsAudioPlayerInterface > "+jsPlayElem+".jsPlay.jsActive.controlElem:empty:after"] = { "content": r'"Playing"', "color":colour["link"]}
   css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.jsMute.controlElem:empty:after"] = { "content": '"Mute"', "color":colour["link"]}
-  printOverride["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem:empty:after"] = { "color":"black" } # (TODO: but do we want to print those controls at all?)
+  printOverride["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.jsMute.controlElem:empty:after"] = { "color":"black" } # (TODO: but do we want to print those controls at all?)
   css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem:empty"] = { "cursor":"pointer" }
   css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem"] = { "*display":"inline" }
   css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem.ui-slider"] = { "*display":"block" }
@@ -1385,8 +1399,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[":focus"]={"outline":colour.get("focusOutlineStyle","thin dotted")}
   
   # Remove '*' as necessary (in css, not needed in printOverride):
-  for el in css.keys()[:]:
-    for prop,value in css[el].items()[:]:
+  for el in list(css.keys())[:]:
+    for prop,value in list(css[el].items())[:]:
       if len(prop)>1 and prop[0]=='*':
         del css[el][prop]
         if pixelSize: css[el][prop[1:]] = value
@@ -1442,7 +1456,9 @@ only Mozilla 1.0 does it properly; later versions and Firefox don't)
 img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */\n""")
 
+  cssRef = {x:y.copy() for x,y in css.items()}
   ret = printCss(css,outfile,debugStopAfter)
+  css = cssRef
 
   outfile.write("""@media print {
 /*
@@ -1456,18 +1472,21 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */
 """)
   # (PocketIE7 also has a habit of displaying the page with a white background while rendering, and applying the CSS's colours only afterwards, even if the CSS is in cache.  PocketIE6 did not do this.  See cssHtmlAttrs option in Web Adjuster for a possible workaround.)
+  screen_ReOverride = {x:y.copy() for x,y in printOverride.items()}
   printCss(printOverride,outfile,debugStopAfter=0)
+  del printOverride
   # and the above-mentioned second override for IE7, Midori etc :
   outfile.write("} @media tv,handheld,screen,projection {\n")
-  for k in printOverride.keys():
-    for attr in printOverride[k].keys():
-      if attr=='background-color' or printOverride[k][attr] == css.get(k,{}).get(attr,None): del printOverride[k][attr] # don't need to re-iterate an identical attribute (and anyway delete the added background-color alias: we'll re-generate it)
-      elif attr=='color': printOverride[k][attr] = css.get(k,{}).get("color",colour["text"])
-      elif attr=='background': printOverride[k][attr] = css.get(k,{}).get("background",colour["background"])
-      elif attr in ['font-size']: printOverride[k][attr] = css.get(k,{}).get(attr,"")
-      else: del printOverride[k][attr] # TODO: shouldn't happen?
-    if not printOverride[k]: del printOverride[k]
-  printCss(printOverride,outfile,debugStopAfter=0)
+  for k in list(screen_ReOverride.keys()):
+    for attr in list(screen_ReOverride[k].keys())[:]:
+      assert k in css, k+" was in printOverride but not css (attr="+attr+")"
+      assert attr in css[k], attr+" was in printOverride["+k+"] but not css"
+      if screen_ReOverride[k][attr] == css[k][attr]: del screen_ReOverride[k][attr] # don't need to re-iterate an identical attribute
+      else:
+        assert attr in ['color','background','background-color','font-size'], attr+" not identical in "+k
+        screen_ReOverride[k][attr] = css[k][attr]
+    if not screen_ReOverride[k]: del screen_ReOverride[k]
+  printCss(screen_ReOverride,outfile,debugStopAfter=0)
   # Browser-specific screen overrides:
   webkitScreenOverride.update(webkitGeckoScreenOverride)
   webkitScreenOverride.update(webkitMsieScreenOverride)
@@ -1498,7 +1517,7 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
   if problem_end==problem_start+1:
     if chop_results and chop_results[0]=="1": assert 0, "Binary chop: Problem persisted when removed whole remaining suspect item (with %d chops remaining). Maybe this isn't a problem that's due to just one thing." % (len(chop_results)-1)
     return problem_start,problem_end,chop_results[1:] # [1:] because important to drop 1 result (expected 'problem didn't persist when removing whole item', then try subdividing and check further results)
-  problem_mid = (problem_end-problem_start)/2+problem_start
+  problem_mid = int((problem_end-problem_start)/2)+problem_start
   if not chop_results: return problem_start,problem_mid,"" # try disabling 1st half
   if chop_extra_verification:
     if len(chop_results)==1:
@@ -1517,11 +1536,11 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
 from textwrap import fill
 def printCss(css,outfile,debugStopAfter=0):
   # hack for MathJax (see comments above)
-  for k in css.keys()[:]:
+  for k in list(css.keys())[:]:
     if "div.MathJax_Display" in k: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
   # For each attrib:val find which elems share it & group them
   rDic={} # maps (attrib,val) to a list of elements that have it
-  for elem,attribValDict in css.items():
+  for elem,attribValDict in list(css.items()):
     # add aliases before starting
     for master,alias in [
         ("background","background-color"),
@@ -1532,13 +1551,13 @@ def printCss(css,outfile,debugStopAfter=0):
         ("transform","-webkit-transform"),
         ("transform","-o-transform"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
-      if attribValDict.has_key(master) and not attribValDict.has_key(alias): attribValDict[alias]=attribValDict[master]
+      if master in attribValDict and not alias in attribValDict: attribValDict[alias]=attribValDict[master]
     # end of adding aliases
-    for i in attribValDict.items():
-      if not rDic.has_key(i): rDic[i]=[]
+    for i in list(attribValDict.items()):
+      if not i in rDic: rDic[i]=[]
       rDic[i].append(elem.strip())
   del css # won't use that any more this function
-  attrib_val_elemList = rDic.items()
+  attrib_val_elemList = list(rDic.items())
   # Browser debugging by binary chop:
   attrib_val_elemList.sort() # (makes it easier to think about)
   if do_binary_chop:
@@ -1548,11 +1567,11 @@ def printCss(css,outfile,debugStopAfter=0):
       # chopping up elements within 1 attribute
       attrib_val_elemList[disable_start][1].sort()
       ds2,de2,binary_chop_results = debug_binary_chop(attrib_val_elemList[disable_start][1],binary_chop_results)
-      print "Binary chop: From attribute %s=%s, disabling these elements: %s" % (attrib_val_elemList[disable_start][0][0],attrib_val_elemList[disable_start][0][1],", ".join(attrib_val_elemList[disable_start][1][ds2:de2]))
+      print("Binary chop: From attribute %s=%s, disabling these elements: %s" % (attrib_val_elemList[disable_start][0][0],attrib_val_elemList[disable_start][0][1],", ".join(attrib_val_elemList[disable_start][1][ds2:de2])))
       del attrib_val_elemList[disable_start][1][ds2:de2]
       if binary_chop_results: assert 0, "Binary chop: You have supplied %d too many chop results.  Back off a bit and see the last few debug prints." % (len(binary_chop_results))
     else:
-      print "Binary chop: Disabling these attributes: ","; ".join([("%s=%s"%(k,v)) for (k,v),e in attrib_val_elemList[disable_start:disable_end]])
+      print("Binary chop: Disabling these attributes: ","; ".join([("%s=%s"%(k,v)) for (k,v),e in attrib_val_elemList[disable_start:disable_end]]))
       del attrib_val_elemList[disable_start:disable_end]
   # If any element groups are identical, merge contents, but beware to keep some things separate:
   outDic = {}
@@ -1572,7 +1591,7 @@ def printCss(css,outfile,debugStopAfter=0):
       if not eList: continue
       eList.sort()
       elems=tuple(eList)
-      if not outDic.has_key(elems): outDic[elems]={}
+      if not elems in outDic: outDic[elems]={}
       outDic[elems][k]=v
   # Now ready for output
   def lenOfShortestElem(elemList): return (min([len(e) for e in elemList if len(e)]),elemList) # (elemList is already alphabetically sorted, so have that as secondary sort)
@@ -1581,7 +1600,7 @@ def printCss(css,outfile,debugStopAfter=0):
       # for pedantic debugging, write each rule separately
       for e in elemList:
         outfile.write(e+" {\n")
-        l=style.items() ; l.sort()
+        l=list(style.items()) ; l.sort()
         for k,v in l:
           outfile.write("   %s: %s !important;\n" % (k,v))
           debugStopAfter -= 1
@@ -1592,13 +1611,13 @@ def printCss(css,outfile,debugStopAfter=0):
     # else, if not debugStopAfter:
     outfile.write(fill(", ".join(x.replace(" ","%@%") for x in elemList).replace("-","#@#"),break_long_words=False).replace("#@#","-").replace("%@%"," ")) # (don't let 'fill' break on the hyphens, or on spaces WITHIN each item which might be inside quoted attributes etc, just on spaces BETWEEN items)
     outfile.write(" {\n")
-    l=style.items() ; l.sort()
+    l=list(style.items()) ; l.sort()
     for k,v in l: outfile.write("   %s: %s !important;\n" % (k,v))
     outfile.write("}\n")
   return debugStopAfter
 
 def main():
-  if outHTML: print "<div id=pregen_download><h3>Download pre-generated low-vision stylesheets</h3><noscript>(If you switch on Javascript, there will be an interactive chooser here.&nbsp; Otherwise you can still choose manually from the links below.)</noscript><script><!-- \ndocument.write('Although Javascript is on, for some reason the interactive chooser failed to run on your particular browser. Falling back to the list below.'); //--></script><br><ul>"
+  if outHTML: print("<div id=pregen_download><h3>Download pre-generated low-vision stylesheets</h3><noscript>(If you switch on Javascript, there will be an interactive chooser here.&nbsp; Otherwise you can still choose manually from the links below.)</noscript><script><!-- \ndocument.write('Although Javascript is on, for some reason the interactive chooser failed to run on your particular browser. Falling back to the list below.'); //--></script><br><ul>")
   # (HTML5 defaults script type to text/javascript, as do all pre-HTML5 browsers including NN2's 'script language="javascript"' thing, so we might as well save a few bytes)
   for pixelSize in pixel_sizes_to_generate:
     saidPixels = False
@@ -1613,12 +1632,12 @@ def main():
       else: pxDesc = "unchanged"
       toPrn="<li><a href=\"%s\" download>%s %s</a>" % (filename,pxDesc,scheme)
       if not outHTML: pass
-      elif i==len(colour_schemes_to_generate)-1: print toPrn+"</li>"
-      else: print toPrn+","
+      elif i==len(colour_schemes_to_generate)-1: print(toPrn+"</li>")
+      else: print(toPrn+",")
       do_one_stylesheet(pixelSize,colour,filename)
   if not outHTML: return
-  print "</ul></div>"
-  print """<script><!--
+  print("</ul></div>")
+  print("""<script><!--
 if(document.all||document.getElementById) {
 var newDiv=document.createElement('DIV');
 var e=document.createElement('H3'); e.appendChild(document.createTextNode('Download or Try Low Vision Stylesheets')); newDiv.appendChild(e);
@@ -1627,23 +1646,26 @@ var sizeSelect=document.createElement('SELECT');
 var colourSelect=document.createElement('SELECT');
 newDiv.appendChild(sizeSelect); newDiv.appendChild(colourSelect);
 var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/(window.devicePixelRatio||1)/18.12; // 36pt 15.1in
-"""
+""")
   pixel_sizes_to_generate.sort()
   for pixelSize in pixel_sizes_to_generate:
     if pixelSize: pxDesc = str(pixelSize)+" pixels"
     else: pxDesc = "unchanged"
-    print "e=document.createElement('OPTION'); e.value='"+str(pixelSize)+"'; e.appendChild(document.createTextNode('"+pxDesc+"')); sizeSelect.appendChild(e); if(defaultSize) sizeSelect.selectedIndex="+str(pixel_sizes_to_generate.index(pixelSize))+"; if(defaultSize<"+str(pixelSize)+") defaultSize=0;"
-  for scheme,suffix,colour in colour_schemes_to_generate: print "e=document.createElement('OPTION'); e.value='"+suffix+"'; e.appendChild(document.createTextNode('"+scheme+"')); colourSelect.appendChild(e);"
+    print("e=document.createElement('OPTION'); e.value='"+str(pixelSize)+"'; e.appendChild(document.createTextNode('"+pxDesc+"')); sizeSelect.appendChild(e); if(defaultSize) sizeSelect.selectedIndex="+str(pixel_sizes_to_generate.index(pixelSize))+"; if(defaultSize<"+str(pixelSize)+") defaultSize=0;")
+  for scheme,suffix,colour in colour_schemes_to_generate: print("e=document.createElement('OPTION'); e.value='"+suffix+"'; e.appendChild(document.createTextNode('"+scheme+"')); colourSelect.appendChild(e);")
   alternate_server_for_https_requests = os.environ.get('CSS_HTTPS_SERVER',None) # for the bookmarklet, if you want to apply it on https pages (which means the CSS itself must be served from https) and your main website isn't on an HTTPS-capable server but there's a secondary (lower-bandwidth) one you can use just for that use-case
+  alternate_server_needs_css_extension = os.environ.get('CSS_HTTPS_SERVER_USE_EXTENSION',False)
   def tryStylesheetJS(hrefExpr):
     r = "var e=document.createElement('link');e.id0='ssb22css';e.rel='stylesheet';e.href="+hrefExpr+";if(!document.getElementsByTagName('head'))document.body.appendChild(document.createElement('head'));var h=document.getElementsByTagName('head')[0];if(h.lastChild&&h.lastChild.id0=='ssb22css')h.removeChild(h.lastChild);h.appendChild(e);" # try to avoid spaces because they get written as %20 in the bookmarklet
     if alternate_server_for_https_requests:
-      r = "var c="+hrefExpr+","+r[4:].replace(hrefExpr,"location.protocol=='https:'?'"+alternate_server_for_https_requests+r"'+c.slice(c.search(/[^/]*[.]css/)).replace(/[.]css.*/,''):c",1)
+      if alternate_server_needs_css_extension: r2=""
+      else: r2 = r".replace(/[.]css.*/,'')"
+      r = "var c="+hrefExpr+","+r[4:].replace(hrefExpr,"location.protocol=='https:'?'"+alternate_server_for_https_requests+r"'+c.slice(c.search(/[^/]*[.]css/))"+r2+":c",1)
     return r
   # (do NOT put that in a JS function, the 1st link must be self-contained.  and don't say link.click() it's too browser-specific)
   if alternate_server_for_https_requests: exception = ""
   else: exception = ", except for HTTPS sites in recent browsers which block \"mixed content\" (my site is not yet able to offer an HTTPS option), and" # TODO: implement 3rd alternative if primary server becomes HTTPS-capable
-  print r"""
+  print(r"""
 newDiv.appendChild(document.createElement('BR'));
 newDiv.appendChild(document.createTextNode('Then press '));
 var cssLink=document.createElement("A");
@@ -1672,9 +1694,9 @@ function update() {
 sizeSelect.onchange=update; colourSelect.onchange=update; update();
 e=document.getElementById('pregen_download'); e.parentNode.replaceChild(newDiv,e);
 if(document.location.href.indexOf("?whatLookLike")>-1) {"""+tryStylesheetJS('cssLink.href')+"""}}
-//--></script>""" # "  # (comment for emacs)
+//--></script>""") # "  # (comment for emacs)
   # (patchy use of CSS priorities: e.g. setting background: white !important while leaving foreground unchanged, mumble mumble)
-  print "(above stylesheets generated by version "+prog.split()[-1]+")"
+  print("(above stylesheets generated by version "+prog.split()[-1]+")")
 
 do_binary_chop = False
 binary_chop_results = ""
@@ -1689,13 +1711,13 @@ if "adjuster-config" in sys.argv:
   for d,f,rest in colour_schemes_to_generate:
     cs.append(f+'='+d)
     ha.append('text="%s" bgcolor="%s" link="%s" vlink="%s" alink="%s"' % (rest['text'],rest['background'],rest['link'],rest['visited'],'red'))
-  print "adjuster.options.headAppendCSS="+repr('http://people.ds.cam.ac.uk/ssb22/css/%s%s.css;'+','.join(ps)+';'+','.join(cs))
-  print "adjuster.options.cssHtmlAttrs="+repr(';'.join(ha))
+  print("adjuster.options.headAppendCSS="+repr('http://ssb22.user.srcf.net/css/%s%s.css;'+','.join(ps)+';'+','.join(cs)))
+  print("adjuster.options.cssHtmlAttrs="+repr(';'.join(ha)))
 elif "desperate-debug" in sys.argv:
   scheme,suffix,colour = colour_schemes_to_generate[0]
   debugStopAfter=1
   while not do_one_stylesheet(chop_pixel_size,colour,"debug%04d.css" % debugStopAfter,debugStopAfter):
-    print "Generated debug stylesheet debug%04d.css" % debugStopAfter
+    print("Generated debug stylesheet debug%04d.css" % debugStopAfter)
     debugStopAfter += 1
 elif "chop" in sys.argv:
   do_binary_chop = True
@@ -1703,5 +1725,5 @@ elif "chop" in sys.argv:
   scheme,suffix,colour = colour_schemes_to_generate[0]
   filename="%d%s.css" % (chop_pixel_size,suffix)
   do_one_stylesheet(chop_pixel_size,colour,filename)
-  print "Generated debug stylesheet:",filename
+  print("Generated debug stylesheet: "+filename)
 else: main()
