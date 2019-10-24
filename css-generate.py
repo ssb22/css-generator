@@ -1590,9 +1590,7 @@ def printCss(css,outfile,debugStopAfter=0):
     for eList in elemLists:
       if not eList: continue
       eList.sort()
-      elems=tuple(eList)
-      if not elems in outDic: outDic[elems]={}
-      outDic[elems][k]=v
+      outDic.setdefault(tuple(eList),{})[k]=v
   # Now ready for output
   def lenOfShortestElem(elemList): return (min([len(e) for e in elemList if len(e)]),elemList) # (elemList is already alphabetically sorted, so have that as secondary sort)
   for elemList,style in sorted(outDic.items(),lambda x,y:cmp(lenOfShortestElem(x[0]),lenOfShortestElem(y[0]))):
