@@ -469,8 +469,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for linkInside in mostElements+rubyElements:
     for lType in [":link",":visited","[onclick]"]:
       key="a"+lType+" "+linkInside
-      if not key in css: css[key]={}
-      css[key]["cursor"]="pointer"
+      css.setdefault(key,{})["cursor"]="pointer"
       if not linkInside in rubyElements: css[key]["*display"]="inline" # some sites have 'div' or do JS things with 'span'...
 
   # Italic and bold:
@@ -838,8 +837,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.highlight > pre span.s1,div.highlight > pre span.s2,div.highlight > pre span.sd,div.highlight > pre span.si']=shl_string
   # TODO: p = punc (and do we differentiate sd=docstring, si=% formatter)
   css['pre > code.hljs > span.hljs-keyword'] = shl_keyword
+  css['pre > code.hljs > span.hljs-built_in'] = shl_varname
   css['pre > code.hljs > span.hljs-string'] = shl_string
   css['pre > code.hljs > span.hljs-comment'] = shl_comment
+  css['pre > code.hljs > span.hljs-number'] = shl_preproc
   css['pre.code > span.com'] = shl_comment
   css['pre.code > span.str'] = shl_string
   css['pre.code > span.kwd'] = shl_keyword
@@ -1386,6 +1387,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div#z_shell td div.ImgMsgStatusRead:empty:before']={'content':'"R"'}
     css['div#z_shell td div.ImgMsgStatusUnread:empty:before']={'content':'"N"'}
     css['div#z_shell td > div.ImgTaskCheckbox:empty, div#z_shell td > div.ImgTaskCheckboxCompleted:empty, div#z_shell td > div.ImgFlagRed:empty, div#z_shell td div.ImgMsgStatusRead:empty, div#z_shell td div.ImgMsgStatusUnread:empty']={'width':'1em'}
+    # Slack app-login with size=unchanged: please don't make the "Launch in Slack" buttons invisible due to badly-coded(?) :after CSS:
+    css['.c-button--primary:after']={'visibility':'hidden'}
+    css['div > *'] = defaultStyle.copy() # LiChess move list
+    css['a.js-user-link > span.note-header-author-name']={"word-wrap":"normal"} # not break-word (Gitlab line comments on pull requests)
   
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
@@ -1554,8 +1559,7 @@ def printCss(css,outfile,debugStopAfter=0):
       if master in attribValDict and not alias in attribValDict: attribValDict[alias]=attribValDict[master]
     # end of adding aliases
     for i in list(attribValDict.items()):
-      if not i in rDic: rDic[i]=[]
-      rDic[i].append(elem.strip())
+      rDic.setdefault(i,[]).append(elem.strip())
   del css # won't use that any more this function
   attrib_val_elemList = list(rDic.items())
   # Browser debugging by binary chop:
