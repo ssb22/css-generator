@@ -1354,7 +1354,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['div.quoted-text']={'border':'thin grey solid'} # may help on some forum sites
 
-  css['div#mobileNavTopBar div.navBarControls span.navBarButton-icon, button.accordionButton > span.accordionButton-text + span.accordionButton-icon, div.articleFooterLinks nav a span.buttonIcon, div.articleShareLinks span.buttonIcon, button#mobileTOCHandle span.mobilePaneControl-icon, div.downloadLinks span.buttonIcon svg, button.jsCloseModal span.closeModal svg, div.fileContainer a span svg, span.buttonIcon[aria-hidden="true"]']={'*display':'none'} # TODO: why do these add 300px+ Y when we've included the 24px svg in doHeightWidth
+  css['div#mobileNavTopBar div.navBarControls span.navBarButton-icon, button.accordionButton > span.accordionButton-text + span.accordionButton-icon, div.articleFooterLinks nav a span.buttonIcon, div.articleShareLinks span.buttonIcon, button#mobileTOCHandle span.mobilePaneControl-icon, div.downloadLinks span.buttonIcon svg, button.jsCloseModal span.closeModal svg, div.fileContainer a span svg, span[aria-hidden="true"]']={'*display':'none'} # TODO: why do these add 300px+ Y when we've included the 24px svg in doHeightWidth
   css['div.vjs-audio iframe.vjs-resize-manager']={'*display':'none'}
   css['div.standardModal-flexWrapper, div.standardModal, div.standardModal-toolbar']={'*display':'block'} # not flex
 
