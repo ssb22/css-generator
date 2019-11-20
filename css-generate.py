@@ -1576,7 +1576,7 @@ def printCss(css,outfile,debugStopAfter=0):
       del attrib_val_elemList[disable_start][1][ds2:de2]
       if binary_chop_results: assert 0, "Binary chop: You have supplied %d too many chop results.  Back off a bit and see the last few debug prints." % (len(binary_chop_results))
     else:
-      print("Binary chop: Disabling these attributes: ","; ".join([("%s=%s"%(k,v)) for (k,v),e in attrib_val_elemList[disable_start:disable_end]]))
+      print("Binary chop: Disabling these attributes: "+"; ".join([("%s=%s"%(k,v)) for (k,v),e in attrib_val_elemList[disable_start:disable_end]]))
       del attrib_val_elemList[disable_start:disable_end]
   # If any element groups are identical, merge contents, but beware to keep some things separate:
   outDic = {}
