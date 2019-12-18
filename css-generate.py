@@ -1367,6 +1367,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
     css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
     css['pre#editArea']={"border":"thin solid white"} # WeChat
+    # Confluence:
+    css['body#com-atlassian-confluence span.inline-comment-marker']={"color":colour["coloured"]}
+    css['body#com-atlassian-confluence span.diff-html-added,body#com-atlassian-confluence span.diff-html-removed,body#com-atlassian-confluence span.diff-html-changed']={"color":colour["italic"]}
     # Zimbra: (works with size=unchanged, although in Firefox (at least v69)
     # Compose doesn't work because their Javascript fails to find the correct
     # div to change z-index (why don't they just use classes ??) : this seems
