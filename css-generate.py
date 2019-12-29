@@ -340,7 +340,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   webkitGeckoScreenOverride = {} ; webkitMsieScreenOverride = {} ; geckoMsieScreenOverride = {}
   for e in mostElements+rubyElements:
     css[e]=defaultStyle.copy()
-    if e=="img": printOverride[e] = {"color":"black","background-color":"white"}.copy()
+    if e=="img": printOverride[e] = {"color":"black","background":"white"}.copy()
     else: printOverride[e] = {"color":"black","background":"white"}.copy()
     if pixelSize: printOverride[e]["font-size"] = "12pt" # TODO: option?
     geckoMsieScreenOverride[e] = {"*column-count":"1"} # not Webkit (PageUp/PageDown bug in Chrome57 etc)
@@ -530,8 +530,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
   # Images and buttons:
-  css["img"]["background-color"]=colour["image_transparency_compromise"]
-  css["object"]["background-color"]=colour["image_transparency_compromise"] # for SVG via object tag (treated as separate document and we can't always change currentColor from black e.g. if CSS not fully installed)
+  css["img"]["background"]=colour["image_transparency_compromise"]
+  css["object"]["background"]=colour["image_transparency_compromise"] # for SVG via object tag (treated as separate document and we can't always change currentColor from black e.g. if CSS not fully installed)
   
   # Exception needed for MediaWiki TeX images
   # (they tend to be transparent but with antialiasing that
