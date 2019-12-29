@@ -347,6 +347,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # but there are some exceptions:
 
   for e in rubyElements: del css[e]["*text-align"]
+
+  del css['svg']['*font-size'] # doesn't make sense to override, as it's subject to the resize of the whole SVG (usually an enlargement)
+  if pixelSize: del printOverride['svg']['font-size']
+  for e in ['text','text > tspan']: # may help with SVG Lilypond output
+    del css[e]["*font-size"],css[e]["*font-family"],css[e]["*font-weight"],css[e]["*font-variant"]
+    if pixelSize: del printOverride[e]["font-size"]
+  
   for k in list(css["img"].keys())[:]:
     if k.startswith("background"): del css["img"][k] # e.g. WhatsApp emoji uses a single image with positioning (and we want this to work if size=unchanged)
   css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
@@ -524,7 +531,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Images and buttons:
   css["img"]["background-color"]=colour["image_transparency_compromise"]
-  css["object"]["background-color"]=colour["image_transparency_compromise"] # for SVG via object tag (treated as separate document and we can't always change currentColor from black)
+  css["object"]["background-color"]=colour["image_transparency_compromise"] # for SVG via object tag (treated as separate document and we can't always change currentColor from black e.g. if CSS not fully installed)
   
   # Exception needed for MediaWiki TeX images
   # (they tend to be transparent but with antialiasing that
@@ -578,7 +585,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   firstLetterBugs_multiple=[
   "input","select","option","textarea","table","colgroup","col","img", # probably best to avoid these
    "div", # Gecko messes up textarea when enter multiple paragraphs; Safari has text selection visibility problem see below
-   "svg", # doesn't make sense, and can cause confusion
+   "svg","text","text > tspan","object", # doesn't make sense, and can cause confusion
   ]
   firstLetterBugs_geckoOnly=[
     # none here for now
@@ -592,7 +599,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   assert not(any(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_multiple) or any(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_geckoOnly) or any(x in firstLetterBugs_msie for x in firstLetterBugs_webkitOnly)), "Error: firstLetterBugs item in more than one category"
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
-    "svg", # doesn't make sense, and can cause confusion
+  "svg","text","text > tspan","object", # doesn't make sense, and can cause confusion
   "input","select","option","textarea","table","colgroup","col","img",
   "td","th", # causes problems on Firefox 2 if there's a form inside
   "a", # causes problems in IE
@@ -625,14 +632,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for i in map(lambda x:exclude_ie_below_9+x,[":before",":after"]): css[i]=defaultStyle.copy() # (especially margin and padding)
 
   # CSS 2+ markup for viewing XML+CSS pages that don't use HTML.  Not perfect but should be better than nothing.
-  xmlKey=":root:not(HTML):not(page), :root:not(HTML):not(page) :not(:empty)"
+  xmlKey=":root:not(HTML):not(page):not(svg), :root:not(HTML):not(page):not(svg) :not(:empty)"
   # Careful not to use the universal selector, because it can mess up Mozilla's UI.
   # :not(page) is an important addition for recent versions of Firefox whose Preference pages start with 'page' (can be rendered invisible if apply whole of defaultStyle to it).
   css["page:root *"]={"background-color":colour["background"]} # to normalise recent-Firefox preferences pages (without this, some parts do and some don't; result can look too stark).  Tested in Firefox 45.4.
   css[xmlKey]=defaultStyle.copy()
   del css[xmlKey]["*text-decoration"] # because this CSS won't be able to put it back in for links (since it doesn't know which elements ARE links in arbitrary XML)
   # Exception to above for Mozilla scrollbars:
-  css[":root:not(HTML):not(page) slider:not(:empty)"]={"background":"#301090"}
+  css[":root:not(HTML):not(page):not(svg) slider:not(:empty)"]={"background":"#301090"}
 
   checkbox_scale = int(pixelSize/16)
   for iType in ["checkbox","radio"]:
