@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-19.  Version 0.9891"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9892"
 # Should run on either Python 2 or Python 3
 
 # This program is free software; you can redistribute it and/or modify 
@@ -356,6 +356,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   for k in list(css["img"].keys())[:]:
     if k.startswith("background"): del css["img"][k] # e.g. WhatsApp emoji uses a single image with positioning (and we want this to work if size=unchanged)
+  for k in list(printOverride["img"].keys())[:]:
+    if k.startswith("background"): del printOverride["img"][k]
   css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
   del css["rt"]["*padding"] # some sites omit space between ruby elements and make up for it by setting padding on the rt elements: let that through
   del css["ruby"]["*padding"];del css["rb"]["*padding"] # might as well do this too
@@ -530,7 +532,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
   # Images and buttons:
-  css["img"]["background"]=colour["image_transparency_compromise"]
+  css["img:not(.emoji)"]={"background":colour["image_transparency_compromise"]} # see WhatsApp exception above
   css["object"]["background"]=colour["image_transparency_compromise"] # for SVG via object tag (treated as separate document and we can't always change currentColor from black e.g. if CSS not fully installed)
   
   # Exception needed for MediaWiki TeX images
@@ -892,6 +894,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.diff-content td.line_content span.s'] = shl_string
   css['div.diff-content td.line_content span.cp'] = shl_preproc
   css['div.diff-content td.line_content span.c1'] = shl_comment
+  css['devsite-code span.com'] = shl_comment
+  css['devsite-code span.kwd'] = shl_keyword
+  css['devsite-code span.typ'] = shl_varname
+  css['devsite-code span.str'] = shl_string
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
@@ -1348,9 +1354,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
   css['div#content > .row']={'*display':'block'} # not flex please OED
   css['div#mobileNavTopBar div.navBarControls, div#regionMain ol.breadcrumbMenu, div#footerTop div.primaryNav, footer div#footer, footer div#footer div.quickLinks ul, footer div#footer div.sitemapLinks, nav > ul.jsDropdownNav, article div.articleFileLinks']={'*display':'block'} # not flex please
-  css['article, article > div, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,div.ghacks-sidebared-content,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment,div.entry__content,div.MuiGrid-container,div.et_pb_extra_column_main,div#content-area']={'*display':'block'} # not flex please (various sites)
+  css['article, article > div, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,div.ghacks-sidebared-content,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment,div.entry__content,div.MuiGrid-container,div.et_pb_extra_column_main,div#content-area,body > div#2x-container div,div.message-main,div.p-body-inner,div.p-body']={'*display':'block'} # not flex please (various sites)
   css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
-  css['div.swiper-wrapper,div.swiper-wrapper div'],css['div.widget__top-picks,svg.image-wrapper__placeholder']={'*display':'block'},{'*display':'none'} # this line makes some attempt to clean up SCMP's flex overuse 2019
+  css['div.swiper-wrapper,div.swiper-wrapper div,div.article-level,div.topic-article-container'],css['div.widget__top-picks,svg.image-wrapper__placeholder']={'*display':'block'},{'*display':'none'} # this line makes some attempt to clean up SCMP's flex overuse 2019
   # TODO: is there a more general way of addressing these
   # (plus other "not flex" display rules), w/out Web Adjuster?
   # Just set div *max-width 100% ? would need overflow:auto (see
@@ -1370,7 +1376,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   if not pixelSize:
     if not colour["background"]=="white": css["body.web div#app div.landing-window div.landing-main div[data-ref]"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
-    css["body.web div#app div._37f_5"]={"display":"none"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
+    css["body.web div#app div.app.two > div:first-child + div"]={"display":"none"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
     css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
     css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
     css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
