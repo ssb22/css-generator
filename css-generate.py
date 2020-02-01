@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9892"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9893"
 # Should run on either Python 2 or Python 3
 
 # This program is free software; you can redistribute it and/or modify 
@@ -354,9 +354,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     del css[e]["*font-size"],css[e]["*font-family"],css[e]["*font-weight"],css[e]["*font-variant"]
     if pixelSize: del printOverride[e]["font-size"]
   
-  for k in list(css["img"].keys())[:]:
+  for k in list(css["img"].keys()):
     if k.startswith("background"): del css["img"][k] # e.g. WhatsApp emoji uses a single image with positioning (and we want this to work if size=unchanged)
-  for k in list(printOverride["img"].keys())[:]:
+  for k in list(printOverride["img"].keys()):
     if k.startswith("background"): del printOverride["img"][k]
   css["rt:lang(cmn-hans),rt:lang(zh)"]={"*font-family":pinyin_fonts}
   del css["rt"]["*padding"] # some sites omit space between ruby elements and make up for it by setting padding on the rt elements: let that through
@@ -625,7 +625,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     for i in map(lambda x:exclude_ie_below_9+e+x,[":before",":after"]):
       css[i]=defaultStyle.copy()
       if e=="img":
-        for k in list(css[i].keys())[:]:
+        for k in list(css[i].keys()):
           if k.startswith("background"): del css[i][k]
       for mp in ["*margin","*padding"]:
         if not css.get(e,{}).get(mp,"")==css[i][mp]:
@@ -870,10 +870,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.dp-highlighter > ol span.keyword'] = shl_keyword
   css['div.dp-highlighter > ol span.special'] = shl_varname
   # TODO: number
-  css['td.blob-code > span.pl-k'] = shl_keyword
-  css['td.blob-code > span.pl-c, td.blob-code > span.pl-c > span'] = shl_comment
-  css['td.blob-code > span.pl-v,td.blob-code > span.pl-smi'] = shl_varname
-  css['td.blob-code > span.pl-s'] = shl_string
+  css['td.blob-code > span.pl-k,div.highlight > pre > span.pl-k'] = shl_keyword
+  css['td.blob-code > span.pl-c, td.blob-code > span.pl-c > span, div.highlight > pre > span.pl-c, div.highlight > pre > span.pl-c > span'] = shl_comment
+  css['td.blob-code > span.pl-v,td.blob-code > span.pl-smi, div.highlight > pre > span.pl-v, div.highlight > pre > span.pl-smi'] = shl_varname
+  css['td.blob-code > span.pl-s, div.highlight > pre > span.pl-s'] = shl_string
   css['pre > span.enscript-comment'] = shl_comment
   css['pre > span.enscript-reference'] = shl_preproc
   css['pre > span.enscript-string'] = shl_string
@@ -889,11 +889,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.FileContents .u-pre span.kwd'] = shl_keyword
   css['.FileContents .u-pre span.typ'] = shl_varname
   css['.FileContents .u-pre span.str'] = shl_string
-  css['div.diff-content td.line_content span.k'] = shl_keyword
+  css['div.diff-content td.line_content span.k'] = shl_keyword # GitLab merge-requests
   css['div.diff-content td.line_content span.n'] = shl_varname
   css['div.diff-content td.line_content span.s'] = shl_string
   css['div.diff-content td.line_content span.cp'] = shl_preproc
   css['div.diff-content td.line_content span.c1'] = shl_comment
+  css['div.diff-content td.line_content span.c'] = shl_comment
   css['devsite-code span.com'] = shl_comment
   css['devsite-code span.kwd'] = shl_keyword
   css['devsite-code span.typ'] = shl_varname
@@ -1422,8 +1423,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[":focus"]={"outline":colour.get("focusOutlineStyle","thin dotted")}
   
   # Remove '*' as necessary (in css, not needed in printOverride):
-  for el in list(css.keys())[:]:
-    for prop,value in list(css[el].items())[:]:
+  for el in list(css.keys()):
+    for prop,value in list(css[el].items()):
       if len(prop)>1 and prop[0]=='*':
         del css[el][prop]
         if pixelSize: css[el][prop[1:]] = value
@@ -1501,7 +1502,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   # and the above-mentioned second override for IE7, Midori etc :
   outfile.write("} @media tv,handheld,screen,projection {\n")
   for k in list(screen_ReOverride.keys()):
-    for attr in list(screen_ReOverride[k].keys())[:]:
+    for attr in list(screen_ReOverride[k].keys()):
       assert k in css, k+" was in printOverride but not css (attr="+attr+")"
       assert attr in css[k], attr+" was in printOverride["+k+"] but not css"
       if screen_ReOverride[k][attr] == css[k][attr]: del screen_ReOverride[k][attr] # don't need to re-iterate an identical attribute
@@ -1559,7 +1560,7 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
 from textwrap import fill
 def printCss(css,outfile,debugStopAfter=0):
   # hack for MathJax (see comments above)
-  for k in list(css.keys())[:]:
+  for k in list(css.keys()):
     if "div.MathJax_Display" in k: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
   # For each attrib:val find which elems share it & group them
   rDic={} # maps (attrib,val) to a list of elements that have it
