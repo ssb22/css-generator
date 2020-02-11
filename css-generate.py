@@ -1410,6 +1410,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['.c-button--primary:after']={'visibility':'hidden'}
     css['div > *'] = defaultStyle.copy() # LiChess move list
     css['a.js-user-link > span.note-header-author-name']={"word-wrap":"normal"} # not break-word (Gitlab line comments on pull requests)
+
+  css['div.support-list li.stat-cell.n']={'border':'red solid'} # caniuse
+  css['div.support-list li.stat-cell.y']={'border':'green solid'}
   
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
