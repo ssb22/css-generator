@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9893"
-# Should run on either Python 2 or Python 3
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9894"
+# Works on either Python 2 or Python 3
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -649,6 +649,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if checkbox_scale > 1: css[iKey]={"transform":"scale(%d,%d)" % (checkbox_scale,checkbox_scale),"margin":"%dpx"%(checkbox_scale*6)} # margin not padding (browser problems)
     else: css[iKey]={}
     css[iKey]['-webkit-appearance']=iType
+    css[iKey]['-webkit-appearance'] += ' !important; -moz-appearance: none' # see comments elsewhere about Firefox bug 1616243
   if pixelSize:
     # In many versions of firefox, a <P ALIGN=center> with an <IFRAME> inside it will result in the iframe being positioned over the top of the main text if the P's text-align is overridden to "left".  But missing out text-align could allow websites to do full justification.  However it seems OK if we override iframe's display to "block" (this may make some layouts slightly less brief, but iframes usually need a line of their own anyway)
     css["iframe"]["*display"]="block"
@@ -667,9 +668,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["::-moz-selection"] = {"background":colour["selection"]}
 
   css['input[type=search]'] = {"-webkit-appearance":"textfield"} # searchbox forces background:white which may conflict with our foreground
+  css['input[type=search]']['-webkit-appearance'] += ' !important; -moz-appearance: none' # see comment below about Firefox bug 1616243
   
   css['select']['-webkit-appearance']='listbox' # workaround for Midori Ubuntu bug 1024783
-  css['select']['-moz-appearance']='none' # ... but we don't want Firefox 69-etc to always use a white background
+  css['select']['-webkit-appearance'] += ' !important; -moz-appearance: none' # ... but we don't want Firefox 69-etc to always use a white background (and Firefox 73 adds bug 1616243 meaning we'd better specify moz-appearance immediately after webkit-appearance, not in a different ruleset that might be earlier in the CSS file)
   css['select']['background']=colour['selectbox']
   printOverride['select']['background']=printButtonBackground # TODO: or something else?
 
@@ -1408,7 +1410,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div#z_shell td > div.ImgTaskCheckbox:empty, div#z_shell td > div.ImgTaskCheckboxCompleted:empty, div#z_shell td > div.ImgFlagRed:empty, div#z_shell td div.ImgMsgStatusRead:empty, div#z_shell td div.ImgMsgStatusUnread:empty']={'width':'1em'}
     # Slack app-login with size=unchanged: please don't make the "Launch in Slack" buttons invisible due to badly-coded(?) :after CSS:
     css['.c-button--primary:after']={'visibility':'hidden'}
-    css['div > *'] = defaultStyle.copy() # LiChess move list
+    css['div > index, div > move, div > interrupt'] = defaultStyle.copy() # LiChess move list
     css['a.js-user-link > span.note-header-author-name']={"word-wrap":"normal"} # not break-word (Gitlab line comments on pull requests)
 
   css['div.support-list li.stat-cell.n']={'border':'red solid'} # caniuse
