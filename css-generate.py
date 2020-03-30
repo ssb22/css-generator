@@ -184,7 +184,7 @@ cjk_fonts = "Lantinghei SC, AppleGothic"
 # Other Mac CJK fonts to be aware of: MingLiU prefers full 'Traditional' forms of characters where Trad/Simp has same Unicode value (e.g. U+8D77 'qi3' has an extra vertical stroke making the 'ji' component look more like a 'si'); renders OK on Mac OS 10.9 at 20px without antialias, but might not always be present (the ttf is installed to /Library/Fonts/Microsoft by MS Office and is not present on machines without MS Office).  Arial Unicode MS (present on both 10.7 and 10.9) has some issues with baselines not lining up e.g. in the word 'zhen1li3' U+771F U+7406; it prefers Simplifed Chinese forms (e.g. U+8D77 uses 'ji', and U+95E8 is the Chinese rather than the Japanese simplification).  GB18030 Bitmap (NISC18030) might work at 16px, 32px etc, but scales badly to other sizes.  "Hei" has irregular stroke widths in 10.9 20px no-antialias, but otherwise OK
 serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", serif" # TNR is listed first for the benefit of broken Xft systems that need the MS fonts to make them look OK. Shouldn't have any effect on other systems.
 sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
-pinyin_fonts = "Gandhari Unicode, Lucida Sans Unicode, Times New Roman, DejaVu Sans, serif" # try to get clear tone marks (but DejaVu Sans must be low priority because it results in disappearing text on some buggy Safari versions under Mac OS 10.7, regardless of whether or not the ttf has been installed)
+pinyin_fonts = "FreeSerif, Lucida Sans Unicode, Times New Roman, DejaVu Sans, serif" # try to get clear tone marks (but DejaVu Sans must be low priority because it results in disappearing text on some buggy Safari versions under Mac OS 10.7)
 
 # ---- End of options (but read on for debugging) ----
 
@@ -920,11 +920,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div#container div#result tt > i"]={"display":"table-header-group","text-align":"center"}
     css["div#container div#result tt > b, div#container div#result tt > acronym"]={"display":"table-row-group","text-align":"center"}
   # hack for messages on some sites
-  css["tr.new td"]={"border-left":"thick solid "+colour["coloured"]}
-  css["tr.new td"]={"border-right":"thick solid "+colour["coloured"]}
+  css["tr.new td,tr td.new"]={"border-left":"thick solid "+colour["coloured"]}
+  css["tr.new td,tr td.new"]={"border-right":"thick solid "+colour["coloured"]}
   # and as that also matches GitLab diffs:
-  css["tr.old td"]={"border-left":"thin solid "+colour["coloured"]}
-  css["tr.old td"]={"border-right":"thin solid "+colour["coloured"]}
+  css["tr.old td,tr td.old"]={"border-left":"thin solid "+colour["coloured"]}
+  css["tr.old td,tr td.old"]={"border-right":"thin solid "+colour["coloured"]}
   # hack for (some versions of) phpBB
   css["ul.profile-icons li span"]={"*display":"inline"}
   # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
