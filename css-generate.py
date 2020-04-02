@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9894"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9895"
 # Works on either Python 2 or Python 3
 
 # This program is free software; you can redistribute it and/or modify 
@@ -186,6 +186,8 @@ serif_fonts = "Times New Roman, times, utopia, /* charter, */ "+cjk_fonts+", ser
 sans_serif_fonts = "helvetica, arial, verdana, "+cjk_fonts+", sans-serif" # (TODO: do we want different cjk_fonts here?)
 pinyin_fonts = "FreeSerif, Lucida Sans Unicode, Times New Roman, DejaVu Sans, serif" # try to get clear tone marks (but DejaVu Sans must be low priority because it results in disappearing text on some buggy Safari versions under Mac OS 10.7)
 
+browser_is_Firefox_73 = False # set this to True ONLY if you are using Firefox 73, to work around bug 1616243.  Do NOT set it to True on Firefox 74+ as it will make checkboxes unreadable.
+
 # ---- End of options (but read on for debugging) ----
 
 # DEBUGGING BY BINARY CHOP: If a complex stylesheet exhibits
@@ -340,19 +342,22 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   webkitGeckoScreenOverride = {} ; webkitMsieScreenOverride = {} ; geckoMsieScreenOverride = {}
   for e in mostElements+rubyElements:
     css[e]=defaultStyle.copy()
-    if e=="img": printOverride[e] = {"color":"black","background":"white"}.copy()
-    else: printOverride[e] = {"color":"black","background":"white"}.copy()
-    if pixelSize: printOverride[e]["font-size"] = "12pt" # TODO: option?
+    printOverride[e] = {"color":"black","background":"white"}.copy()
+    printOverride[e]["*font-size"] = "12pt" # TODO: option?
     geckoMsieScreenOverride[e] = {"*column-count":"1"} # not Webkit (PageUp/PageDown bug in Chrome57 etc)
   # but there are some exceptions:
 
   for e in rubyElements: del css[e]["*text-align"]
 
+  if not pixelSize:
+    css['div']['background'] = 'transparent' # because some position <video> elements behind the div
+    css['div.ui-dialog']={'background':colour["background"],'border':'blue solid'} # exception for obvious "dialogue" DIVs though
+
   del css['svg']['*font-size'] # doesn't make sense to override, as it's subject to the resize of the whole SVG (usually an enlargement)
-  if pixelSize: del printOverride['svg']['font-size']
+  del printOverride['svg']['*font-size']
   for e in ['text','text > tspan']: # may help with SVG Lilypond output
     del css[e]["*font-size"],css[e]["*font-family"],css[e]["*font-weight"],css[e]["*font-variant"]
-    if pixelSize: del printOverride[e]["font-size"]
+    del printOverride[e]["*font-size"]
   
   for k in list(css["img"].keys()):
     if k.startswith("background"): del css["img"][k] # e.g. WhatsApp emoji uses a single image with positioning (and we want this to work if size=unchanged)
@@ -649,7 +654,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if checkbox_scale > 1: css[iKey]={"transform":"scale(%d,%d)" % (checkbox_scale,checkbox_scale),"margin":"%dpx"%(checkbox_scale*6)} # margin not padding (browser problems)
     else: css[iKey]={}
     css[iKey]['-webkit-appearance']=iType
-    css[iKey]['-webkit-appearance'] += ' !important; -moz-appearance: none' # see comments elsewhere about Firefox bug 1616243
+    if browser_is_Firefox_73: css[iKey]['-webkit-appearance'] += ' !important; -moz-appearance: none'
   if pixelSize:
     # In many versions of firefox, a <P ALIGN=center> with an <IFRAME> inside it will result in the iframe being positioned over the top of the main text if the P's text-align is overridden to "left".  But missing out text-align could allow websites to do full justification.  However it seems OK if we override iframe's display to "block" (this may make some layouts slightly less brief, but iframes usually need a line of their own anyway)
     css["iframe"]["*display"]="block"
@@ -668,10 +673,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["::-moz-selection"] = {"background":colour["selection"]}
 
   css['input[type=search]'] = {"-webkit-appearance":"textfield"} # searchbox forces background:white which may conflict with our foreground
-  css['input[type=search]']['-webkit-appearance'] += ' !important; -moz-appearance: none' # see comment below about Firefox bug 1616243
+  if browser_is_Firefox_73: css['input[type=search]']['-webkit-appearance'] += ' !important; -moz-appearance: none'
   
   css['select']['-webkit-appearance']='listbox' # workaround for Midori Ubuntu bug 1024783
-  css['select']['-webkit-appearance'] += ' !important; -moz-appearance: none' # ... but we don't want Firefox 69-etc to always use a white background (and Firefox 73 adds bug 1616243 meaning we'd better specify moz-appearance immediately after webkit-appearance, not in a different ruleset that might be earlier in the CSS file)
+  css['select']['-webkit-appearance'] += ' !important; -moz-appearance: none' # even if not browser_is_Firefox_73
   css['select']['background']=colour['selectbox']
   printOverride['select']['background']=printButtonBackground # TODO: or something else?
 
@@ -1419,6 +1424,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.support-list li.stat-cell.n']={'border':'red solid'} # caniuse
   css['div.support-list li.stat-cell.y']={'border':'green solid'}
 
+  css['div#pt_checkout_onepage input[type="checkbox"],div#pt_checkout_onepage input[type="radio"]']={'opacity':'1','position':'static'} # Claires checkout junk-signup checkbox: please make current state visible
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
@@ -1430,14 +1437,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # help Opera 12 and other browsers that don't show keyboard focus -
   css[":focus"]={"outline":colour.get("focusOutlineStyle","thin dotted")}
   
-  # Remove '*' as necessary (in css, not needed in printOverride):
-  for el in list(css.keys()):
-    for prop,value in list(css[el].items()):
-      if len(prop)>1 and prop[0]=='*':
-        del css[el][prop]
-        if pixelSize: css[el][prop[1:]] = value
-    if css[el] == {}: del css[el]
-
   # Text for the beginning of the CSS file:
   
   # outfile.write("@import url(chrome://flashblock/content/flashblock.css);\n")
@@ -1489,7 +1488,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */\n""")
 
   cssRef = {x:y.copy() for x,y in css.items()}
-  ret = printCss(css,outfile,debugStopAfter)
+  ret = printCss(css,outfile,debugStopAfter,pixelSize)
   css = cssRef
 
   outfile.write("""@media print {
@@ -1505,7 +1504,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 """)
   # (PocketIE7 also has a habit of displaying the page with a white background while rendering, and applying the CSS's colours only afterwards, even if the CSS is in cache.  PocketIE6 did not do this.  See cssHtmlAttrs option in Web Adjuster for a possible workaround.)
   screen_ReOverride = {x:y.copy() for x,y in printOverride.items()}
-  printCss(printOverride,outfile,debugStopAfter=0)
+  printCss(printOverride,outfile,0,pixelSize)
   del printOverride
   # and the above-mentioned second override for IE7, Midori etc :
   outfile.write("} @media tv,handheld,screen,projection {\n")
@@ -1515,10 +1514,10 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
       assert attr in css[k], attr+" was in printOverride["+k+"] but not css"
       if screen_ReOverride[k][attr] == css[k][attr]: del screen_ReOverride[k][attr] # don't need to re-iterate an identical attribute
       else:
-        assert attr in ['color','background','background-color','font-size'], attr+" not identical in "+k
+        assert attr in ['color','background','background-color','*font-size'], attr+" not identical in "+k
         screen_ReOverride[k][attr] = css[k][attr]
     if not screen_ReOverride[k]: del screen_ReOverride[k]
-  printCss(screen_ReOverride,outfile,debugStopAfter=0)
+  printCss(screen_ReOverride,outfile,0,pixelSize)
   # Browser-specific screen overrides:
   webkitScreenOverride.update(webkitGeckoScreenOverride)
   webkitScreenOverride.update(webkitMsieScreenOverride)
@@ -1535,7 +1534,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   ]:
     if d or not doneWebkit:
       outfile.write("} @media "+mediaHack+" {\n")
-      printCss(d,outfile,debugStopAfter=0)
+      printCss(d,outfile,0,pixelSize)
       if not doneWebkit:
         outfile.write("::-webkit-input-placeholder { -webkit-text-fill-color: "+colour["form_disabled"]+" !important; }\n") # bug workaround for Safari 10's Webkit (not present on Safari 6 etc): -webkit-text-fill-color in a DIV element overrides that in ::-webkit-input-placeholder, so better re-specify here (making sure it's at the end)
         doneWebkit=1
@@ -1566,7 +1565,14 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
     return debug_binary_chop(items,chop_results[1:],problem_start,problem_mid)
 
 from textwrap import fill
-def printCss(css,outfile,debugStopAfter=0):
+def printCss(css,outfile,debugStopAfter,pixelSize):
+  # Remove '*' as necessary
+  for el in list(css.keys()):
+    for prop,value in list(css[el].items()):
+      if len(prop)>1 and prop[0]=='*':
+        del css[el][prop]
+        if pixelSize: css[el][prop[1:]] = value
+    if css[el] == {}: del css[el]
   # hack for MathJax (see comments above)
   for k in list(css.keys()):
     if "div.MathJax_Display" in k: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
@@ -1584,6 +1590,9 @@ def printCss(css,outfile,debugStopAfter=0):
         ("transform","-o-transform"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
       if master in attribValDict and not alias in attribValDict: attribValDict[alias]=attribValDict[master]
+    if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: None when -webkit-appearance is set for a checkbox etc
+      if "-webkit-appearance" in attribValDict and not attribValDict["-webkit-appearance"]=='listbox': # (Firefox 74 forces white background if -moz-appearance listbox, must set -moz-appearance=none for that as done above, just not for checkboxes etc)
+        attribValDict["-moz-appearance"]=attribValDict["-webkit-appearance"]
     # end of adding aliases
     for i in list(attribValDict.items()):
       rDic.setdefault(i,[]).append(elem.strip())
