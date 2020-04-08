@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9895"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9896"
 # Works on either Python 2 or Python 3
 
 # This program is free software; you can redistribute it and/or modify 
@@ -82,6 +82,7 @@ chop_pixel_size = 20
 colour_schemes_to_generate = [
   ("yellow on black","",
    {"text":"yellow","background":"black",
+    "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#8080FF","link":"#00FF00",
     "hover":"#0000C0","visited":"#00FFFF",
     "bold":"#FFFF80","italic":"white",
@@ -97,6 +98,7 @@ colour_schemes_to_generate = [
   
   ("green on black","green",
    {"text":"#00FF00","background":"black",
+    "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#40C080","link":"#008AFF",
     "hover":"#400000","visited":"#00FFFF",
     "bold":"#80FF80","italic":"white",
@@ -112,6 +114,7 @@ colour_schemes_to_generate = [
   
   ("white on black","WonB",
    {"text":"white","background":"black",
+    "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#40C090","link":"#0080FF",
     "hover":"#400000","visited":"#00FFFF",
     "bold":"yellow","italic":"#FFFF80",
@@ -127,6 +130,7 @@ colour_schemes_to_generate = [
   
   ("soft greys","soft", # c.f. Nightshift etc; thanks to Liviu Andronic for testing
    {"text":"#C0C0C0","background":"#383838",
+    "translucent_background_compromise":"rgba(56,56,56,0.5)",
     "alt-backgrounds":["#333333","#2E2E2E"], # optional
     "headings":"#40C090","link":"#BDB76B",
     "hover":"#453436","visited":"#B6AA7B",
@@ -145,6 +149,7 @@ colour_schemes_to_generate = [
 
   ("black on linen","BonL", # LyX's background colour is "linen", 240/230/220
    {"text":"black","background":"#faf0e6",
+    "translucent_background_compromise":"rgba(250,240,230,0.5)",
     "headings":"#404040","link":"#0000FF",
     "hover":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
@@ -159,6 +164,7 @@ colour_schemes_to_generate = [
   
   ("black on white","BonW", # cld call this "black on bright white" (as opposed to "black on linen white") but that causes the list to take up more width
    {"text":"black","background":"white",
+    "translucent_background_compromise":"rgba(255,255,255,0.5)",
     "headings":"#404040","link":"#0000FF",
     "hover":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
@@ -249,7 +255,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # In the settings below, beginning with * means it will
   # be omitted from the "pixelSize 0" option (i.e. leave
-  # site's size/layout alone and just changing colours)
+  # site's size/layout alone and just changing colours),
+  # and anything beginning with ** means it will be
+  # included ONLY in the "pixelSize 0" option.
   defaultStyle={
     "*font-family":serif_fonts,
     "*font-size":"%.1fpx" % pixelSize,
@@ -350,8 +358,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for e in rubyElements: del css[e]["*text-align"]
 
   if not pixelSize:
-    css['div']['background'] = 'transparent' # because some position <video> elements behind the div
-    css['div.ui-dialog']={'background':colour["background"],'border':'blue solid'} # exception for obvious "dialogue" DIVs though
+    # We want div's background to have some transparency, because some sites position <video> elements behind the div.  But we don't want it completely transparent (unless we can confirm it contains video), as we probably won't be able to catch all UI elements as exceptions.
+    css['div']['background'] = colour["translucent_background_compromise"]
 
   del css['svg']['*font-size'] # doesn't make sense to override, as it's subject to the resize of the whole SVG (usually an enlargement)
   del printOverride['svg']['*font-size']
@@ -812,15 +820,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a:link.new, a:link.new i,a:link.new b"]={"color":colour["coloured"] } # (TODO use a different colour?)
   printOverride["a:link.new, a:link.new i,a:link.new b"]={"color":"black" } # TODO: shade of grey?
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
-  css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip,body.mediawiki .rt-tooltip, ul.ui-autocomplete, body.mediawiki div.mwe-popups']={"*position":"absolute","border":"blue solid"}
+  css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip,body.mediawiki .rt-tooltip, ul.ui-autocomplete, body.mediawiki div.mwe-popups']={"*position":"absolute","border":"blue solid","**background":colour["background"]}
   css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
   css["body.mediawiki div.mwe-popups a.mwe-popups-extract"]={"text-decoration":"none","color":colour["text"]} # don't underline if they present it as a very long link
   # and the map pins (TODO: this is still only approximate! pins tend to be a bit too far to the south-west; not sure why) :
   css['body.mediawiki table tr div[style^="position:absolute"]']={"*position":"absolute","background-color":"transparent"}
-  css['body.mediawiki table tr div[style^="position:relative"]']={"*position":"relative","*display":"inline-block"} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
+  css['body.mediawiki table tr div[style^="position:relative"]']={"*position":"relative","*display":"inline-block","**background":colour["background"]} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
   css['body.mediawiki table tr div[style^="position:absolute"] div[style^="position:absolute"] + div']={"display":"none"} # or the place name would overprint the map too much; it can usually be inferred from the caption
   css["body.mediawiki a.cn-full-banner-click"]={"*display":"none"} # sorry, it was too big
-  css['body.mediawiki div.chess-board > div[style^="position:absolute"]']={"*position":"absolute"}
+  css['body.mediawiki div.chess-board > div[style^="position:absolute"]']={"*position":"absolute","**background":colour["background"]}
   css['body.mediawiki div.chess-board > div > a.image:before, body.mediawiki div.chess-board > div > a.image:after']={"content":'""'} # overriding our [..]
   css['a:link div']["*padding"]="0px" # WikiMedia some site notices (the div is set to display inline, and adding padding to inline elements can cause overprinting)
   
@@ -955,7 +963,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       printOverride[','.join(x+l for x in make_like_link)] = printOverride[exclude_ie_below_9+"a:link"+l]
   css['img[src="img/otterlogo.jpg"][width="100%"]']={'*display':'none'} # ott.cl.cam.ac.uk
   # and ds-print top-up 2017:
-  css['body#ext-element-1 div.x-boundlist-floating']={'*position':'relative'}
+  css['body#ext-element-1 div.x-boundlist-floating']={'*position':'relative',"**background":colour["background"]}
 
   # hack for MHonarc and similar setups that put full-sized images into clickable links
   # (see comments on max-width above; doesn't seem to be a problem in this instance)
@@ -963,7 +971,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # -> DON'T do this - if one dimension is greater than 100% viewport but other is less, result can be bad aspect ratio
 
   # More autocomplete stuff
-  css['body > div.jsAutoCompleteSelector[style~="relative;"]'] = {'*position':'relative','border':'blue solid'}
+  css['body > div.jsAutoCompleteSelector[style~="relative;"]'] = {'*position':'relative','border':'blue solid',"**background":colour["background"]}
   
   # hack for sites that use jump.js with nav boxes
   jjc = "body > script + div#wrapper "
@@ -1044,6 +1052,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     'border':'thin blue solid'}
   css['#content > div#pubListResults > div#pubsViewResults > div.publication'] = {'border':'thin blue solid'}
   css[jjc+"span.pageNum[data-no]"]={'display':'none'}
+  css['div.ui-dialog,div[style^="position: fixed"],div.js-sticky,div.tooltip']={'**background':colour["background"],'**border':'blue solid'} # these can be opaque
+  css['#content > div#videoPlayerInstance, #content > div#videoPlayerInstance div']={'**background':'transparent'} # for 0.css (TODO: works in Chrome but not Firefox 74?  even if manually ensure this is the last thing in the CSS, and despite its specificity being higher than the 'div' w.rgba background)
   css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
   css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'} ; css['div#materialNav nav nav ul.books,div#materialNav nav nav ul.books > li.book']={'*display':'block'} # not flex, won't work here
@@ -1149,7 +1159,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   doHeightWidth(24,18) # some Tesco pages 2017-11
   for w in [12,15,16,17,18,20,24,26,28,30,32,36,44,48,50,100]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
-  css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute"}
+  css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute","**background":colour["background"]}
   css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css["div.issues-other-filters div.dropdown button.dropdown-menu-toggle span.dropdown-toggle-text svg,a#logo span.logo-text svg,body.ui-indigo div.nav-sidebar a div.nav-icon-container svg,body.ui-indigo a.toggle-sidebar-button svg,body.ui-indigo div.breadcrumbs-links svg.breadcrumbs-list-angle,body.ui-indigo svg.caret-down"]={"*display":"none"} # GitLab 2018
   css["a.note-emoji-button > svg.s16, button > svg.s16"]={"*height":"16px","*width":"16px"} # GitLab 2019
@@ -1162,10 +1172,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card"]={"border":"green solid","*padding":"1em"}
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card.card--selected"]={"border":"blue solid"}
   # For Jenkins 1.624 (some of it not quite working yet):
-  css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid"}
+  css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid","**background":colour["background"]}
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: hidden\"]"]={"*display":"none"}
   emptyLink("div#menuSelector",r"\2193+",css,printOverride,False)
-  css["body#jenkins div#breadcrumb-menu.yui-overlay.visible"]={"*position":"absolute","*border":"blue solid"}
+  css["body#jenkins div#breadcrumb-menu.yui-overlay.visible"]={"*position":"absolute","*border":"blue solid","**background":colour["background"]}
   css["body#jenkins div#breadcrumb-menu.yui-overlay-hidden"]={"*display":"none"}
   css["body#jenkins a > img[alt^=\"Failed\"]:before"]={"*content":'"Failed: "'} ; css["body#jenkins a > img[alt^=\"Success\"]:before"]={"*content":'"Success: "'} # (why on earth does the JS *remove* the title attribute when the mouse enters?)
   # For vtiger CRM 6.5.0:
@@ -1298,8 +1308,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
   
-  css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em'} # Tsinghua online course login
-  css['body.question-page script + div.message-dismissable[style^="position: absolute"]']={'*position':'absolute','border':'blue solid','padding':'1em'} # StackExchange "insufficient reputation to comment" etc
+  css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em',"**background":colour["background"]} # Tsinghua online course login
+  css['body.question-page script + div.message-dismissable[style^="position: absolute"]']={'*position':'absolute','border':'blue solid','padding':'1em',"**background":colour["background"]} # StackExchange "insufficient reputation to comment" etc
 
   css['div#wrap > div.__iklan + header#masthead + main#content > article[id^="single-post"] > div.container > div.entry-main > aside.entry-sidebar'] = {"display":"none"} # zap an ever-expanding "sidebar" that never lets you get to the article
   
@@ -1569,7 +1579,10 @@ def printCss(css,outfile,debugStopAfter,pixelSize):
   # Remove '*' as necessary
   for el in list(css.keys()):
     for prop,value in list(css[el].items()):
-      if len(prop)>1 and prop[0]=='*':
+      if prop.startswith("**"):
+        del css[el][prop]
+        if not pixelSize: css[el][prop[2:]] = value
+      elif prop.startswith("*"):
         del css[el][prop]
         if pixelSize: css[el][prop[1:]] = value
     if css[el] == {}: del css[el]
