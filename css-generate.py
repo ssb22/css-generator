@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9896"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.99"
 # Works on either Python 2 or Python 3
 
 # This program is free software; you can redistribute it and/or modify 
@@ -316,7 +316,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*hyphens":"manual",
     "*table-layout":"auto",
     "user-select":"text","-moz-user-select":"text","-webkit-user-select":"text", # don't allow making things non-selectable, as selection might help keep track of things (TODO: still have user-select:none for buttons etc?)
-    "*flex":"0 0 auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths
+    "*flex-wrap":"wrap", # needed for giant print or small windows
+    "*grid-column-start":"auto","*grid-column-end":"auto","*grid-row-start":"auto","*grid-row-end":"auto",
+    "*grid-auto-columns":"auto","*grid-auto-rows":"auto","*grid-auto-flow":"row",
+    "*justify-content":"flex-start","*align-items":"flex-start","*align-content":"flex-start","*align-self":"flex-start", # hopefully makes things more findable
+    "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths
+    "*flex":"0 1 auto", # may prevent margin overflow
     "*-moz-column-count":"1", # see below for column-count (NOT webkit, Chrome/57 bug)
     }
   for css3Thing,value in [
@@ -1056,7 +1061,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['#content > div#videoPlayerInstance, #content > div#videoPlayerInstance div']={'**background':'transparent'} # for 0.css (TODO: works in Chrome but not Firefox 74?  even if manually ensure this is the last thing in the CSS, and despite its specificity being higher than the 'div' w.rgba background)
   css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
-  css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'} ; css['div#materialNav nav nav ul.books,div#materialNav nav nav ul.books > li.book']={'*display':'block'} # not flex, won't work here
+  css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'}
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
   # if pixelSize: css[exclude_ie_below_9+"script + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
@@ -1125,7 +1130,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane > div"]={"display":"flex","flex":"auto","flex-direction":"row","flex-wrap":"wrap"} # workaround for site's Javascript on Firefox accidentally turning it into horizontal-only multicol scroll
     css[jjc+".pub-int ruby"]={"padding":"0 0.35em"}
     css[jjc+"nav div#documentNavigation div.navVerses ul.verses li.verse"]={"display":"inline","margin":"0 0.1ex"}
-    css['div#regionMain div.sbNavBarControls,div#regionMain div.sbNavBarControls div,div#regionMain div.sbNavBarControls h4']={"display":"block"} # not flex
     css['a[data-book-id],a.chapter']={"display":"inline-block"}
     css['div#regionMain a[data-book-id] span.fullName + span.longAbbrName, div#regionMain a[data-book-id] span.fullName + span.longAbbrName + span.abbrName, div#regionMain a[data-book-id] > div.tocIcons']={"display":"none"}
   emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,False)
@@ -1225,11 +1229,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hacks for StackOverflow/etc:
   emptyLink('a[title="delete this comment"]',"Delete this comment",css,printOverride)
   emptyLink('a[title="expand to show all comments on this post"]',"Expand all comments",css,printOverride)
-  css["body > div.container, body.question-page div.grid, body.question-page ul.comments-list, body.question-page div.post-layout, body.question-page ul.comments-list .comment"]={"*display":"block"} # not flex or grid
-  # Hacks for SOME of Discovery's stuff (although that site is difficult to sort out) :
   if pixelSize:
-    css["html.flexbox > body.editorial > div#site-content > div.site-inner > div#content-wrap > div#editorial-main + div#right-rail"]={"display":"none"} # TODO: is this still needed?
-    css["div.slider-body div"]={"display":"block","-webkit-box-orient":"inline-axis","-moz-box-orient":"inline-axis","box-orient":"inline-axis" } # not webkit-box
     css['iframe[title^="Facebook Cross Domain"]']={'display':'none'}
     css['iframe[height="90"][scrolling="no"]']={'display':'none'}
     # + for many sites with large transparent.png images:
@@ -1294,14 +1294,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
   css['div.headerContainer > div#searchResultsDidNotFind:before']={"*content":'""'} # more Tesco image madness
   css['body#delivery div#homeDelivery div#deliverySlots td.reserved div.slotDescription']={"border":"thick solid green"} # (and try to make that a bit clearer)
-  css['div#main.has-trolley']={ # Tesco 2018-02:
-    "*display":"block", # not flex
-    "*max-width":"100%"}
   css['div.tabs > ul.tabs-header-container > li.tabheader.active > a h2, div.tabs > ul.tabs-header-container > li.tabheader.active > a span']={'color':colour["text"]} # Tesco 2018-02 again (confusing non-functional link as current tab)
-  css['ul.product-list div.inputControl-wrapper']={'*display':'block'} # not flex, Tesco 2018-04
-  css['div.tile-content > div.tile-content--upper, div.full-trolley--grid > div.full-trolley--content']={'*display':'block'} # not flex, Tesco 2018-05
   css['a.brand-logo-link[href^="/groceries/"] > svg']={'*display':'none'} # Tesco 2018-11: yes we know whose website we're on: we don't need a logo that takes 2 screens to scroll through, thanks anyway...
-  css['body > div#content main div.component-tree div.recommender--wrapper']={'*display':'none'} # Tesco 2019-07 (there's a flex or something somewhere that's messing up my horizontal scrolling, and I couldn't find exactly which element it was so I'm just turning off the whole adverty construct, sorry)
   css['div.slim-trade-banner--full-width']={'*display':'none'} # Tesco making the page too wide
   css['div#card-section > iframe#bounty-iframe']={'*height':'20em'} # Tesco payment form is in a non-scrollable iframe 2019-07
   css['body > div#bounty-app > form#bounty-form div.secure-payment span.secure-payment__icon, body > div#bounty-app > form#bounty-form div.secure-payment svg']={'*display':'none'} # otherwise it overprints Tesco's entire payment form with a solid box (2019-07).  I actually sent them a video of this one, but I doubt it will make it as far as the developer team.  (To reproduce the video you'll need to get version 0.9873 of this code, e.g. from https://raw.githubusercontent.com/ssb22/css-generator/2253417d45173df2594d4e8c1bc51822613c3f07/css-generate.py as obviously I added the above 3 lines to work around those particular problems but I expect there will be more problems next time because it seems they keep coming up with new ones.)
@@ -1341,7 +1335,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # and if that doesn't work, try bringing in the icon font if it's there:
     css["a > i.fa:empty:before,button > i.fa:empty:before"]={"font-family":"FontAwesome, "+serif_fonts}
   emptyLink("a.overlay-close","Close",css,printOverride)
-  css["div.col-body,div.jsSimpleModalContainer"]={"*display":"block"} # Docker,jw (not display: flex)
 
   css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"],li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/placeholder.png"],div.tooltip div.tooltipList li > a.cardContainer > div.cardThumbnail, div.tooltip div.tooltipList li > a.cardContainer > div.cardChevron']={"*display":"none"}
   css['div.tooltip > div.tooltipHeader > div']={"*display":"inline-block"}
@@ -1352,44 +1345,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['.fixable_fixed']={"*display":"block","*position":"static"} # Quora (needed especially if using CSS bookmarklet instead of proper installation)
 
-  # Why do all these 'news' sites keep using display: flex?
-  # Don't they know it causes paragraphs not to wrap, and
-  # we have to scroll left/right far too much :-(
-  css['div.content-wrap']={'*display':'block'} # not flex please techcrunch
-  css['section']['*display']="block" # not flex please businessinsider
-  css['section > div']={'*display':'block'} # not flex please atlassian
-  css["main, body > div.base-layout"]={"*display":"block"} # not flex please chess.com
-  css['div[style*="flex"]']={'*display':'block'} # not flex please chessbase
-  css['div.responsivegrid div']={'*display':'block'} # not flex please dropbox
-  css['div.layout']={'*display':'block'} # not flex please Google Patents
-  css['div.layout-block']={'*display':'block'} # not flex please makeuseof
-  css['div.story-body-supplemental']={'*display':'block'} # not flex please New York Times
-  css['div.article-wrapper,div.article-container']={'*display':'block'} # not flex please Forbes
-  css['div.jeeng-widght,img.jeeng-widght-img-logo,div.article-container > sharing']={'*display':'none'} # (speaking of Forbes, this rules helps fix the mess caused by their '!important' rules if you're using CSS bookmarklet instead of installing in a browser)
-  css['section div.grd div.row']={'*display':'block'} # not flex please Microsoft Support
-  css["body > header.navbar, body > header.navbar > div.navbar-right > ul, body > header.navbar > div.navbar-right > ul li, div.detail-page-header"]={"*display":"block"} # not flex please GitLab
-  css['div.container div.row']={'*display':'block'} # not flex please Jenkins docs
-  css['div.Section-section,div.PostsPage-header']={'*display':'block'}
-  css['article div.Layout__row']={'*display':'block'} # not flex please, cam.ac.uk news
-  css['div#content > .row']={'*display':'block'} # not flex please OED
-  css['div#mobileNavTopBar div.navBarControls, div#regionMain ol.breadcrumbMenu, div#footerTop div.primaryNav, footer div#footer, footer div#footer div.quickLinks ul, footer div#footer div.sitemapLinks, nav > ul.jsDropdownNav, article div.articleFileLinks']={'*display':'block'} # not flex please
-  css['article, article > div, article div.flex-wrap, main div.row, body > div.container > div.row, body > div.container-fluid > div.row, body > div.flex-container, div.main_content, div[style="max-width:1600px"],div[style="max-width:1600px"] div.Comment,div.post__body,div.dnXaq,div.dHUYIZ,div.ftjuQd,div.oj-flex,main > div,div#main-content,div#main,div.ghacks-sidebared-content,.qc-cmp-ui-container,.qc-cmp-ui-content,div.l-article-body-segment,div.entry__content,div.MuiGrid-container,div.et_pb_extra_column_main,div#content-area,body > div#2x-container div,div.message-main,div.p-body-inner,div.p-body']={'*display':'block'} # not flex please (various sites)
-  css['aside section.c-recirc-content']={'*display':'none'} # sorry The Atlantic, your "more stories" flex list items somehow end up overprinting the main article and the easiest way to deal with it is hide them
-  css['div.swiper-wrapper,div.swiper-wrapper div,div.article-level,div.topic-article-container'],css['div.widget__top-picks,svg.image-wrapper__placeholder']={'*display':'block'},{'*display':'none'} # this line makes some attempt to clean up SCMP's flex overuse 2019
-  # TODO: is there a more general way of addressing these
-  # (plus other "not flex" display rules), w/out Web Adjuster?
-  # Just set div *max-width 100% ? would need overflow:auto (see
-  # comments above on max-width) so be careful.
-  # (Just set div,section *display block could be a problem with display:none)
-  # Pity CSS selectors can't query for an otherwise-applied CSS property to override
-
   css['body.article-type-article#body .apester-layer']={'*display':'none'} # sorry The Independent, your delayed 'register' popup is not very accessible (2019-04)
 
   css['div.quoted-text']={'border':'thin grey solid'} # may help on some forum sites
 
   css['div#mobileNavTopBar div.navBarControls span.navBarButton-icon, button.accordionButton > span.accordionButton-text + span.accordionButton-icon, div.articleFooterLinks nav a span.buttonIcon, div.articleShareLinks span.buttonIcon, button#mobileTOCHandle span.mobilePaneControl-icon, div.downloadLinks span.buttonIcon svg, button.jsCloseModal span.closeModal svg, div.fileContainer a span svg, span[aria-hidden="true"]']={'*display':'none'} # TODO: why do these add 300px+ Y when we've included the 24px svg in doHeightWidth
   css['div.vjs-audio iframe.vjs-resize-manager']={'*display':'none'}
-  css['div.standardModal-flexWrapper, div.standardModal, div.standardModal-toolbar']={'*display':'block'} # not flex
 
   css['div.play > div.input > textarea.code']={'*height':'15em','*margin-left':'1em'} # golang package examples
 
