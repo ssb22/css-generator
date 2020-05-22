@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.99"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.991"
 # Works on either Python 2 or Python 3
+
+# Website: http://ssb22.user.srcf.net/css/
 
 # This program is free software; you can redistribute it and/or modify 
 # it under the terms of the GNU General Public License as published by 
@@ -21,7 +23,8 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.99"
 # and on GitLab at https://gitlab.com/ssb22/css-generator
 # and on BitBucket https://bitbucket.org/ssb22/css-generator
 # as of v0.9782.  Versions prior to that were not kept, but
-# you might be able to find some on Internet Archive.
+# some were captured by Internet Archive at
+# https://web.archive.org/web/*/http://people.pwf.cam.ac.uk/ssb22/css/css-generate.py
 # To check out the repository, you can do:
 # git clone https://github.com/ssb22/css-generator.git
 # or
@@ -365,6 +368,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if not pixelSize:
     # We want div's background to have some transparency, because some sites position <video> elements behind the div.  But we don't want it completely transparent (unless we can confirm it contains video), as we probably won't be able to catch all UI elements as exceptions.
     css['div']['background'] = colour["translucent_background_compromise"]
+    # Also do this for Firefox's PDF viewer:
+    css["div.pdfViewer div.page > div.canvasWrapper + div.textLayer"]={"opacity":"1"}
 
   del css['svg']['*font-size'] # doesn't make sense to override, as it's subject to the resize of the whole SVG (usually an enlargement)
   del printOverride['svg']['*font-size']
