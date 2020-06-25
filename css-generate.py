@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.991"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.992"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -647,14 +647,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if not e in firstLineBugs: css[e+":first-line"]=inheritDic.copy()
     for i in map(lambda x:exclude_ie_below_9+e+x,[":before",":after"]):
       css[i]=defaultStyle.copy()
-      if e=="img":
-        for k in list(css[i].keys()):
-          if k.startswith("background"): del css[i][k]
+      if e=="img": del css[i]["background"]
+      else: css[i]["background"]="transparent" # essential for 0.css where the pseudo-element might be repositioned with different z-index; not supported by IE below 9 but neither are pseudo-elements in general (we're on exclude_ie_below_9 anyway)
       for mp in ["*margin","*padding"]:
         if not css.get(e,{}).get(mp,"")==css[i][mp]:
           del css[i][mp] # as not sure how browsers would treat a different margin/padding in :before/:after.  But DO keep these settings for the 0px elements, because we DON'T want sites overriding this and causing overprinting.
-  # and also do this:
-  for i in map(lambda x:exclude_ie_below_9+x,[":before",":after"]): css[i]=defaultStyle.copy() # (especially margin and padding)
+  # and also do this for no specific element:
+  for i in map(lambda x:exclude_ie_below_9+x,[":before",":after"]):
+    css[i]=defaultStyle.copy() # (especially margin and padding)
+    css[i]["background"]="transparent" # see above
 
   # CSS 2+ markup for viewing XML+CSS pages that don't use HTML.  Not perfect but should be better than nothing.
   xmlKey=":root:not(HTML):not(page):not(svg), :root:not(HTML):not(page):not(svg) :not(:empty)"
@@ -768,7 +769,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
         css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
       for ll in ["",":before",":after"]:
-        if undo: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["background"]}
+        if undo: css[exclude_ie_below_9+key+":hover"+ll]={"background":"transparent"}
         else: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
       printOverride[key] = {"color":"#000080"}
 
