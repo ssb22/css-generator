@@ -1362,7 +1362,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   if not pixelSize:
     if not colour["background"]=="white": css["body.web div#app div.landing-window div.landing-main div[data-ref], body.web div#app div.landing-window div.landing-main canvas"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
-    css["body.web div#app div.app.two > div:first-child + div"]={"display":"none"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
+    css["body.web div#app div.two > div:first-child + div"]={"display":"none"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
     css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
     css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
     css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
