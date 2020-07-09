@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.992"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9921"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -47,6 +47,9 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.992"
 # but you might want to put them in a subdirectory, or set
 # an absolute path
 outputDir = "."
+
+try: True # backward compatibility with Python 2.1:
+except: exec("True,False=1,0") # (syntax error in Python 3)
 
 # Whether to write an HTML menu to standard output as well
 # (see my CSS page for example)
@@ -236,6 +239,27 @@ chop_extra_verification = True # If True, we'll take an extra step to verify eac
 try: from css_generate_config import *
 except ImportError: pass
 
+try: any
+except: # backward compatibility with Python 2.1:
+  def any(l):
+    for i in l:
+      if i: return True
+try: dict
+except:
+  def dict(l):
+    r = {}
+    for k,v in l:
+      r[k] = v
+    return r
+try: set
+except:
+  def set(l): return l
+try: sorted
+except:
+  def sorted(l,cmpFunc=None):
+    r = l[:]
+    r.sort(cmpFunc)
+    return r
 try: reduce # Python 2
 except: # Python 3
   from functools import reduce, cmp_to_key
@@ -348,11 +372,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   mostElements += html5Elements
   mostElements += ['location'] # site-specific hack for lib.cam.ac.uk
 
-  # Selector prefixes to exclude certain browsers from trying to implement a rule:
-  exclude_ie_below_7 = "html > "
-  exclude_ie_below_8 = "html >/**/ body "
-  exclude_ie_below_9 = ":not(:empty) " # IE8 (and non-CSS3 browsers) don't support :not
-  
   css={} ; printOverride = {}
   webkitScreenOverride = {} ; geckoScreenOverride = {} ; msieScreenOverride = {}
   webkitGeckoScreenOverride = {} ; webkitMsieScreenOverride = {} ; geckoMsieScreenOverride = {}
@@ -566,7 +585,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # display maths as real TeX or something instead)
   if not colour["background"]=="white": css["body.mediawiki img.tex"]["border"]="white solid 3px" # to make sure letters near the edge are readable if the rest of the page has a dark background
   
-  if "image_opacity" in colour:
+  if "image_opacity" in colour.keys():
     del css["img"]["*opacity"],css["img"]["*-moz-opacity"],css["img"]["*filter"]
     css["img"]["opacity"]=css["img"]["-moz-opacity"]="%g" % colour["image_opacity"]
     css["img"]["filter"]="alpha(opacity=%d)" % int(colour["image_opacity"]*100) # for IE8 and below
@@ -577,7 +596,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride["button"]["background"]=printButtonBackground
   css['div[role="button"]']={"background":colour["button"]} # for Gmail 2012-07 on "standard" view (rather than "basic HTML" view).  "Standard" view might work for people who want the "unchanged" size.
   printOverride['div[role="button"]']={"background":printButtonBackground}
-  if "alt-backgrounds" in colour:
+  if "alt-backgrounds" in colour.keys():
     # override specificity of alt-backgrounds div:nth-child
     css['html body div[role="button"]'] = css['div[role="button"]']
     printOverride['html body div[role="button"]'] = {"background":printButtonBackground}
@@ -621,7 +640,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","footer","center","article","span","aside","figure","figcaption","time","em"
   ]
   firstLetterBugs_msie=["a"]
-  assert not(any(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_multiple) or any(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie for x in firstLetterBugs_geckoOnly) or any(x in firstLetterBugs_msie for x in firstLetterBugs_webkitOnly)), "Error: firstLetterBugs item in more than one category"
+  assert not(any([(x in firstLetterBugs_geckoOnly or x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie) for x in firstLetterBugs_multiple]) or any([(x in firstLetterBugs_webkitOnly or x in firstLetterBugs_msie) for x in firstLetterBugs_geckoOnly]) or any([(x in firstLetterBugs_msie) for x in firstLetterBugs_webkitOnly])), "Error: firstLetterBugs item in more than one category"
   firstLineBugs=[
   "div", # on firefox 2 causes some google iframes to occlude page content
   "svg","text","text > tspan","object", # doesn't make sense, and can cause confusion
@@ -645,7 +664,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       else: dictToAddTo = css
       dictToAddTo[e+":first-letter"]=inheritDic.copy()
     if not e in firstLineBugs: css[e+":first-line"]=inheritDic.copy()
-    for i in map(lambda x:exclude_ie_below_9+e+x,[":before",":after"]):
+    for i in map(lambda x,e=e:exclude_ie_below_9+e+x,[":before",":after"]):
       css[i]=defaultStyle.copy()
       if e=="img": del css[i]["background"]
       else: css[i]["background"]="transparent" # essential for 0.css where the pseudo-element might be repositioned with different z-index; not supported by IE below 9 but neither are pseudo-elements in general (we're on exclude_ie_below_9 anyway)
@@ -687,7 +706,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["img[align=right]"]={"*float":"right"}
     
   # Selection (CSS3)
-  if "selection" in colour:
+  if "selection" in colour.keys():
     css["::selection"] = {"background":colour["selection"]}
     css["::-moz-selection"] = {"background":colour["selection"]}
 
@@ -699,7 +718,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['select']['background']=colour['selectbox']
   printOverride['select']['background']=printButtonBackground # TODO: or something else?
 
-  if "alt-backgrounds" in colour:
+  if "alt-backgrounds" in colour.keys():
     css['td:nth-child(odd),div:nth-child(odd)'] = {"background":colour["alt-backgrounds"][0]}
     printOverride['td:nth-child(odd),div:nth-child(odd)'] = {"background":"white"} # TODO: or a very light grey?
     if len(colour["alt-backgrounds"])>1:
@@ -726,7 +745,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Begin site-specific hacks
 
-  def emptyLink(lType,content,css,printOverride,isRealLink=True,omitEmpty=False,isInsideRealLink=False,undo=False):
+  def emptyLink(lType,content,css,printOverride,colour,isRealLink=True,omitEmpty=False,isInsideRealLink=False,undo=False):
    assert not ',' in lType
    assert not (undo and content)
    if isInsideRealLink: isRealLink = False # overrides
@@ -795,7 +814,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[k] = {"color":colour["italic"]}
   printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
-  css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; emptyLink('table.diff-table button[aria-label="Add line comment"]','C',css,printOverride,False,True) # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
+  css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; emptyLink('table.diff-table button[aria-label="Add line comment"]','C',css,printOverride,colour,False,True) # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
   css['button.more-actions-toggle > span.icon > svg']={'width':'1em','height':'1em'}
   # and media players:
   css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":r'"\21E8 Play"'}
@@ -966,12 +985,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   make_like_link = ["a.gwt-Anchor"] # CamCORS (and other sites that use the same toolkit)
   # (CamCORS hacks end here)
   make_like_link += ["ul.sidebar-navigation > li.sidebar-navigation-item > div.sidebar-navigation-item-header > div.columns:not(:empty)",'a[data-target]'] # ott.cl.cam.ac.uk
-  css[','.join(make_like_link)] = css["a:link "] ; css[','.join(x+":hover" for x in make_like_link)] = css["a:link:hover "]
+  css[','.join(make_like_link)] = css["a:link "] ; css[','.join([(x+":hover") for x in make_like_link])] = css["a:link:hover "]
   printOverride[','.join(make_like_link)] = printOverride["a:link "]
   if (pixelSize and separate_adjacent_links_at_other_sizes) or (not pixelSize and separate_adjacent_links_at_size_0):
     for l in [":before",":after"]:
-      css[','.join(x+l for x in make_like_link)] = css[exclude_ie_below_9+"a:link"+l]
-      printOverride[','.join(x+l for x in make_like_link)] = printOverride[exclude_ie_below_9+"a:link"+l]
+      css[','.join([(x+l) for x in make_like_link])] = css[exclude_ie_below_9+"a:link"+l]
+      printOverride[','.join([(x+l) for x in make_like_link])] = printOverride[exclude_ie_below_9+"a:link"+l]
   css['img[src="img/otterlogo.jpg"][width="100%"]']={'*display':'none'} # ott.cl.cam.ac.uk
   # and ds-print top-up 2017:
   css['body#ext-element-1 div.x-boundlist-floating']={'*position':'relative',"**background":colour["background"]}
@@ -1031,20 +1050,20 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
       css["body.HomePage > div#regionMain > div.wrapper > div.wrapperShadow > div#slider > div#slideMain"]={"width":"1px","height":"1px","overflow":"hidden"} # can't get those kind of JS image+caption sliders to work well in large print so might be better off cutting them out (TODO somehow relocate to end of page?) (anyway, do height=width=1 because display:none or height=width=0 seems to get some versions of WebKit in a loop and visibility:hidden doesn't always work)
   # and not just if pixelSize (because these icons aren't necessarily visible with our colour changes) -
-  emptyLink(exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon","Navigation",css,printOverride,isInsideRealLink=True)
-  emptyLink(exclude_ie_below_9+"li#menuNavigation.iconOnly > a","Navigation",css,printOverride)
-  emptyLink(exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a > span.icon","Next hit",css,printOverride,isInsideRealLink=True)
-  emptyLink(exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a","Next hit",css,printOverride)
-  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuToday > a.todayNav > span.icon","Today",css,printOverride,isInsideRealLink=True)
-  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuPublications > a > span.icon","Publications",css,printOverride,isInsideRealLink=True)
-  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > div#menuHome > a[aria-label=\"home\"] > span.icon","Home",css,printOverride,isInsideRealLink=True)
-  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav div#compactSearch span.searchIcon.menuButton > span.icon","Search",css,printOverride,False)
-  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome > a > span.icon","Home",css,printOverride,isInsideRealLink=True)
-  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome + li > a > span.icon","Bbl",css,printOverride,isInsideRealLink=True)
-  emptyLink("div#wrapper div#documentMenuButton > span.icon","Show...",css,printOverride,False)
-  emptyLink("div#wrapper div#documentMenuButton > span.rubyIndicator > span.icon","Romanisation...",css,printOverride,False)
-  emptyLink("button#fontSizeSmaller > span.icon","smaller",css,printOverride,False) # probably won't work if we're fixing the size in user CSS, but display anyway to avoid completely empty "Show..." sections if no other functions are shown
-  emptyLink("button#fontSizeLarger > span.icon","bigger",css,printOverride,False)
+  emptyLink(exclude_ie_below_9+"li#menuNavigation.iconOnly > a > span.icon","Navigation",css,printOverride,colour,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"li#menuNavigation.iconOnly > a","Navigation",css,printOverride,colour)
+  emptyLink(exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a > span.icon","Next hit",css,printOverride,colour,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"li#menuSearchHitNext.iconOnly > a","Next hit",css,printOverride,colour)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuToday > a.todayNav > span.icon","Today",css,printOverride,colour,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuPublications > a > span.icon","Publications",css,printOverride,colour,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > div#menuHome > a[aria-label=\"home\"] > span.icon","Home",css,printOverride,colour,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav div#compactSearch span.searchIcon.menuButton > span.icon","Search",css,printOverride,colour,False)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome > a > span.icon","Home",css,printOverride,colour,isInsideRealLink=True)
+  emptyLink(exclude_ie_below_9+"div#wrapper div#primaryNav > ul.menu > li#menuHome + li > a > span.icon","Bbl",css,printOverride,colour,isInsideRealLink=True)
+  emptyLink("div#wrapper div#documentMenuButton > span.icon","Show...",css,printOverride,colour,False)
+  emptyLink("div#wrapper div#documentMenuButton > span.rubyIndicator > span.icon","Romanisation...",css,printOverride,colour,False)
+  emptyLink("button#fontSizeSmaller > span.icon","smaller",css,printOverride,colour,False) # probably won't work if we're fixing the size in user CSS, but display anyway to avoid completely empty "Show..." sections if no other functions are shown
+  emptyLink("button#fontSizeLarger > span.icon","bigger",css,printOverride,colour,False)
   css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:after, div#regionHeader menu li#menuSynchronizeSwitch a:after, div#wrapper div#primaryNav ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after, div#wrapper div#toolbarFrame ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after"]={"content":'"Sync"',"text-transform":"none"}
   css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a:empty:after"]={"content":'"Preferences"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after"]={"content":'"<- Prev"',"text-transform":"none"}
@@ -1072,9 +1091,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # if pixelSize: css[exclude_ie_below_9+"script + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   css["body > script + div#wrapper #content figure > img, div.lsrBannerImage img"]={"*max-width":"100%"}
-  emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
-  emptyLink("div.downloadContent div.downloadOptions div.fileTypeButtonContainer a.fileType.current span.buttonText",None,css,printOverride,False,omitEmpty=True,undo=True)
-  emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,isInsideRealLink=True)
+  emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,colour,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
+  emptyLink("div.downloadContent div.downloadOptions div.fileTypeButtonContainer a.fileType.current span.buttonText",None,css,printOverride,colour,False,omitEmpty=True,undo=True)
+  emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,colour,isInsideRealLink=True)
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
@@ -1083,21 +1102,21 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls"]={"background":"transparent"}
     css["div#yt-masthead > div.yt-masthead-logo-container, div#yt-masthead-content > form#masthead-search > button.yt-uix-button.yt-uix-button-default"]={"display":"none"}
     css['div.guide-item-container > ul.guide-user-links.yt-box > li[role="menuitem"], div.guide-channels-content > ul#guide-channels > li[role="menuitem"]']={"display":"inline-block"}
-  emptyLink("div.welcome-wrapper > nav > div.container > div.navbar-header > button.navbar-toggle > span:first-child","Toggle navigation",css,printOverride,False)
-  emptyLink("div.btn-group > button#hideNames > i.fa-eye-slash","Hide names",css,printOverride,False)
-  emptyLink("div.btn-group > button#showNames > i.fa-eye","Show names",css,printOverride,False)
+  emptyLink("div.welcome-wrapper > nav > div.container > div.navbar-header > button.navbar-toggle > span:first-child","Toggle navigation",css,printOverride,colour,False)
+  emptyLink("div.btn-group > button#hideNames > i.fa-eye-slash","Hide names",css,printOverride,colour,False)
+  emptyLink("div.btn-group > button#showNames > i.fa-eye","Show names",css,printOverride,colour,False)
   # hack for MusOpen:
   css["a.download-icon span.icon-down:empty:after"]={"content":'"Download"',"color":colour["link"]}
   printOverride["a.download-icon span.icon-down:empty:after"]={"color":"black"}
   css['iframe[title="Like this content on Facebook."],iframe[title="+1"],iframe[title="Twitter Tweet Button"]']={"*display":"none"}
   # Hack for some other sites that put nothing inside software download links:
-  emptyLink("div.jsDropdownMenu.downloadDropdown > a.secondaryButton.dropdownHandle > span.buttonIcon.download","Download",css,printOverride,False)
-  emptyLink("a.shareButton > span",None,css,printOverride,False,True);emptyLink("div.standardModal-content > div.itemInfoContainer > div.itemFinderLink > a.copyLink[title=\"Copy Link\"] > span","Copy Link",css,printOverride,False);css["div.itemInfoContainer > div.itemFinderLink, div.itemFinderLink > div.shareLinkContainer,input.shareLink[readonly],div.itemFinderLink > div.shareLinkContainer > input.shareLink"]={"*width":"100%"}
-  emptyLink("a[title~=download]","Download",css,printOverride)
+  emptyLink("div.jsDropdownMenu.downloadDropdown > a.secondaryButton.dropdownHandle > span.buttonIcon.download","Download",css,printOverride,colour,False)
+  emptyLink("a.shareButton > span",None,css,printOverride,colour,False,True);emptyLink("div.standardModal-content > div.itemInfoContainer > div.itemFinderLink > a.copyLink[title=\"Copy Link\"] > span","Copy Link",css,printOverride,colour,False);css["div.itemInfoContainer > div.itemFinderLink, div.itemFinderLink > div.shareLinkContainer,input.shareLink[readonly],div.itemFinderLink > div.shareLinkContainer > input.shareLink"]={"*width":"100%"}
+  emptyLink("a[title~=download]","Download",css,printOverride,colour)
   # and more for audio players:
-  emptyLink("div.audioFormat > a.stream","Stream",css,printOverride)
-  emptyLink("a.jsTrackPlay",r"\21E8 Play",css,printOverride) # (sometimes but not always within div.playBtn)
-  emptyLink("a.jsTrackPause","Pause",css,printOverride)
+  emptyLink("div.audioFormat > a.stream","Stream",css,printOverride,colour)
+  emptyLink("a.jsTrackPlay",r"\21E8 Play",css,printOverride,colour) # (sometimes but not always within div.playBtn)
+  emptyLink("a.jsTrackPause","Pause",css,printOverride,colour)
   css["div.jsAudioPlayer div.ui-slider > a.ui-slider-handle:link:empty"] = { "*position": "relative", "text-decoration":"none" }
   for jsPlayElem in ['div','a']:
     css["div.jsAudioPlayer > div.jsAudioPlayerInterface > "+jsPlayElem+".jsPlay.controlElem:empty:after"] = { "content": r'"\21E8 Play"', "color":colour["link"]}
@@ -1109,28 +1128,28 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.jsAudioPlayer > div.jsAudioPlayerInterface > div.controlElem.ui-slider"] = { "*display":"block" }
   css['div.mejs-playpause-button button[title="Play/Pause"]:empty:after'] = {"content":'"Play/pause"'}
   # and more:
-  emptyLink("div.digitalPubFormat > a.fileFormatIcon","Pub format",css,printOverride) # digital publication or whatever
-  emptyLink("div.audioFormat > a.fileFormatIcon.audio","Audio format",css,printOverride)
-  emptyLink('a[target="itunes_store"]',"iTunes shop",css,printOverride)
-  emptyLink('a.appStore[href^="https://itunes.apple.com/"]',"Apple shop",css,printOverride)
-  emptyLink('a[href^="https://play.google.com/store/apps/"]',"Android shop",css,printOverride)
-  emptyLink('a[href^="http://apps.microsoft.com/"]',"Microsoft shop",css,printOverride)
-  emptyLink('div#btnPreviousPage.previousPage',"Previous page",css,printOverride,False)
-  emptyLink('div#btnNextPage.nextPage',"Next page",css,printOverride,False)
-  emptyLink('div.expanderIcon.collapsed',"+ expand",css,printOverride,False)
-  emptyLink('div.expanderIcon.expanded',"- collapse",css,printOverride,False)
-  emptyLink('a.navButton.prevNav > div.buttonShell',"Previous",css,printOverride,False)
-  emptyLink('a.navButton.nextNav > div.buttonShell',"Next",css,printOverride,False)
-  emptyLink('a[title="PREVIOUS"]',"Previous",css,printOverride,True)
-  emptyLink('a[title="NEXT"]',"Next",css,printOverride,True)
-  emptyLink("div.iconOnly + span.share + span.buttonText",None,css,printOverride,False,True)
-  # emptyLink('div.toolbar > a.jsZoomIn.zoomIn',"Zoom in",css,printOverride,False);emptyLink('div.toolbar > a.jsZoomOut.zoomOut',"Zoom out",css,printOverride,False) # TODO: somehow let these work? (apparently it's all CSS tricks and we're overriding it)
-  emptyLink('div.toolbar > a.jsCloseModal',"Close",css,printOverride,False)
+  emptyLink("div.digitalPubFormat > a.fileFormatIcon","Pub format",css,printOverride,colour) # digital publication or whatever
+  emptyLink("div.audioFormat > a.fileFormatIcon.audio","Audio format",css,printOverride,colour)
+  emptyLink('a[target="itunes_store"]',"iTunes shop",css,printOverride,colour)
+  emptyLink('a.appStore[href^="https://itunes.apple.com/"]',"Apple shop",css,printOverride,colour)
+  emptyLink('a[href^="https://play.google.com/store/apps/"]',"Android shop",css,printOverride,colour)
+  emptyLink('a[href^="http://apps.microsoft.com/"]',"Microsoft shop",css,printOverride,colour)
+  emptyLink('div#btnPreviousPage.previousPage',"Previous page",css,printOverride,colour,False)
+  emptyLink('div#btnNextPage.nextPage',"Next page",css,printOverride,colour,False)
+  emptyLink('div.expanderIcon.collapsed',"+ expand",css,printOverride,colour,False)
+  emptyLink('div.expanderIcon.expanded',"- collapse",css,printOverride,colour,False)
+  emptyLink('a.navButton.prevNav > div.buttonShell',"Previous",css,printOverride,colour,False)
+  emptyLink('a.navButton.nextNav > div.buttonShell',"Next",css,printOverride,colour,False)
+  emptyLink('a[title="PREVIOUS"]',"Previous",css,printOverride,colour,True)
+  emptyLink('a[title="NEXT"]',"Next",css,printOverride,colour,True)
+  emptyLink("div.iconOnly + span.share + span.buttonText",None,css,printOverride,colour,False,True)
+  # emptyLink('div.toolbar > a.jsZoomIn.zoomIn',"Zoom in",css,printOverride,colour,False);emptyLink('div.toolbar > a.jsZoomOut.zoomOut',"Zoom out",css,printOverride,colour,False) # TODO: somehow let these work? (apparently it's all CSS tricks and we're overriding it)
+  emptyLink('div.toolbar > a.jsCloseModal',"Close",css,printOverride,colour,False)
   css["div.galleryCarouselItems"]={"*white-space":"normal"} # not 'nowrap'
-  emptyLink('div.tabViews > div.tabControls > a.discoveryTab',"Discovery",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.comparisonTab',"Comparison",css,printOverride,True);emptyLink('div.tabViews > div.tabControls > a.xRefTab',"xref",css,printOverride,True) # has href="#" so True; NB these are more likely :blank than :empty, so might not work in all browsers (but don't want to risk removing :empty altogether)
-  emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-play > button",r"\21E8 Play",css,printOverride,False)
-  emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-pause > button",r"Pause",css,printOverride,False)
-  emptyLink(jjc+"div#regionHeader > div#publicationNavigation > div.studyPaneToggle > span.icon","Toggle study pane",css,printOverride,False) # (TODO: on some versions this is effective only if the browser window exceeds a certain width)
+  emptyLink('div.tabViews > div.tabControls > a.discoveryTab',"Discovery",css,printOverride,colour,True);emptyLink('div.tabViews > div.tabControls > a.comparisonTab',"Comparison",css,printOverride,colour,True);emptyLink('div.tabViews > div.tabControls > a.xRefTab',"xref",css,printOverride,colour,True) # has href="#" so True; NB these are more likely :blank than :empty, so might not work in all browsers (but don't want to risk removing :empty altogether)
+  emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-play > button",r"\21E8 Play",css,printOverride,colour,False)
+  emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-pause > button",r"Pause",css,printOverride,colour,False)
+  emptyLink(jjc+"div#regionHeader > div#publicationNavigation > div.studyPaneToggle > span.icon","Toggle study pane",css,printOverride,colour,False) # (TODO: on some versions this is effective only if the browser window exceeds a certain width)
   if pixelSize:
     css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane"]={"position":"fixed","bottom":"0px","left":"30%","height":"30%","border":"magenta solid","overflow":"auto","z-index":"4"}
     css[jjc+"div#regionMain div#study div.studyPane,div#regionMain > div.wrapper > div.wrapperShadow > div.studyPane > div"]={"display":"flex","flex":"auto","flex-direction":"row","flex-wrap":"wrap"} # workaround for site's Javascript on Firefox accidentally turning it into horizontal-only multicol scroll
@@ -1138,18 +1157,18 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[jjc+"nav div#documentNavigation div.navVerses ul.verses li.verse"]={"display":"inline","margin":"0 0.1ex"}
     css['a[data-book-id],a.chapter']={"display":"inline-block"}
     css['div#regionMain a[data-book-id] span.fullName + span.longAbbrName, div#regionMain a[data-book-id] span.fullName + span.longAbbrName + span.abbrName, div#regionMain a[data-book-id] > div.tocIcons']={"display":"none"}
-  emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,False)
-  emptyLink(jjc+"li.verseOutline a.outToggle > span","Outline",css,printOverride,False) # TODO: why won't this match?
-  emptyLink("a#jsGalleryNextBtn > div.nextArrow","Next",css,printOverride,False)
-  emptyLink("a#jsGalleryPrevBtn > div.prevArrow","Previous",css,printOverride,False)
-  emptyLink('button[title^="Compose"] > span.compose-email-icon',"Compose",css,printOverride,False)
-  emptyLink('button > span.previous-email-icon',"Previous",css,printOverride,False)
-  emptyLink('button > span.next-email-icon',"Next",css,printOverride,False)
-  emptyLink('button > span.print-icon',"Print",css,printOverride,False)
-  emptyLink('button[title^="Reply"] > span.reply-icon',"Reply",css,printOverride,False)
-  emptyLink('button[title^="Reply"] > span.reply-all-icon',"Reply to All",css,printOverride,False)
-  emptyLink('button[title^="Forward"] > span.forward-icon',"Forward",css,printOverride,False)
-  emptyLink('button > span.delete-icon',"Delete",css,printOverride,False)
+  emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,colour,False)
+  emptyLink(jjc+"li.verseOutline a.outToggle > span","Outline",css,printOverride,colour,False) # TODO: why won't this match?
+  emptyLink("a#jsGalleryNextBtn > div.nextArrow","Next",css,printOverride,colour,False)
+  emptyLink("a#jsGalleryPrevBtn > div.prevArrow","Previous",css,printOverride,colour,False)
+  emptyLink('button[title^="Compose"] > span.compose-email-icon',"Compose",css,printOverride,colour,False)
+  emptyLink('button > span.previous-email-icon',"Previous",css,printOverride,colour,False)
+  emptyLink('button > span.next-email-icon',"Next",css,printOverride,colour,False)
+  emptyLink('button > span.print-icon',"Print",css,printOverride,colour,False)
+  emptyLink('button[title^="Reply"] > span.reply-icon',"Reply",css,printOverride,colour,False)
+  emptyLink('button[title^="Reply"] > span.reply-all-icon',"Reply to All",css,printOverride,colour,False)
+  emptyLink('button[title^="Forward"] > span.forward-icon',"Forward",css,printOverride,colour,False)
+  emptyLink('button > span.delete-icon',"Delete",css,printOverride,colour,False)
   css["div#screenReaderNavLinkTop > p,div#primaryNav > nav > ul > li"]={"*display":"inline"} # save a bit of vertical space
   css["nav p#showHideMenu > a#showMenu > span.icon:empty:after"]={"content":'"showMenu"'}
   css["nav p#showHideMenu > a#hideMenu > span.icon:empty:after"]={"content":'"hideMenu"'}
@@ -1163,11 +1182,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.audio > div.pause[rv-on-click]:empty:before']={'content':'"Pause"'}
   css['body > div.ui-draggable > div.ui-dialog-titlebar']={'cursor':'move'}
   css['img.emoji[src$=".svg"]']={"*height":"1em","*max-height":"1em","*width":"1em","*max-width":"1em"}
-  def doHeightWidth(height,width): css['img[width="%d"][height="%d"],svg[viewBox="0 0 %d %d"]' % (width,height,width,height)]={"*height":"%dpx"%height,"*max-height":"%dpx"%height,"*width":"%dpx"%width,"*max-width":"%dpx"%width} # setting max as well seems to partially work around some Safari 6.1 SVG bugs
-  doHeightWidth(17,21);doHeightWidth(24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
-  doHeightWidth(24,32) # some cl.cam pages
-  doHeightWidth(24,18) # some Tesco pages 2017-11
-  for w in [12,15,16,17,18,20,24,26,28,30,32,36,44,48,50,100]: doHeightWidth(w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
+  def doHeightWidth(css,height,width): css['img[width="%d"][height="%d"],svg[viewBox="0 0 %d %d"]' % (width,height,width,height)]={"*height":"%dpx"%height,"*max-height":"%dpx"%height,"*width":"%dpx"%width,"*max-width":"%dpx"%width} # setting max as well seems to partially work around some Safari 6.1 SVG bugs
+  doHeightWidth(css,17,21);doHeightWidth(css,24,25) # better keep these because it could be an image link to a social network whose natural size is full-screen (and some news sites put these right at the top of all their pages)
+  doHeightWidth(css,24,32) # some cl.cam pages
+  doHeightWidth(css,24,18) # some Tesco pages 2017-11
+  for w in [12,15,16,17,18,20,24,26,28,30,32,36,44,48,50,100]: doHeightWidth(css,w,w) # could be navigation icons or similar & there could be very many of them; don't want these to take too much space (e.g. GitHub 'avatars', can be quite simple but still hundreds of pixels big unnecessarily)
   css["div.write-content > textarea#new_comment_field, div.write-content > textarea#issue_body, div.write-content > textarea[id^=\"issuecomment\"], div.div-dropzone > textarea#issue_description, div.div-dropzone > textarea#note_note"]={"*height":"10em","*border":"blue solid"} # GitHub and GitLab (make comment fields a bit bigger)
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute","**background":colour["background"]}
   css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
@@ -1184,17 +1203,17 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # For Jenkins 1.624 (some of it not quite working yet):
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: visible\"]"]={"*position":"absolute","*border":"blue solid","**background":colour["background"]}
   css["body#jenkins > iframe + div#tt[style^=\"z-index: 999; visibility: hidden\"]"]={"*display":"none"}
-  emptyLink("div#menuSelector",r"\2193+",css,printOverride,False)
+  emptyLink("div#menuSelector",r"\2193+",css,printOverride,colour,False)
   css["body#jenkins div#breadcrumb-menu.yui-overlay.visible"]={"*position":"absolute","*border":"blue solid","**background":colour["background"]}
   css["body#jenkins div#breadcrumb-menu.yui-overlay-hidden"]={"*display":"none"}
   css["body#jenkins a > img[alt^=\"Failed\"]:before"]={"*content":'"Failed: "'} ; css["body#jenkins a > img[alt^=\"Success\"]:before"]={"*content":'"Success: "'} # (why on earth does the JS *remove* the title attribute when the mouse enters?)
   # For vtiger CRM 6.5.0:
-  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,isInsideRealLink=True)
+  emptyLink("div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div#headerLinks span.dropdown > a.dropdown-toggle > span.icon-bar:first-child","Preferences etc",css,printOverride,colour,isInsideRealLink=True)
   css["div#page > div.navbar > div#topMenus > div#nav-inner > div.menuBar > div.span9 > ul#largeNav"]={"*display":"block"}
   for n in ['listView','relatedList']:
     for t in ["Previous","Next"]:
-      emptyLink("button#"+n+t+"PageButton.btn > span",t+" page",css,printOverride,False)
-  emptyLink("button.dropdown-toggle.btn > i","Toggle",css,printOverride,False)
+      emptyLink("button#"+n+t+"PageButton.btn > span",t+" page",css,printOverride,colour,False)
+  emptyLink("button.dropdown-toggle.btn > i","Toggle",css,printOverride,colour,False)
   # For Atlassan:
   css["span.aui-avatar img, img.jira-project-avatar-icon, img.jpo-team-field-avatar"]={"*width":"24px","*height":"24px"}
   css["a.aui-sidebar-toggle > span.aui-icon:empty::before"]={'content':r'"\2B04"'}
@@ -1208,7 +1227,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
   printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']=printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':'#000080'}
   # Hacks for RoundCube-based webmail sites and some forums:
-  for t in ["Reset search","Search modifiers","Show preview pane","Enlarge","Click here to give thanks to this post."]: emptyLink('a[title="'+t+'"]',t,css,printOverride) # (OK 'Enlarge' isn't RoundCube but is used on some MediaWiki sites)
+  for t in ["Reset search","Search modifiers","Show preview pane","Enlarge","Click here to give thanks to this post."]: emptyLink('a[title="'+t+'"]',t,css,printOverride,colour) # (OK 'Enlarge' isn't RoundCube but is used on some MediaWiki sites)
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:before"]={"content":'" ("',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount:after"]={"content":'")"',"color":colour["coloured"]}
   css[exclude_ie_below_9+"li.unread > a > span.unreadcount"]={"color":colour["coloured"]}
@@ -1219,8 +1238,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.detailhost > table#detable,body.detailhost > table#detable td#drifdiv"]={"*width":"100%"} # also for search.lib.cam.ac.uk
   css["a#composeoptionstoggle > span.iconlink[title=\"Options\"]:empty:after"]={"content":'"Options"'}
   # Blackwells article feedback:
-  emptyLink("a[title=\"Yes\"]","Yes",css,printOverride)
-  emptyLink("a[title=\"No\"]","No",css,printOverride)
+  emptyLink("a[title=\"Yes\"]","Yes",css,printOverride,colour)
+  emptyLink("a[title=\"No\"]","No",css,printOverride,colour)
   # Hacks for eBay:
   css['td#storeHeader']={"*width":"30%"}
   css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
@@ -1231,10 +1250,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hacks for LinkedIn:
   css['div#post-module > div.post-module-in > form#slideshare-upload-form, div#post-module > div.post-module-in > div#slideshare-upload-callout']={'*display':'none'} # can't get it to work, and a non-working form is just clutter
   css['iframe[src^="https://www.linkedin.com/csp/ads"],iframe[src^="https://ad-emea.doubleclick.net"]']={'*display':'none'} # sorry LinkedIn but they're getting really too cluttered for giant-print navigation
-  emptyLink("input.post-link + a.post-link-close","Cancel posting link",css,printOverride) ; emptyLink("a.cancel-file-upload","Cancel file upload",css,printOverride) # I think (not sure how this is supposed to work)
+  emptyLink("input.post-link + a.post-link-close","Cancel posting link",css,printOverride,colour) ; emptyLink("a.cancel-file-upload","Cancel file upload",css,printOverride,colour) # I think (not sure how this is supposed to work)
   # Hacks for StackOverflow/etc:
-  emptyLink('a[title="delete this comment"]',"Delete this comment",css,printOverride)
-  emptyLink('a[title="expand to show all comments on this post"]',"Expand all comments",css,printOverride)
+  emptyLink('a[title="delete this comment"]',"Delete this comment",css,printOverride,colour)
+  emptyLink('a[title="expand to show all comments on this post"]',"Expand all comments",css,printOverride,colour)
   if pixelSize:
     css['iframe[title^="Facebook Cross Domain"]']={'display':'none'}
     css['iframe[height="90"][scrolling="no"]']={'display':'none'}
@@ -1261,8 +1280,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['div#menuHome > a:link > span.icon:empty:before']={'content':'"Home"'}
   css['#standardSearch .searchControlContainer .searchButton'] = {'*width':'auto'} # site was somehow overriding it to a pixel width on Safari 6, cutting off the larger text
-  emptyLink("#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,False)
-  emptyLink("#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,False)
+  emptyLink("#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,colour,False)
+  emptyLink("#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,colour,False)
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
   
@@ -1294,7 +1313,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.basketDeliverySurcharge p:before, p.basketInfo:before, body#delivery div#homeDelivery *:after,body#delivery div#homeDelivery *:before, p.productStatus > span.inBasket:before, div.sideBasketHeader > div.action > h2:before, form#fMaxiBasket > div#errorWrapper > div.errors > div.errorContainer:before, form#fMaxiBasket > div#errorWrapper > div.errors > div.errorContainer *:before, div.checkoutContainer > form#fOrder *:before, div#checkoutConfirmationContainer div.content:before']={"*content":'""'} # and this one is needed even on the supposedly "accessible" version (originally developed in conjunction with the RNIB but since drifted)... I want to throw a banana at a Tesco web developer.  Why do I have to spend hours fixing my CSS just to shop?
   css['div.productLists > ul.products > li.whyNotTry']={'*display':'none'} # 'whyNotTry'? hey Tesco, whyNotTry testing your site with low-vision CSS? :-) Then you might realise the end-2016 variation of that 'whyNotTry' gave 10 screenfuls of useless icons.  Sorry to hide your promotions but if they're THAT much of a mess you'd make more profit without them.
   css['body#favourites div#favouritesHub div#hubTopWrap']={'*display':'none'} # Tesco gets it wrong again: 'favourites' is the wrong word for 'usuals' (if I have to buy cold medicine, that doesn't mean I LIKE the stuff) but more to the point we don't want 10+ screens of extra links (each with overspill images full of supposedly-hidden icons) before getting to the list
-  emptyLink('a[title="Basket"] span.icon-cart',"Basket",css,printOverride,isInsideRealLink=True) # Tesco 2017-10
+  emptyLink('a[title="Basket"] span.icon-cart',"Basket",css,printOverride,colour,isInsideRealLink=True) # Tesco 2017-10
   css['div.secondary-nav__left-section > ul.secondary-nav__list'] = { '*display':'block'} # Tesco strikes again.  In 2017-11 their web design department apparently decided anyone with a narrow window (e.g. due to screen magnification) is not allowed to see their Clubcard vouchers on request.  Every little helps... to frustrate our browsing :-(
   css['.header--sticky .primary-nav__item__panel, .header--sticky .utility-nav .utility-nav__list']={"*display":"block"}; css['div[dojotype="dojox.widget.AutoRotator"]'] = {"*display":"none"} # Not that Sainsbury's web developers were any more helpful.  This fixes their broken scrolling 2016-10.
   css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
@@ -1336,15 +1355,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                   ("check","OK"),
                   ]:
       for thing in ["a","button"]:
-          emptyLink(thing+" > i.fa.fa-"+s,r,css,printOverride,isInsideRealLink=True)
+          emptyLink(thing+" > i.fa.fa-"+s,r,css,printOverride,colour,isInsideRealLink=True)
           css[thing+" > i.fa.fa-"+s+":empty:before"]["content"]='""' # in case the font didn't load
     # and if that doesn't work, try bringing in the icon font if it's there:
     css["a > i.fa:empty:before,button > i.fa:empty:before"]={"font-family":"FontAwesome, "+serif_fonts}
-  emptyLink("a.overlay-close","Close",css,printOverride)
+  emptyLink("a.overlay-close","Close",css,printOverride,colour)
 
   css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"],li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/placeholder.png"],div.tooltip div.tooltipList li > a.cardContainer > div.cardThumbnail, div.tooltip div.tooltipList li > a.cardContainer > div.cardChevron']={"*display":"none"}
   css['div.tooltip > div.tooltipHeader > div']={"*display":"inline-block"}
-  emptyLink('div.tooltip > div.tooltipHeader > div.tooltipClose > div.closeBtn > span.icon','X',css,printOverride,False)
+  emptyLink('div.tooltip > div.tooltipHeader > div.tooltipClose > div.closeBtn > span.icon','X',css,printOverride,colour,False)
   css['div#wrapper > div#regionMain img.thumbnail']={"*max-width":"1em"}
 
   css['body.page-template div.toggles > div.nav-toggle:before']={'content':'"Toggle navigation: "',"color":colour["link"],"text-decoration":"underline","cursor":"pointer"} # some 'blog' templates contain just bars done as 3 styled empty DIVs
@@ -1402,6 +1421,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.support-list li.stat-cell.y']={'border':'green solid'}
 
   css['div#pt_checkout_onepage input[type="checkbox"],div#pt_checkout_onepage input[type="radio"]']={'opacity':'1','position':'static'} # Claires checkout junk-signup checkbox: please make current state visible
+  css['input.oo-ui-inputWidget-input[type="checkbox"]']={'opacity':'1'} # e.g. MediaWiki on Wenlin edit pages: please make current state more visible
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
@@ -1464,7 +1484,7 @@ only Mozilla 1.0 does it properly; later versions and Firefox don't)
 img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */\n""")
 
-  cssRef = {x:y.copy() for x,y in css.items()}
+  cssRef = dict([(x,y.copy()) for x,y in css.items()])
   ret = printCss(css,outfile,debugStopAfter,pixelSize)
   css = cssRef
 
@@ -1480,15 +1500,15 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */
 """)
   # (PocketIE7 also has a habit of displaying the page with a white background while rendering, and applying the CSS's colours only afterwards, even if the CSS is in cache.  PocketIE6 did not do this.  See cssHtmlAttrs option in Web Adjuster for a possible workaround.)
-  screen_ReOverride = {x:y.copy() for x,y in printOverride.items()}
+  screen_ReOverride = dict([(x,y.copy()) for x,y in printOverride.items()])
   printCss(printOverride,outfile,0,pixelSize)
   del printOverride
   # and the above-mentioned second override for IE7, Midori etc :
   outfile.write("} @media tv,handheld,screen,projection {\n")
   for k in list(screen_ReOverride.keys()):
     for attr in list(screen_ReOverride[k].keys()):
-      assert k in css, k+" was in printOverride but not css (attr="+attr+")"
-      assert attr in css[k], attr+" was in printOverride["+k+"] but not css"
+      assert k in css.keys(), k+" was in printOverride but not css (attr="+attr+")"
+      assert attr in css[k].keys(), attr+" was in printOverride["+k+"] but not css"
       if screen_ReOverride[k][attr] == css[k][attr]: del screen_ReOverride[k][attr] # don't need to re-iterate an identical attribute
       else:
         assert attr in ['color','background','background-color','*font-size'], attr+" not identical in "+k
@@ -1519,6 +1539,11 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 
   return ret
 
+# Selector prefixes to exclude certain browsers from trying to implement a rule:
+exclude_ie_below_7 = "html > "
+exclude_ie_below_8 = "html >/**/ body "
+exclude_ie_below_9 = ":not(:empty) " # IE8 (and non-CSS3 browsers) don't support :not
+
 def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
   # returns start,end of problem, and any remaining chop_results after narrowing down to 1 item (so can pass the rest to a sublist)
   if problem_end==-1: problem_end=len(items)
@@ -1541,7 +1566,9 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
     # problem did not persist when 1st half disabled, so recurse on 1st half
     return debug_binary_chop(items,chop_results[1:],problem_start,problem_mid)
 
-from textwrap import fill
+try: from textwrap import fill
+except:
+  def fill(x,*args,**kwargs): return x
 def printCss(css,outfile,debugStopAfter,pixelSize):
   # Remove '*' as necessary
   for el in list(css.keys()):
@@ -1555,7 +1582,7 @@ def printCss(css,outfile,debugStopAfter,pixelSize):
     if css[el] == {}: del css[el]
   # hack for MathJax (see comments above)
   for k in list(css.keys()):
-    if "div.MathJax_Display" in k: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
+    if k.find("div.MathJax_Display")>-1: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
   # For each attrib:val find which elems share it & group them
   rDic={} # maps (attrib,val) to a list of elements that have it
   for elem,attribValDict in list(css.items()):
@@ -1569,9 +1596,9 @@ def printCss(css,outfile,debugStopAfter,pixelSize):
         ("transform","-webkit-transform"),
         ("transform","-o-transform"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
-      if master in attribValDict and not alias in attribValDict: attribValDict[alias]=attribValDict[master]
+      if master in attribValDict.keys() and not alias in attribValDict.keys(): attribValDict[alias]=attribValDict[master]
     if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: None when -webkit-appearance is set for a checkbox etc
-      if "-webkit-appearance" in attribValDict and not attribValDict["-webkit-appearance"]=='listbox': # (Firefox 74 forces white background if -moz-appearance listbox, must set -moz-appearance=none for that as done above, just not for checkboxes etc)
+      if "-webkit-appearance" in attribValDict.keys() and not attribValDict["-webkit-appearance"]=='listbox': # (Firefox 74 forces white background if -moz-appearance listbox, must set -moz-appearance=none for that as done above, just not for checkboxes etc)
         attribValDict["-moz-appearance"]=attribValDict["-webkit-appearance"]
     # end of adding aliases
     for i in list(attribValDict.items()):
@@ -1596,24 +1623,24 @@ def printCss(css,outfile,debugStopAfter,pixelSize):
   # If any element groups are identical, merge contents, but beware to keep some things separate:
   outDic = {}
   for (k,v),elemList in attrib_val_elemList:
-    elemLists = [[x] for x in elemList if '::' in x] # COMPLETELY separate the ::selection markup at all times, to work around browsers ignoring the whole list if they don't like it
-    def addIn(l):
+    elemLists = [[x] for x in elemList if x.find('::')>-1] # COMPLETELY separate the ::selection markup at all times, to work around browsers ignoring the whole list if they don't like it
+    def addIn(elemLists,l):
       flat=set(reduce(lambda a,b:a+b,elemLists,[]))
       elemLists.append([i for i in l if not i in flat])
-    addIn([x for x in elemList if ':blank' in x]) # some Firefox versions need this separated
-    addIn([x for x in elemList if ':-moz' in x]) # just in case
-    addIn([x for x in elemList if ':-webkit' in x]) # just in case
-    addIn([x for x in elemList if ':ms-' in x]) # just in case
-    addIn([x for x in elemList if not '*' in x and not '>' in x and not ':empty' in x and not ':not' in x and not '[' in x and not '+' in x]) # with IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list, so we need to separate these out
-    addIn([x for x in elemList if not ':not' in x]) # for later versions of IE
-    addIn(elemList) # everything else
+    addIn(elemLists,[x for x in elemList if x.find(':blank')>-1]) # some Firefox versions need this separated
+    addIn(elemLists,[x for x in elemList if x.find(':-moz')>-1]) # just in case
+    addIn(elemLists,[x for x in elemList if x.find(':-webkit')>-1]) # just in case
+    addIn(elemLists,[x for x in elemList if x.find(':ms-')>-1]) # just in case
+    addIn(elemLists,[x for x in elemList if not '*' in x and not '>' in x and x.find(':empty')==-1 and x.find(':not')==-1 and not '[' in x and not '+' in x]) # with IE6, if ANY of the elements in the list use syntax it doesn't recognise ('>', '*' etc), it ignores the whole list, so we need to separate these out
+    addIn(elemLists,[x for x in elemList if x.find(':not')==-1]) # for later versions of IE
+    addIn(elemLists,elemList) # everything else
     for eList in elemLists:
       if not eList: continue
       eList.sort()
       outDic.setdefault(tuple(eList),{})[k]=v
   # Now ready for output
   def lenOfShortestElem(elemList): return (min([len(e) for e in elemList if len(e)]),elemList) # (elemList is already alphabetically sorted, so have that as secondary sort)
-  for elemList,style in sorted(outDic.items(),lambda x,y:cmp(lenOfShortestElem(x[0]),lenOfShortestElem(y[0]))):
+  for elemList,style in sorted(outDic.items(),lambda x,y,lenOfShortestElem=lenOfShortestElem:cmp(lenOfShortestElem(x[0]),lenOfShortestElem(y[0]))):
     if debugStopAfter:
       # for pedantic debugging, write each rule separately
       for e in elemList:
@@ -1627,7 +1654,7 @@ def printCss(css,outfile,debugStopAfter,pixelSize):
         if not debugStopAfter: return 0
       continue
     # else, if not debugStopAfter:
-    outfile.write(fill(", ".join(x.replace(" ","%@%") for x in elemList).replace("-","#@#"),break_long_words=False).replace("#@#","-").replace("%@%"," ")) # (don't let 'fill' break on the hyphens, or on spaces WITHIN each item which might be inside quoted attributes etc, just on spaces BETWEEN items)
+    outfile.write(fill(", ".join([(x.replace(" ","%@%")) for x in elemList]).replace("-","#@#"),break_long_words=False).replace("#@#","-").replace("%@%"," ")) # (don't let 'fill' break on the hyphens, or on spaces WITHIN each item which might be inside quoted attributes etc, just on spaces BETWEEN items)
     outfile.write(" {\n")
     l=list(style.items()) ; l.sort()
     for k,v in l: outfile.write("   %s: %s !important;\n" % (k,v))
@@ -1671,8 +1698,6 @@ var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/(windo
     else: pxDesc = "unchanged"
     print("e=document.createElement('OPTION'); e.value='"+str(pixelSize)+"'; e.appendChild(document.createTextNode('"+pxDesc+"')); sizeSelect.appendChild(e); if(defaultSize) sizeSelect.selectedIndex="+str(pixel_sizes_to_generate.index(pixelSize))+"; if(defaultSize<"+str(pixelSize)+") defaultSize=0;")
   for scheme,suffix,colour in colour_schemes_to_generate: print("e=document.createElement('OPTION'); e.value='"+suffix+"'; e.appendChild(document.createTextNode('"+scheme+"')); colourSelect.appendChild(e);")
-  alternate_server_for_https_requests = os.environ.get('CSS_HTTPS_SERVER',None) # for the bookmarklet, if you want to apply it on https pages (which means the CSS itself must be served from https) and your main website isn't on an HTTPS-capable server but there's a secondary (lower-bandwidth) one you can use just for that use-case
-  alternate_server_needs_css_extension = os.environ.get('CSS_HTTPS_SERVER_USE_EXTENSION',False)
   def tryStylesheetJS(hrefExpr):
     r = "var e=document.createElement('link');e.id0='ssb22css';e.rel='stylesheet';e.href="+hrefExpr+";if(!document.getElementsByTagName('head'))document.body.appendChild(document.createElement('head'));var h=document.getElementsByTagName('head')[0];if(h.lastChild&&h.lastChild.id0=='ssb22css')h.removeChild(h.lastChild);h.appendChild(e);" # try to avoid spaces because they get written as %20 in the bookmarklet
     if alternate_server_for_https_requests:
@@ -1719,6 +1744,9 @@ if(document.location.href.indexOf("?whatLookLike")>-1) {"""+tryStylesheetJS('css
 do_binary_chop = False
 binary_chop_results = ""
 import sys, os
+alternate_server_for_https_requests = os.environ.get('CSS_HTTPS_SERVER',None) # for the bookmarklet, if you want to apply it on https pages (which means the CSS itself must be served from https) and your main website isn't on an HTTPS-capable server but there's a secondary (lower-bandwidth) one you can use just for that use-case
+alternate_server_needs_css_extension = os.environ.get('CSS_HTTPS_SERVER_USE_EXTENSION',False)
+
 if "adjuster-config" in sys.argv:
   # print out configuration options for Web Adjuster
   # e.g. large-print-websites.appspot.com
