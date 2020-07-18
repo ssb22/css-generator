@@ -5,8 +5,9 @@
 
 # Where to find history:
 # on GitHub at https://github.com/ssb22/css-generator
-# or on GitLab at https://gitlab.com/ssb22/css-generator
-# or on BitBucket https://bitbucket.org/ssb22/css-generator
+# and on GitLab at https://gitlab.com/ssb22/css-generator
+# and on BitBucket https://bitbucket.org/ssb22/css-generator
+# and at https://gitlab.developers.cam.ac.uk/ssb22/css-generator
 
 if ! cd "$HOME/.mozilla/firefox"; then
   echo "Could not find Firefox profiles directory"

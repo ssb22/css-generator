@@ -22,6 +22,7 @@ prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9921"
 # and on GitHub at https://github.com/ssb22/css-generator
 # and on GitLab at https://gitlab.com/ssb22/css-generator
 # and on BitBucket https://bitbucket.org/ssb22/css-generator
+# and at https://gitlab.developers.cam.ac.uk/ssb22/css-generator
 # as of v0.9782.  Versions prior to that were not kept, but
 # some were captured by Internet Archive at
 # https://web.archive.org/web/*/http://people.pwf.cam.ac.uk/ssb22/css/css-generate.py
