@@ -1219,6 +1219,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["span.aui-avatar img, img.jira-project-avatar-icon, img.jpo-team-field-avatar"]={"*width":"24px","*height":"24px"}
   css["a.aui-sidebar-toggle > span.aui-icon:empty::before"]={'content':r'"\2B04"'}
   css[".ghx-backlog-container .ghx-backlog-header"]={'position':'static'} # not sticky, even at pixelSize=0 + zoom
+  css["body#jira > aui-dropdown-menu"]={"**max-height":"50%","**overflow":"scroll"} # works around having to use right-hand scrollbar to see all 'More' options when zoomed in
 
   css['body.md-skin div#wrapper div.shifts-wrapper div.day-wrapper > button.shift']={'*display':'inline'}
   css['body.md-skin div#wrapper div.shifts-wrapper div.day-wrapper > button.shift + div.separator']={'*display':'none'}
