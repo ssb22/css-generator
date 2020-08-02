@@ -735,6 +735,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['hr']={"color":"grey","border-style":"inset"} # prevent pages from changing the colour of horizontal rules, especially to black if we have a black background (sometimes used within tables to mimic fraction lines in formulae)
   for aside in ['aside','figure']: css[aside]['border']="thin "+colour["italic"]+" solid" # might help sometimes
   css['body > pre:only-child']={'*white-space':'pre-line','*font-family':serif_fonts} # this might make Gopher pages easier to read in Firefox's "OverbiteFF" (unless ASCII art is in use); NB on some firefox versions it slows down the loading of text/plain URLs and chrome://browser/skin/browser.css etc
+  css['body > form[action="man:"] + pre']={'*white-space':'pre-line','*font-family':serif_fonts} # ditto for Bwana manpage-viewing plugin for Mac OS X browsers
   
   for pt in '::-webkit-input-placeholder,:-moz-placeholder,::-moz-placeholder,:ms-input-placeholder,::placeholder,:placeholder-shown'.split(","): css[pt] = {"color":colour["form_disabled"]}
 
