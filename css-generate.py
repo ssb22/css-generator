@@ -1096,6 +1096,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("a[role=\"button\"] > span.buttonText",None,css,printOverride,colour,False,omitEmpty=True) # TODO: narrow down the selector so 'a' does not have 'href' etc?
   emptyLink("div.downloadContent div.downloadOptions div.fileTypeButtonContainer a.fileType.current span.buttonText",None,css,printOverride,colour,False,omitEmpty=True,undo=True)
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,colour,isInsideRealLink=True)
+  css["a:empty"]={"**background":"transparent"} # might be position:absolute over the top of something
+  css["a:empty:hover"]={"**opacity":"0.5"}
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
@@ -1270,6 +1272,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
     css['button.twite__share-button,button.twite__share-button + div.twite__panel,a.twite__share-button']={"display":"none"} # BBC 2016/17: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
     css['form[action^="https://ssl.bbc.co.uk"] > button.p-f-button']={'display':'none'} # doesn't work very well anyway and takes up too much room
+  css['div[style^="background-image"] + img']={'**opacity':'1'} # Twitter embedded tweets with images at size=unchanged
   css['body#schedules-day div.programmes-page li#on-now']={"border":"blue solid"}
   css['button.smp__blocklink div.smp__overlay div.smp__message div.smp__cta span.smp__messagetext']={"background":colour["button"],"border":"red solid","margin":"1em"} # 2018 "listen now" button (easy to miss)
   css['div#msi-modal div.msi-modal__body div.msi-modal__wrap']={"position":"fixed","top":"0px","z-index":"999","border":"solid magenta"} # 2018 sign-in box (don't miss this or nothing works)
