@@ -1429,6 +1429,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#pt_checkout_onepage input[type="checkbox"],div#pt_checkout_onepage input[type="radio"]']={'opacity':'1','position':'static'} # Claires checkout junk-signup checkbox: please make current state visible
   css['input.oo-ui-inputWidget-input[type="checkbox"]']={'opacity':'1'} # e.g. MediaWiki on Wenlin edit pages: please make current state more visible
 
+  # Google's cookie-consent 2020-09 in 0.css with zoom is disorienting and requires scrolling down to the Accept button, potentially dozens of times per day unless you give up clearing cookies and let Google track you, or hide it like this:
+  css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, iframe[src^="https://consent.google.com";]']={'**display':'none'}
+  css['html']['overflow']='auto'
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
