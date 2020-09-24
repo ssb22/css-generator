@@ -1429,6 +1429,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#pt_checkout_onepage input[type="checkbox"],div#pt_checkout_onepage input[type="radio"]']={'opacity':'1','position':'static'} # Claires checkout junk-signup checkbox: please make current state visible
   css['input.oo-ui-inputWidget-input[type="checkbox"]']={'opacity':'1'} # e.g. MediaWiki on Wenlin edit pages: please make current state more visible
 
+  css['span.starRating-blank:empty:before']={'opacity':'0.5'} # Yellow Pages
+
   # Google's cookie-consent 2020-09 in 0.css with zoom is disorienting and requires scrolling down to the Accept button, potentially dozens of times per day unless you give up clearing cookies and let Google track you, or hide it like this:
   css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, iframe[src^="https://consent.google.com";]']={'**display':'none'}
   css['html']['overflow']='auto'
