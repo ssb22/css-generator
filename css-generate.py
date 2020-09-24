@@ -1432,7 +1432,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['span.starRating-blank:empty:before']={'opacity':'0.5'} # Yellow Pages
 
   # Google's cookie-consent 2020-09 in 0.css with zoom is disorienting and requires scrolling down to the Accept button, potentially dozens of times per day unless you give up clearing cookies and let Google track you, or hide it like this:
-  css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, iframe[src^="https://consent.google.com";]']={'**display':'none'}
+  css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, iframe[src^="https://consent.google.com"]']={'**display':'none'}
   css['html']['overflow']='auto'
 
   # End site-specific hacks
