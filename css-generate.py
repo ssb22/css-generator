@@ -1436,6 +1436,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, iframe[src^="https://consent.google.com"]']={'**display':'none'}
   css['html']['overflow']='auto'
 
+  # Glint employment surveys on size=unchanged: make checkboxes visible please
+  css['body.questionnairePage input[type="checkbox"].question']={'**opacity':'1','**position':'static','**width':'auto','**height':'auto'}
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
