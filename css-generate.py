@@ -89,7 +89,7 @@ chop_pixel_size = 20
 colour_schemes_to_generate = [
   ("yellow on black","",
    {"text":"yellow","background":"black",
-    "translucent_background_compromise":"rgba(0,0,0,0.5)",
+    "translucent_background_compromise":"rgba(0,0,0,0.3)",
     "headings":"#8080FF","link":"#00FF00",
     "hover":"#0000C0","visited":"#00FFFF",
     "bold":"#FFFF80","italic":"white",
@@ -105,7 +105,7 @@ colour_schemes_to_generate = [
   
   ("green on black","green",
    {"text":"#00FF00","background":"black",
-    "translucent_background_compromise":"rgba(0,0,0,0.5)",
+    "translucent_background_compromise":"rgba(0,0,0,0.3)",
     "headings":"#40C080","link":"#008AFF",
     "hover":"#400000","visited":"#00FFFF",
     "bold":"#80FF80","italic":"white",
@@ -121,7 +121,7 @@ colour_schemes_to_generate = [
   
   ("white on black","WonB",
    {"text":"white","background":"black",
-    "translucent_background_compromise":"rgba(0,0,0,0.5)",
+    "translucent_background_compromise":"rgba(0,0,0,0.3)",
     "headings":"#40C090","link":"#0080FF",
     "hover":"#400000","visited":"#00FFFF",
     "bold":"yellow","italic":"#FFFF80",
@@ -137,7 +137,7 @@ colour_schemes_to_generate = [
   
   ("soft greys","soft", # c.f. Nightshift etc; thanks to Liviu Andronic for testing
    {"text":"#C0C0C0","background":"#383838",
-    "translucent_background_compromise":"rgba(56,56,56,0.5)",
+    "translucent_background_compromise":"rgba(56,56,56,0.3)",
     "alt-backgrounds":["#333333","#2E2E2E"], # optional
     "headings":"#40C090","link":"#BDB76B",
     "hover":"#453436","visited":"#B6AA7B",
@@ -156,7 +156,7 @@ colour_schemes_to_generate = [
 
   ("black on linen","BonL", # LyX's background colour is "linen", 240/230/220
    {"text":"black","background":"#faf0e6",
-    "translucent_background_compromise":"rgba(250,240,230,0.5)",
+    "translucent_background_compromise":"rgba(250,240,230,0.3)",
     "headings":"#404040","link":"#0000FF",
     "hover":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
@@ -171,7 +171,7 @@ colour_schemes_to_generate = [
   
   ("black on white","BonW", # cld call this "black on bright white" (as opposed to "black on linen white") but that causes the list to take up more width
    {"text":"black","background":"white",
-    "translucent_background_compromise":"rgba(255,255,255,0.5)",
+    "translucent_background_compromise":"rgba(255,255,255,0.3)",
     "headings":"#404040","link":"#0000FF",
     "hover":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
