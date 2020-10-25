@@ -89,7 +89,7 @@ chop_pixel_size = 20
 colour_schemes_to_generate = [
   ("yellow on black","",
    {"text":"yellow","background":"black",
-    "translucent_background_compromise":"rgba(0,0,0,0.3)",
+    "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#8080FF","link":"#00FF00",
     "hover":"#0000C0","visited":"#00FFFF",
     "bold":"#FFFF80","italic":"white",
@@ -105,7 +105,7 @@ colour_schemes_to_generate = [
   
   ("green on black","green",
    {"text":"#00FF00","background":"black",
-    "translucent_background_compromise":"rgba(0,0,0,0.3)",
+    "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#40C080","link":"#008AFF",
     "hover":"#400000","visited":"#00FFFF",
     "bold":"#80FF80","italic":"white",
@@ -121,7 +121,7 @@ colour_schemes_to_generate = [
   
   ("white on black","WonB",
    {"text":"white","background":"black",
-    "translucent_background_compromise":"rgba(0,0,0,0.3)",
+    "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#40C090","link":"#0080FF",
     "hover":"#400000","visited":"#00FFFF",
     "bold":"yellow","italic":"#FFFF80",
@@ -137,7 +137,7 @@ colour_schemes_to_generate = [
   
   ("soft greys","soft", # c.f. Nightshift etc; thanks to Liviu Andronic for testing
    {"text":"#C0C0C0","background":"#383838",
-    "translucent_background_compromise":"rgba(56,56,56,0.3)",
+    "translucent_background_compromise":"rgba(56,56,56,0.5)",
     "alt-backgrounds":["#333333","#2E2E2E"], # optional
     "headings":"#40C090","link":"#BDB76B",
     "hover":"#453436","visited":"#B6AA7B",
@@ -156,7 +156,7 @@ colour_schemes_to_generate = [
 
   ("black on linen","BonL", # LyX's background colour is "linen", 240/230/220
    {"text":"black","background":"#faf0e6",
-    "translucent_background_compromise":"rgba(250,240,230,0.3)",
+    "translucent_background_compromise":"rgba(250,240,230,0.5)",
     "headings":"#404040","link":"#0000FF",
     "hover":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
@@ -171,7 +171,7 @@ colour_schemes_to_generate = [
   
   ("black on white","BonW", # cld call this "black on bright white" (as opposed to "black on linen white") but that causes the list to take up more width
    {"text":"black","background":"white",
-    "translucent_background_compromise":"rgba(255,255,255,0.3)",
+    "translucent_background_compromise":"rgba(255,255,255,0.5)",
     "headings":"#404040","link":"#0000FF",
     "hover":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
@@ -333,7 +333,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     
     "*filter":"none","*-webkit-filter":"none","*-moz-filter":"none","*-o-filter":"none","*-ms-filter":"none",
     "*opacity":"1",
-    "*-moz-opacity":"1",
     "*mask-image":"none","*-webkit-mask-image":"none",
     
     "-moz-appearance":"none", # DON'T * this, it can lead to white-on-white situations so we need it for colour changes not just size changes
@@ -587,10 +586,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if not colour["background"]=="white": css["body.mediawiki img.tex"]["border"]="white solid 3px" # to make sure letters near the edge are readable if the rest of the page has a dark background
   
   if "image_opacity" in colour.keys():
-    del css["img"]["*opacity"],css["img"]["*-moz-opacity"],css["img"]["*filter"]
-    css["img"]["opacity"]=css["img"]["-moz-opacity"]="%g" % colour["image_opacity"]
+    del css["img"]["*opacity"],css["img"]["*filter"]
+    css["img"]["opacity"]="%g" % colour["image_opacity"]
     css["img"]["filter"]="alpha(opacity=%d)" % int(colour["image_opacity"]*100) # for IE8 and below
-    if colour["image_opacity"]<0.9: css["img:hover"] = css["a:hover img"]={"opacity":"0.9","-moz-opacity":"0.9","filter":"alpha(opacity=90)"}
+    if colour["image_opacity"]<0.9: css["img:hover"] = css["a:hover img"]={"opacity":"0.9","filter":"alpha(opacity=90)"}
   
   css["button"]["background"]=colour["button"]
   printButtonBackground = "#e0e0e0" # light grey, TODO: option
@@ -700,7 +699,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # and if we're doing that, we might as well use the full width:
     css["iframe"]["*width"]="100%"
     # The following may help a little as well: make iframes 50% transparent so at least we can see what's under them if they do overprint (depends on the browser and the site; apparently the IFRAME's height can be treated as close to 0 when it's not) (fixed? keeping this anyway just in case)
-    css["iframe"].update({"*filter":"alpha(opacity=50)","*opacity":"0.5","*-moz-opacity":"0.5"})
+    css["iframe"].update({"*filter":"alpha(opacity=50)","*opacity":"0.5"})
 
   # float exceptions for img align=left and align=right (might as well)
   css["img[align=left]"]={"*float":"left"}
@@ -1240,7 +1239,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div#mailboxcontainer > div#folderlist-content ul#mailboxlist > li.mailbox"]={"*display":"inline","*border":"none"} # in case you have a lot of folders (seeing as they're displayed on every screen)
   css["div#mailview-bottom > div#mailpreviewframe > iframe#messagecontframe,body.home > div.container > header#globalMasthead + div.clear + header#localMasthead + div.clear + div#frameStore > iframe,body.back > #content > iframe#ifraResult,body.detailhost > table#detable td#drifdiv > iframe#drif"]={ # 'body.home' etc is for search.lib.cam.ac.uk
       "*height":"25em","*overflow":"visible", # hopefully one of those will work
-      "*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+      "*filter":"none","*opacity":"1"}
   css["body.detailhost > table#detable,body.detailhost > table#detable td#drifdiv"]={"*width":"100%"} # also for search.lib.cam.ac.uk
   css["a#composeoptionstoggle > span.iconlink[title=\"Options\"]:empty:after"]={"content":'"Options"'}
   # Blackwells article feedback:
@@ -1248,11 +1247,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("a[title=\"No\"]","No",css,printOverride,colour)
   # Hacks for eBay:
   css['td#storeHeader']={"*width":"30%"}
-  css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1","*-moz-opacity":"1"}
+  css['td#storeHeader + td.ds-dtd iframe']={"*height":"15em","*filter":"none","*opacity":"1"}
   css['a#gh-la > img#gh-logo']={"*display":"none"} # sorry but it's too big and causes too much horizontal scrolling
   css['div#main + div#spinner > div.spinWrap > p.loader:empty']={'*display':'none'} # Energenie/Sagepay+Paypal 2014-10: please don't spin that line all over the screen and give me a seizure (TODO: would be nice to inspect their scripts to figure out which CSS attributes they were using and consider turning these off globally, but this might require another purchase; the site has timeouts so you can't hang around for too long inspecting how it works)
   # Hacks for LycaMobile online top-up (2014):
-  css['iframe[style="height: 1024px;"]']={"*height":"50em","*filter":"none","*opacity":"1","*-moz-opacity":"1"} # (some versions of Firefox can't turn off their misguided scrolling="no" markup AND can't access a context menu to open frame in new tab, so I hope height=50em will be enough; TODO: overflow-y within the iframe like the Twitter-embedded hack below?)
+  css['iframe[style="height: 1024px;"]']={"*height":"50em","*filter":"none","*opacity":"1"} # (some versions of Firefox can't turn off their misguided scrolling="no" markup AND can't access a context menu to open frame in new tab, so I hope height=50em will be enough; TODO: overflow-y within the iframe like the Twitter-embedded hack below?)
   # Hacks for LinkedIn:
   css['div#post-module > div.post-module-in > form#slideshare-upload-form, div#post-module > div.post-module-in > div#slideshare-upload-callout']={'*display':'none'} # can't get it to work, and a non-working form is just clutter
   css['iframe[src^="https://www.linkedin.com/csp/ads"],iframe[src^="https://ad-emea.doubleclick.net"]']={'*display':'none'} # sorry LinkedIn but they're getting really too cluttered for giant-print navigation
@@ -1278,7 +1277,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['button.smp__blocklink div.smp__overlay div.smp__message div.smp__cta span.smp__messagetext']={"background":colour["button"],"border":"red solid","margin":"1em"} # 2018 "listen now" button (easy to miss)
   css['div#msi-modal div.msi-modal__body div.msi-modal__wrap']={"position":"fixed","top":"0px","z-index":"999","border":"solid magenta"} # 2018 sign-in box (don't miss this or nothing works)
   css['button.p_iplayerIcon span.p_hiddenElement']={"display":"block","background":colour["button"],"border":"red solid","margin":"1em"} # and the button once you've signed in (don't hide this please!)
-  css['div.episode-playout div.smp iframe']={"overflow-y":"auto","height":"9em","*filter":"none","*opacity":"1","*-moz-opacity":"1"} # more space please so we can see the button
+  css['div.episode-playout div.smp iframe']={"overflow-y":"auto","height":"9em","*filter":"none","*opacity":"1"} # more space please so we can see the button
 
   # alternative to <wbr/> :
   css['div#regionMain > div.wrapper #content div#article > article p span.wd.refID, div#regionMain > div.wrapper #content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper #content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
@@ -1391,6 +1390,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["body.web div#app div.two > div:first-child + div"]={"display":"none"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
     css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
     css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
+    css['span[aria-label~="Delivered"] > svg']={"opacity":"0.5"}
+    css['span[aria-label~="Read"] > svg']={"border":"thin blue solid"}
     css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
     css['pre#editArea']={"border":"thin solid white"} # WeChat
     # Confluence:
@@ -1438,8 +1439,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Glint employment surveys on size=unchanged: make checkboxes visible please
   css['body.questionnairePage input[type="checkbox"].question']={'**opacity':'1','**position':'static','**width':'auto','**height':'auto'}
-
-  css['body#page-mod-wiki-view > svg#acc-colour-overlay:empty']={'**display':'none'} # Moodle at size=unchanged: overlay obscuring entire page when background set
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
@@ -1613,6 +1612,7 @@ def printCss(css,outfile,debugStopAfter,pixelSize):
         ("transform","-moz-transform"),
         ("transform","-webkit-transform"),
         ("transform","-o-transform"),
+        ("opacity","-moz-opacity"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
       if master in attribValDict.keys() and not alias in attribValDict.keys(): attribValDict[alias]=attribValDict[master]
     if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: None when -webkit-appearance is set for a checkbox etc
