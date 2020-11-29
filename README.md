@@ -196,6 +196,7 @@ Opera menu / Settings / Preferences / Advanced / Content / Style options / My st
 
 **Otter:** Go to Tools / Preferences / Advanced / Content / User style sheet
 and type in the full path or Browse to it.
+Not yet working if you're using the newer QtWebEngine instead of QtWebKit.
 
 **OLPC browser:**
 Save the file as `~/.sugar/default/gecko/user-stylesheet.css` and
