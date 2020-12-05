@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9921"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9922"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -346,6 +346,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*flex-wrap":"wrap", # needed for giant print or small windows
     "*grid-column-start":"auto","*grid-column-end":"auto","*grid-row-start":"auto","*grid-row-end":"auto",
     "*grid-auto-columns":"auto","*grid-auto-rows":"auto","*grid-auto-flow":"row",
+    "*grid-template-columns":"none","*grid-template-rows":"none",
     "*justify-content":"flex-start","*align-items":"flex-start","*align-content":"flex-start","*align-self":"flex-start", # hopefully makes things more findable
     "*flex-basis":"auto", # giant print or small windows can cause long words to overflow 'flex' layouts that specify small pixel widths
     "*flex":"0 1 auto", # may prevent margin overflow
