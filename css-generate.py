@@ -686,6 +686,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   del css[xmlKey]["*text-decoration"] # because this CSS won't be able to put it back in for links (since it doesn't know which elements ARE links in arbitrary XML)
   # Exception to above for Mozilla scrollbars:
   css[":root:not(HTML):not(page):not(svg) slider:not(:empty)"]={"background":"#301090"}
+  # and Firefox icons:
+  css[":root:not(HTML) *"]={"-moz-context-properties":"fill,fill-opacity","fill":colour["link"],"fill-opacity":"1"}
 
   checkbox_scale = int(pixelSize/16)
   for iType in ["checkbox","radio"]:
