@@ -1445,7 +1445,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body#page-mod-wiki-view > svg#acc-colour-overlay:empty']={'**display':'none'} # Moodle at size=unchanged: overlay obscuring entire page when background set
 
-  css['iframe[title^="recaptcha"]']={'*height':'200em','overflow':'visible','*filter':'none','*opacity':'1'} # TODO: can we somehow override their non-scrollable nonsense?  they do use IMG SRC so we might be able to get it to work.  Test on https://www.google.com/recaptcha/api2/demo
+  # Recaptcha:
+  css['iframe[title^="recaptcha"]']={'*height':'200em','overflow':'visible','*filter':'none','*opacity':'1'}
+  css['img[style^="top:-100%"]']={'*top':'-100%'}
+  css['img[style^="top:100%"]']={'*top':'100%'}
+  css['img[style^="left:-100%"]']={'*left':'-100%'}
+  css['img[style^="left:100%"]']={'*left':'100%'}
+  css['table.rc-imageselect-table-33']={'*max-width':'100%'}
+  css['table.rc-imageselect-table-33 td.rc-imageselect-tile']={'*max-width':'33%'}
+  # test on https://www.google.com/recaptcha/api2/demo
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
