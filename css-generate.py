@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-20.  Version 0.9922"
+prog="Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9923"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -1015,7 +1015,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[jumpjsTooltip+","+jjc+"div#message,"+jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"border":"thin solid "+colour["italic"]}
   for lr in ['Left','Right']: css["div.nav > div.resultNavControls > ul > li.resultNav"+lr+"Disabled"]={'display':'none'}
   if pixelSize:
-      css[jumpjsTooltip]={"position":"absolute","z-index":"9"}
+      css[jumpjsTooltip]={"position":"absolute","z-index":"9","max-width":"20em","left":"1em"}
       css[jjc+"div#toolbarFrame div#standardSearch > form.searchForm > div.suggestions"]={"position":"fixed","z-index":"9"}
       css[jumpjsTooltip+" p,"+jumpjsTooltip+" div.par"]={"margin":"0px","padding":"0px"}
       css["div.document > div.par > p.sl,div.document > div.par > p.sz"]={"margin":"0px","padding":"0px"}
