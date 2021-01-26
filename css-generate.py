@@ -1101,6 +1101,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,colour,isInsideRealLink=True)
   css["a:empty"]={"**background":"transparent"} # might be position:absolute over the top of something
   css["a:empty:hover"]={"**opacity":"0.5"}
+  css["div#react-root,div#react-root div"]={"**background":"transparent"} # e.g. Twitter video posts 2021 (dozens of nested divs with video positioned underneath), this line does not completely fix but at least makes them more visible
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
@@ -1231,6 +1232,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.md-skin div#wrapper div.shifts-wrapper div.day-wrapper > button.shift + div.separator']={'*display':'none'}
   css['body.md-skin div#wrapper div.shifts-wrapper div#shiftModal img']={'*max-width':'100%','*max-height':'9em'}
 
+  css['body#ChapterPage a.jsHasModalListener']={'color':colour['link']}
+  printOverride['body#ChapterPage a.jsHasModalListener']={'color':'black'}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']={'color':colour['link']}
   css['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':colour['visited'],'border':'thin red solid'}
   printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem']=printOverride['div#secondaryNav div#documentNavigation ul.navigationTabs li.tabItem.active']={'color':'#000080'}
