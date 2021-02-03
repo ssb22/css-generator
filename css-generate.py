@@ -945,6 +945,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.diff-content td.line_content span.cp'] = shl_preproc
   css['div.diff-content td.line_content span.c1'] = shl_comment
   css['div.diff-content td.line_content span.c'] = shl_comment
+  css['div.diff-content td.line_content span.cm'] = shl_comment
   css['devsite-code span.com'] = shl_comment
   css['devsite-code span.kwd'] = shl_keyword
   css['devsite-code span.typ'] = shl_varname
