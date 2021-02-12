@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9923"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9924"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -857,6 +857,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip,body.mediawiki .rt-tooltip, ul.ui-autocomplete, body.mediawiki div.mwe-popups']={"*position":"absolute","border":"blue solid","**background":colour["background"]}
   css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
   css["body.mediawiki div.mwe-popups a.mwe-popups-extract"]={"text-decoration":"none","color":colour["text"]} # don't underline if they present it as a very long link
+  css["body.mediawiki div.mwe-popups-container footer"]={"display":"none"} # 2021-02: this popup footer doesn't show on our colour schemes anyway, and it's a setting to disable the popups taking screen space away from them, bad in large print
   # and the map pins (TODO: this is still only approximate! pins tend to be a bit too far to the south-west; not sure why) :
   css['body.mediawiki table tr div[style^="position:absolute"]']={"*position":"absolute","background-color":"transparent"}
   css['body.mediawiki table tr div[style^="position:relative"]']={"*position":"relative","*display":"inline-block","**background":colour["background"]} # inline-block needed because the percentage positioning of the 'absolute' pin div depends on the map div's width being set to that of the map (done on-site by hard-coding, but we would have to special-case it for every possible map width; inline-block is a workaround)
@@ -1121,6 +1122,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Hack for some other sites that put nothing inside software download links:
   emptyLink("div.jsDropdownMenu.downloadDropdown > a.secondaryButton.dropdownHandle > span.buttonIcon.download","Download",css,printOverride,colour,False)
   emptyLink("a.shareButton > span",None,css,printOverride,colour,False,True);emptyLink("div.standardModal-content > div.itemInfoContainer > div.itemFinderLink > a.copyLink[title=\"Copy Link\"] > span","Copy Link",css,printOverride,colour,False);css["div.itemInfoContainer > div.itemFinderLink, div.itemFinderLink > div.shareLinkContainer,input.shareLink[readonly],div.itemFinderLink > div.shareLinkContainer > input.shareLink"]={"*width":"100%"}
+  emptyLink("div#regionHeader + span#contextMenu > span#playSelectedButton span.icon","Play",css,printOverride,colour,False)
+  emptyLink("div#regionHeader + span#contextMenu > span#shareContextButton span.icon","Share",css,printOverride,colour,False)
+  emptyLink("div#regionHeader + span#contextMenu > span#shareCopyWithCaptionButton span.icon","Copy",css,printOverride,colour,False)
   emptyLink("a[title~=download]","Download",css,printOverride,colour)
   # and more for audio players:
   emptyLink("div.audioFormat > a.stream","Stream",css,printOverride,colour)
