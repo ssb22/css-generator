@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9924"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9925"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -828,7 +828,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if pixelSize: css["td.fm-num-frac,td.fm-den-frac"] = {"text-align":"center"}
   # Partial hack for MathJax:  (I wish webmasters would use
   # jqMath, which is easier on user CSS, instead)
-  # NB we use div.MathJax_Display here but it's expanded to inline MathJax in printCss
+  # NB we use div.MathJax_Display here but it's expanded to inline MathJax in outCss
   if pixelSize:
     css["div.MathJax_Display span.mfrac,span.MathJax span.mfrac"]={"display":"inline-table","vertical-align":"middle","padding":"0.5ex"}
     css["div.MathJax_Display span.mfrac > span > span,span.MathJax span.mfrac > span > span"]={"display":"table-row-group","text-align":"center"}
@@ -1103,7 +1103,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,colour,isInsideRealLink=True)
   css["a:empty"]={"**background":"transparent"} # might be position:absolute over the top of something
   css["a:empty:hover"]={"**opacity":"0.5"}
-  css["div#react-root,div#react-root div"]={"**background":"transparent"} # e.g. Twitter video posts 2021 (dozens of nested divs with video positioned underneath), this line does not completely fix but at least makes them more visible
+  css['div.videocontrols[role="none"], div.videocontrols[role="none"] div#controlsContainer, div.videocontrols[role="none"] div#controlsContainer div']={"**background":"transparent"} # Firefox e.g. v85 (see toolkit/content/widgets/videocontrols.js, hidden by DOM Inspector)
+  css["div#react-root,div#react-root div"]={"**background":"transparent"} # e.g. Twitter video posts 2021 (dozens of nested divs with video positioned underneath)
+  css["div.campl-row, div.campl-row > div.campl-wrap, div.campl-wrap > div#content, div#content > div.campl-content-container"]={"**background":"transparent"} # similarly for Panopto(?) lecture platform used by cl.cam
+  css["body.player-v2.v2ui div, body > div.mwPlayerContainer, body > div.mwPlayerContainer div"]={"**background":"transparent"} # and Kaltura videos (used by Oracle)
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
@@ -1525,7 +1528,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 */\n""")
 
   cssRef = dict([(x,y.copy()) for x,y in css.items()])
-  ret = printCss(css,outfile,debugStopAfter,pixelSize)
+  ret = outCss(css,outfile,debugStopAfter,pixelSize)
   css = cssRef
 
   outfile.write("""@media print {
@@ -1541,7 +1544,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 """)
   # (PocketIE7 also has a habit of displaying the page with a white background while rendering, and applying the CSS's colours only afterwards, even if the CSS is in cache.  PocketIE6 did not do this.  See cssHtmlAttrs option in Web Adjuster for a possible workaround.)
   screen_ReOverride = dict([(x,y.copy()) for x,y in printOverride.items()])
-  printCss(printOverride,outfile,0,pixelSize)
+  outCss(printOverride,outfile,0,pixelSize)
   del printOverride
   # and the above-mentioned second override for IE7, Midori etc :
   outfile.write("} @media tv,handheld,screen,projection {\n")
@@ -1554,7 +1557,14 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
         assert attr in ['color','background','background-color','*font-size'], attr+" not identical in "+k
         screen_ReOverride[k][attr] = css[k][attr]
     if not screen_ReOverride[k]: del screen_ReOverride[k]
-  printCss(screen_ReOverride,outfile,0,pixelSize)
+  for k in list(css.keys()):
+    for attr in list(css[k].keys()):
+      if css[k][attr]=="transparent":
+        # need to re-override exceptions after we re-override main div
+        if not k in screen_ReOverride: screen_ReOverride[k] = {}
+        elif attr in screen_ReOverride[k]: continue
+        screen_ReOverride[k][attr] = css[k][attr]
+  outCss(screen_ReOverride,outfile,0,pixelSize)
   # Browser-specific screen overrides:
   webkitScreenOverride.update(webkitGeckoScreenOverride)
   webkitScreenOverride.update(webkitMsieScreenOverride)
@@ -1571,7 +1581,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
   ]:
     if d or not doneWebkit:
       outfile.write("} @media "+mediaHack+" {\n")
-      printCss(d,outfile,0,pixelSize)
+      outCss(d,outfile,0,pixelSize)
       if not doneWebkit:
         outfile.write("::-webkit-input-placeholder { -webkit-text-fill-color: "+colour["form_disabled"]+" !important; }\n") # bug workaround for Safari 10's Webkit (not present on Safari 6 etc): -webkit-text-fill-color in a DIV element overrides that in ::-webkit-input-placeholder, so better re-specify here (making sure it's at the end)
         doneWebkit=1
@@ -1609,7 +1619,7 @@ def debug_binary_chop(items,chop_results,problem_start=0,problem_end=-1):
 try: from textwrap import fill
 except:
   def fill(x,*args,**kwargs): return x
-def printCss(css,outfile,debugStopAfter,pixelSize):
+def outCss(css,outfile,debugStopAfter,pixelSize):
   # Remove '*' as necessary
   for el in list(css.keys()):
     for prop,value in list(css[el].items()):
