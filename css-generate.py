@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9925"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9926"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -91,15 +91,15 @@ colour_schemes_to_generate = [
    {"text":"yellow","background":"black",
     "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#8080FF","link":"#00FF00",
-    "hover":"#0000C0","visited":"#00FFFF",
+    "hover-bkg":"#0000C0","visited":"#00FFFF",
     "bold":"#FFFF80","italic":"white",
     "coloured":"pink", # used for text inside any FONT COLOR= markup
-    "button":"#600040",
-    "selectbox":"#600060",
-    "reset_button":"#400060",
+    "button-bkg":"#600040",
+    "select-bkg":"#600060",
+    "reset-bkg":"#400060",
     "form_disabled":"#404040", # GrayText requires CSS 2.1
-    "selection":"#006080", # (if supported by the browser. BEWARE: Some browsers, e.g. Safari 6, will NOT display this exact colour, but a computed medium mid-way between it and the unselected background; you should therefore ensure that other backgrounds (e.g. highlight) are discernable against those 'computed medium' colours as well)
-    "highlight":"#300030", # (misc non-selection highlights in site-specific hacks)
+    "selection-bkg":"#006080", # (if supported by the browser. BEWARE: Some browsers, e.g. Safari 6, will NOT display this exact colour, but a computed medium mid-way between it and the unselected background; you should therefore ensure that other backgrounds (e.g. highlight) are discernable against those 'computed medium' colours as well)
+    "highlight-bkg":"#300030", # (misc non-selection highlights in site-specific hacks)
     "image_transparency_compromise":"#808000" # non-black and non-white background for transparent images, so at least stand a chance of seeing transparent imgs that were meant for white bkg (or black bkg)
     }),
   
@@ -107,15 +107,15 @@ colour_schemes_to_generate = [
    {"text":"#00FF00","background":"black",
     "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#40C080","link":"#008AFF",
-    "hover":"#400000","visited":"#00FFFF",
+    "hover-bkg":"#400000","visited":"#00FFFF",
     "bold":"#80FF80","italic":"white",
-    "button":"#600040",
-    "selectbox":"#600060",
+    "button-bkg":"#600040",
+    "select-bkg":"#600060",
     "coloured":"#80C040",
-    "reset_button":"#400060",
+    "reset-bkg":"#400060",
     "form_disabled":"#404040",
-    "selection":"#4000c0",
-    "highlight":"#003050",
+    "selection-bkg":"#4000c0",
+    "highlight-bkg":"#003050",
     "image_transparency_compromise":"#808000"
     }),
   
@@ -123,15 +123,15 @@ colour_schemes_to_generate = [
    {"text":"white","background":"black",
     "translucent_background_compromise":"rgba(0,0,0,0.5)",
     "headings":"#40C090","link":"#0080FF",
-    "hover":"#400000","visited":"#00FFFF",
+    "hover-bkg":"#400000","visited":"#00FFFF",
     "bold":"yellow","italic":"#FFFF80",
-    "button":"#600040",
-    "selectbox":"#600060",
+    "button-bkg":"#600040",
+    "select-bkg":"#600060",
     "coloured":"#FFFF40",
-    "reset_button":"#400060",
+    "reset-bkg":"#400060",
     "form_disabled":"#404040",
-    "selection":"#4080c0",
-    "highlight":"#003050",
+    "selection-bkg":"#4080c0",
+    "highlight-bkg":"#003050",
     "image_transparency_compromise":"#808080"
     }),
   
@@ -140,15 +140,15 @@ colour_schemes_to_generate = [
     "translucent_background_compromise":"rgba(56,56,56,0.5)",
     "alt-backgrounds":["#333333","#2E2E2E"], # optional
     "headings":"#40C090","link":"#BDB76B",
-    "hover":"#453436","visited":"#B6AA7B",
+    "hover-bkg":"#453436","visited":"#B6AA7B",
     "bold":"#CD853F","italic":"#EFEFCF",
-    "button":"#553030",
-    "selectbox":"#603440",                              
+    "button-bkg":"#553030",
+    "select-bkg":"#603440",                              
     "coloured":"#E0E040",
-    "reset_button":"#303055",
+    "reset-bkg":"#303055",
     "form_disabled":"#555753",
-    "selection":"#5f5f5f",
-    "highlight":"#2e3050",
+    "selection-bkg":"#5f5f5f",
+    "highlight-bkg":"#2e3050",
     "focusOutlineStyle":"solid #006080",
     "image_opacity":0.8,
     "image_transparency_compromise":"#2e3436"
@@ -158,14 +158,14 @@ colour_schemes_to_generate = [
    {"text":"black","background":"#faf0e6",
     "translucent_background_compromise":"rgba(250,240,230,0.5)",
     "headings":"#404040","link":"#0000FF",
-    "hover":"#80C0C0","visited":"#008020",
+    "hover-bkg":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
-    "button":"#608040",
-    "selectbox":"#608060",
+    "button-bkg":"#608040",
+    "select-bkg":"#608060",
     "coloured":"#001040",
-    "reset_button":"#408060",
+    "reset-bkg":"#408060",
     "form_disabled":"#A0A0A0",
-    "highlight":"#FFFFE6",
+    "highlight-bkg":"#FFFFE6",
     "image_transparency_compromise":"#faf0e6"
     }),
   
@@ -173,14 +173,14 @@ colour_schemes_to_generate = [
    {"text":"black","background":"white",
     "translucent_background_compromise":"rgba(255,255,255,0.5)",
     "headings":"#404040","link":"#0000FF",
-    "hover":"#80C0C0","visited":"#008020",
+    "hover-bkg":"#80C0C0","visited":"#008020",
     "bold":"black","italic":"#400000",
-    "button":"#608040",
-    "selectbox":"#608060",
+    "button-bkg":"#608040",
+    "select-bkg":"#608060",
     "coloured":"#001040",
-    "reset_button":"#408060",
+    "reset-bkg":"#408060",
     "form_disabled":"#A0A0A0",
-    "highlight":"#FFFF80",
+    "highlight-bkg":"#FFFF80",
     "image_transparency_compromise":"white"
     }),
   ]
@@ -513,7 +513,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
                  ]:
       css["a"+lType+" "+linkInside]={"color":colour["link"],"text-decoration":"underline","cursor":"pointer"}
       printOverride["a"+lType+" "+linkInside]={"color":"#000080"} # printing: links in blue might be useful for sending PDFs to others, but make it a dark blue so still readable if printed in black and white (don't try to ensure page is ALWAYS black and white: that can't be done w/out suppressing images.  User needs to suppress colour at print time.  But ensure legible choice of shading when that happens.)
-      css["a"+lType+":hover "+linkInside]={"background":colour["hover"]}
+      css["a"+lType+":hover "+linkInside]={"background":colour["hover-bkg"]}
       css["a"+lType+":active "+linkInside]={"color":"red","text-decoration":"underline","cursor":"pointer"}
       if linkInside in ["b","i","em","u","strong"] and not css[linkInside]["color"]==colour["text"]: css["a"+lType+" "+linkInside]["color"]=css[linkInside]["color"]
     css["a:visited "+linkInside]["color"]=colour["visited"]
@@ -592,18 +592,18 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["img"]["filter"]="alpha(opacity=%d)" % int(colour["image_opacity"]*100) # for IE8 and below
     if colour["image_opacity"]<0.9: css["img:hover"] = css["a:hover img"]={"opacity":"0.9","filter":"alpha(opacity=90)"}
   
-  css["button"]["background"]=colour["button"]
+  css["button"]["background"]=colour["button-bkg"]
   printButtonBackground = "#e0e0e0" # light grey, TODO: option
   printOverride["button"]["background"]=printButtonBackground
-  css['div[role="button"]']={"background":colour["button"]} # for Gmail 2012-07 on "standard" view (rather than "basic HTML" view).  "Standard" view might work for people who want the "unchanged" size.
+  css['div[role="button"]']={"background":colour["button-bkg"]} # for Gmail 2012-07 on "standard" view (rather than "basic HTML" view).  "Standard" view might work for people who want the "unchanged" size.
   printOverride['div[role="button"]']={"background":printButtonBackground}
   if "alt-backgrounds" in colour.keys():
     # override specificity of alt-backgrounds div:nth-child
     css['html body div[role="button"]'] = css['div[role="button"]']
     printOverride['html body div[role="button"]'] = {"background":printButtonBackground}
-  css["input[type=submit]"]={"background":colour["button"]}
-  css["input[type=button]"]={"background":colour["button"]}
-  css["input[type=reset]"]={"background":colour["reset_button"]}
+  css["input[type=submit]"]={"background":colour["button-bkg"]}
+  css["input[type=button]"]={"background":colour["button-bkg"]}
+  css["input[type=reset]"]={"background":colour["reset-bkg"]}
   printOverride["input[type=submit]"]={"background":printButtonBackground}
   printOverride["input[type=button]"]={"background":printButtonBackground}
   printOverride["input[type=reset]"]={"background":printButtonBackground}
@@ -619,8 +619,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       css[exclude_ie_below_9+"a"+l+":before"]={"content":'"["',"color":colour["text"],"text-decoration":"none","white-space":"nowrap"}
       css[exclude_ie_below_9+"a"+l+":after"]={"content":'"]"',"color":colour["text"],"text-decoration":"none","white-space":"nowrap"}
       # make sure the hover colour includes :before and :after - this is needed if the :before/:after text is changed by site-specific hacks etc (to cope with empty links)
-      css[exclude_ie_below_9+"a"+l+":hover:before"]={"background":colour["hover"]}
-      css[exclude_ie_below_9+"a"+l+":hover:after"]={"background":colour["hover"]}
+      css[exclude_ie_below_9+"a"+l+":hover:before"]={"background":colour["hover-bkg"]}
+      css[exclude_ie_below_9+"a"+l+":hover:after"]={"background":colour["hover-bkg"]}
       printOverride[exclude_ie_below_9+"a"+l+":before"]={"color":"black"} # TODO: option to delete the "[" "]" content also?
       printOverride[exclude_ie_below_9+"a"+l+":after"]={"color":"black"}
       
@@ -709,16 +709,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["img[align=right]"]={"*float":"right"}
     
   # Selection (CSS3)
-  if "selection" in colour.keys():
-    css["::selection"] = {"background":colour["selection"]}
-    css["::-moz-selection"] = {"background":colour["selection"]}
+  if "selection-bkg" in colour.keys():
+    css["::selection"] = {"background":colour["selection-bkg"]}
+    css["::-moz-selection"] = {"background":colour["selection-bkg"]}
 
   css['input[type=search]'] = {"-webkit-appearance":"textfield"} # searchbox forces background:white which may conflict with our foreground
   if browser_is_Firefox_73: css['input[type=search]']['-webkit-appearance'] += ' !important; -moz-appearance: none'
   
   css['select']['-webkit-appearance']='listbox' # workaround for Midori Ubuntu bug 1024783
   css['select']['-webkit-appearance'] += ' !important; -moz-appearance: none' # even if not browser_is_Firefox_73
-  css['select']['background']=colour['selectbox']
+  css['select']['background']=colour["select-bkg"]
   printOverride['select']['background']=printButtonBackground # TODO: or something else?
 
   if "alt-backgrounds" in colour.keys():
@@ -793,7 +793,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
         css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
       for ll in ["",":before",":after"]:
         if undo: css[exclude_ie_below_9+key+":hover"+ll]={"background":"transparent"}
-        else: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover"]}
+        else: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover-bkg"]}
       printOverride[key] = {"color":"#000080"}
 
   css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
@@ -806,8 +806,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.gb_tc.gb_uc.gb_Vb:empty,div.gb_uc.gb_vc.gb_Wb:empty,span.gb_0a:empty']={"*display":"none"} # TODO: if gb = Great Britain then we might need to rewrite this to cover other countries.  The div has a :before rule with image content, takes up lots of screen space and is not functional. (2016-10)
   css['div.sbibtd > div#sfdiv.sbibod > button.sbico-c > span.sbico._wtf._Qtf']={"*display":"none"}
   css['table.gssb_c[style~="absolute;"]']={"*position":"absolute"}
-  for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
-  css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight"]} # suggestions cursor 2015-04
+  for leaf in ['td','span','a','b']: css['table.gssb_c tr.gssb_i '+leaf]={"background":colour["highlight-bkg"]} # TODO: be more specific by saying gssb_c[style~="absolute;"] again ?
+  css['div.sbtc div.sbsb_a li.sbsb_d div']={"background":colour["highlight-bkg"]} # suggestions cursor 2015-04
   css['a#logo > img[src="/images/nav_logo195.png"]']={"*display":"none"}
   css['div#main div#cnt div#rcnt div.col div#ifb div.rg_meta,div#main div#cnt div#rcnt div.col div#ifb div.rg_bb_i div.rg_bb_i_meta']={"*display":"none"} # image search
   css['div#mngb > div#gb > div.gb_Sb,body#gsr.srp > div#mngb']={"*display":"none"} # other graphical clutter they added 2014-09 and 2014-10
@@ -871,9 +871,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Syntax highlighting of code on various platforms:
   shl_keyword = {"color":colour["italic"]}
   shl_varname = {"color":colour["bold"]}
-  shl_comment = {"color":colour["coloured"]}
+  shl_comment = {"color":colour["italic"],"opacity":"0.7"}
   shl_preproc = {"color":colour["headings"]}
-  shl_string = {"background":colour["highlight"]}
+  shl_string = {"background":colour["highlight-bkg"]}
   css['body.mediawiki .mw-highlight .k'] = shl_keyword # keyword
   css['pre > code > span.kwd'] = shl_keyword # StackOverflow keyword
   css['body.mediawiki .mw-highlight .kt'] = shl_keyword # keyword type
@@ -887,7 +887,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki .mw-highlight .cp']=shl_preproc # preprocessor
   css['body.mediawiki .mw-highlight .s']=shl_string # string
   css['pre > code > span.str'] = shl_string # StackOverflow string
-  css['body.mediawiki .mw-highlight .se']={"background":colour["highlight"],"color":colour["bold"]} # string escape character
+  css['body.mediawiki .mw-highlight .se']={"background":colour["highlight-bkg"],"color":colour["bold"]} # string escape character
   css['body.mediawiki .mw-highlight .cpf']=shl_string # #include parameter (treated like string in some editors)
   css['body.mediawiki .mw-highlight .lineno']={"color":colour["form_disabled"]}
   css['a.disabled > span.buttonText']={"color":colour["form_disabled"]}
@@ -942,6 +942,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.FileContents .u-pre span.str'] = shl_string
   css['div.diff-content td.line_content span.k'] = shl_keyword # GitLab merge-requests
   css['div.diff-content td.line_content span.n'] = shl_varname
+  css['div.diff-content td.line_content span.nt'] = shl_keyword
+  css['div.diff-content td.line_content span.ni'] = shl_preproc
+  css['div.diff-content td.line_content span.na'] = shl_varname
   css['div.diff-content td.line_content span.s'] = shl_string
   css['div.diff-content td.line_content span.cp'] = shl_preproc
   css['div.diff-content td.line_content span.c1'] = shl_comment
@@ -975,6 +978,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # and as that also matches GitLab diffs:
   css["tr.old td,tr td.old"]={"border-left":"thin solid "+colour["coloured"]}
   css["tr.old td,tr td.old"]={"border-right":"thin solid "+colour["coloured"]}
+  # and while we're at it:
+  css['div.diff-content td.line_content span.idiff'] = {"color":colour["coloured"]}
   # hack for (some versions of) phpBB
   css["ul.profile-icons li span"]={"*display":"inline"}
   # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
@@ -1079,9 +1084,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavRight"]={"margin":"0px"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavDoubleLeft > a > span:after"]={'content':'"<<- Backwd"','text-transform':'none'}
   css[exclude_ie_below_9+'div.resultNavControls > ul > li.resultNavDoubleRight > a > span:after']={'content':'"Fwd ->>"','text-transform':'none'}
-  css[jumpjsContent.replace(","," .hl,")+" .hl"]={"background":colour['highlight']}
+  css[jumpjsContent.replace(","," .hl,")+" .hl"]={"background":colour["highlight-bkg"]}
   printOverride[jumpjsContent.replace(","," .hl,")+" .hl"]={"background":'white'} # TODO: shade of grey?
-  css[jjc+"span.mk, "+jjc+"span.mk b"]={"background":colour["reset_button"]}
+  css[jjc+"span.mk, "+jjc+"span.mk b"]={"background":colour["reset-bkg"]}
   printOverride[jjc+"span.mk, "+jjc+"span.mk b"]={"background":"white"}
   css[jjc+"div.stdPullQuote"]={"border":css["aside"]["border"]}
   css['div.jsDownloadFileList ul.downloadItemSet > li.itemRow'] = { # confusion re is the Play button above or below the item: delineate them more clearly
@@ -1288,9 +1293,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['form[action^="https://ssl.bbc.co.uk"] > button.p-f-button']={'display':'none'} # doesn't work very well anyway and takes up too much room
   css['div[style^="background-image"] + img']={'**opacity':'1'} # Twitter embedded tweets with images at size=unchanged
   css['body#schedules-day div.programmes-page li#on-now']={"border":"blue solid"}
-  css['button.smp__blocklink div.smp__overlay div.smp__message div.smp__cta span.smp__messagetext']={"background":colour["button"],"border":"red solid","margin":"1em"} # 2018 "listen now" button (easy to miss)
+  css['button.smp__blocklink div.smp__overlay div.smp__message div.smp__cta span.smp__messagetext']={"background":colour["button-bkg"],"border":"red solid","margin":"1em"} # 2018 "listen now" button (easy to miss)
   css['div#msi-modal div.msi-modal__body div.msi-modal__wrap']={"position":"fixed","top":"0px","z-index":"999","border":"solid magenta"} # 2018 sign-in box (don't miss this or nothing works)
-  css['button.p_iplayerIcon span.p_hiddenElement']={"display":"block","background":colour["button"],"border":"red solid","margin":"1em"} # and the button once you've signed in (don't hide this please!)
+  css['button.p_iplayerIcon span.p_hiddenElement']={"display":"block","background":colour["button-bkg"],"border":"red solid","margin":"1em"} # and the button once you've signed in (don't hide this please!)
   css['div.episode-playout div.smp iframe']={"overflow-y":"auto","height":"9em","*filter":"none","*opacity":"1"} # more space please so we can see the button
 
   # alternative to <wbr/> :
@@ -1354,7 +1359,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   # Internet Archive:
   css["div#position > div#wbCalendar > div#calUnder.calPosition"]={"display":"none"}
-  css["a.year-label.activeHighlight:link"]={"background":colour['highlight']}
+  css["a.year-label.activeHighlight:link"]={"background":colour["highlight-bkg"]}
 
   # FontAwesome by Dave Gandy (used on some sites)
   # has accessibility options but these rules apply when they're not turned on:
