@@ -1442,6 +1442,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div > index, div > move, div > interrupt'] = defaultStyle.copy() # LiChess move list
     css['a.js-user-link > span.note-header-author-name']={"word-wrap":"normal"} # not break-word (Gitlab line comments on pull requests)
   
+  css['div[role="checkbox"]']={"border":"thin blue solid","width":"1em"} # airtable
+  
   css['div#htmlContent > title + div.container div.page svg path']={'display':'none'} # Cambridge University Press page backgrounds in books (best at 0px with browser zoom?)
 
   css['div.support-list li.stat-cell.n']={'border':'red solid'} # caniuse
