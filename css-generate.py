@@ -950,6 +950,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.diff-content td.line_content span.c1'] = shl_comment
   css['div.diff-content td.line_content span.c'] = shl_comment
   css['div.diff-content td.line_content span.cm'] = shl_comment
+  css['span.blob-code-inner > span.pl-ent'] = shl_varname
+  css['span.blob-code-inner > span.pl-kos'] = shl_preproc
+  css['span.blob-code-inner > span.pl-s1'] = shl_varname
+  css['span.blob-code-inner > span.pl-s'] = shl_string
+  css['span.blob-code-inner > span.pl-c'] = shl_comment
   css['devsite-code span.com'] = shl_comment
   css['devsite-code span.kwd'] = shl_keyword
   css['devsite-code span.typ'] = shl_varname
@@ -1108,6 +1113,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink('a[aria-label="home"] > span.icon',"Home",css,printOverride,colour,isInsideRealLink=True)
   css["a:empty"]={"**background":"transparent"} # might be position:absolute over the top of something
   css["a:empty:hover"]={"**opacity":"0.5"}
+  css["body > div#default-acx-overlay-container, html.hcfe body > div.modal-backdrop, body > div.content-background:empty"]={"**background":"transparent"} # Google Play Console
   css['div.videocontrols[role="none"], div.videocontrols[role="none"] div#controlsContainer, div.videocontrols[role="none"] div#controlsContainer div']={"**background":"transparent"} # Firefox e.g. v85 (see toolkit/content/widgets/videocontrols.js, hidden by DOM Inspector)
   css["div#react-root,div#react-root div"]={"**background":"transparent"} # e.g. Twitter video posts 2021 (dozens of nested divs with video positioned underneath)
   css["div.campl-row, div.campl-row > div.campl-wrap, div.campl-wrap > div#content, div#content > div.campl-content-container"]={"**background":"transparent"} # similarly for Panopto(?) lecture platform used by cl.cam
