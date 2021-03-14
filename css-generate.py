@@ -34,6 +34,7 @@
 # git clone https://bitbucket.org/ssb22/css-generator.git
 # or
 # svn co http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
+# or in China: git clone https://gitee.com/ssb22/css-generator
 
 # CONFIGURATION
 # -------------
