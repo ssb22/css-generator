@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9926"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9927"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -23,18 +23,10 @@
 # and on GitLab at https://gitlab.com/ssb22/css-generator
 # and on BitBucket https://bitbucket.org/ssb22/css-generator
 # and at https://gitlab.developers.cam.ac.uk/ssb22/css-generator
+# and in China: git clone https://gitee.com/ssb22/css-generator
 # as of v0.9782.  Versions prior to that were not kept, but
 # some were captured by Internet Archive at
 # https://web.archive.org/web/*/http://people.pwf.cam.ac.uk/ssb22/css/css-generate.py
-# To check out the repository, you can do:
-# git clone https://github.com/ssb22/css-generator.git
-# or
-# git clone https://gitlab.com/ssb22/css-generator.git
-# or
-# git clone https://bitbucket.org/ssb22/css-generator.git
-# or
-# svn co http://svn.code.sf.net/p/e-guidedog/code/ssb22/css-generator
-# or in China: git clone https://gitee.com/ssb22/css-generator
 
 # CONFIGURATION
 # -------------
@@ -714,8 +706,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["::selection"] = {"background":colour["selection-bkg"]}
     css["::-moz-selection"] = {"background":colour["selection-bkg"]}
 
-  css['input[type=search]'] = {"-webkit-appearance":"textfield"} # searchbox forces background:white which may conflict with our foreground
-  if browser_is_Firefox_73: css['input[type=search]']['-webkit-appearance'] += ' !important; -moz-appearance: none'
+  css['input[type=search]'] = {
+    "-webkit-appearance":"textfield", # searchbox forces background:white which may conflict with our foreground
+    }
+  css['input[type=search]']['-webkit-appearance'] += ' !important; -moz-appearance: none' # needed on both Firefox 73 and 86.  In Firefox 86 with -moz-appearance and -webkit-appearance textfield, specifying border-width 1px somehow makes all type=search fields white.  Not specifying border-width (but setting a border-radius) will still leave some type=search turning white, even when it's unclear the site itself is setting borders, so more must be at play here.  Setting appearance to none makes none of them white, even when border-width is set, and even when border-radius is not set.  -moz-appearance overrides -webkit-appearance only if specified after it.
   
   css['select']['-webkit-appearance']='listbox' # workaround for Midori Ubuntu bug 1024783
   css['select']['-webkit-appearance'] += ' !important; -moz-appearance: none' # even if not browser_is_Firefox_73
@@ -1662,9 +1656,15 @@ def outCss(css,outfile,debugStopAfter,pixelSize):
         ("opacity","-moz-opacity"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
       if master in attribValDict.keys() and not alias in attribValDict.keys(): attribValDict[alias]=attribValDict[master]
-    if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: None when -webkit-appearance is set for a checkbox etc
+    if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: none when -webkit-appearance is set for a checkbox etc
       if "-webkit-appearance" in attribValDict.keys() and not attribValDict["-webkit-appearance"]=='listbox': # (Firefox 74 forces white background if -moz-appearance listbox, must set -moz-appearance=none for that as done above, just not for checkboxes etc)
-        attribValDict["-moz-appearance"]=attribValDict["-webkit-appearance"]
+        if "-moz-appearance" in attribValDict["-webkit-appearance"]:
+          # it's there to ensure it comes after webkit, so delete any other at
+          # same level and we're done
+          if "-moz-appearance" in attribValDict.keys():
+            del attribValDict["-moz-appearance"]
+        else: # override 'none' coming from anywhere
+          attribValDict["-moz-appearance"]=attribValDict["-webkit-appearance"]
     # end of adding aliases
     for i in list(attribValDict.items()):
       rDic.setdefault(i,[]).append(elem.strip())
