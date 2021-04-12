@@ -59,14 +59,14 @@ how to choose a size without constantly re-experimenting:
       size" on the screen of a wordprocessor or similar, because that
       might not be calibrated correctly.
 
-2. Let P be your on-screen point size, H and V be the horizontal and
-   vertical resolution of your monitor, and D be its size in inches
+2. Let `P` be your on-screen point size, `H` and `V` be the horizontal and
+   vertical resolution of your monitor, and `D` be its size in inches
    (measure across the diagonal if you don't know, and if you're on an
    old CRT monitor then you should subtract about an inch from the
    rated figure whereas TFT monitors' figures are OK as they are).
-   Your pixel size is the square root of (H*H + V*V), divided by D,
-   multiplied by P and divided by 72.  (If your monitor has the old
-   standard 4x3 aspect ratio then this simplifies to P*V/D * 5/216.)
+   Your pixel size is the square root of `(H*H + V*V)`, divided by `D`,
+   multiplied by `P` and divided by 72.  (If your monitor has the old
+   standard 4x3 aspect ratio then this simplifies to `P*V/D * 5/216`.)
 
 3. With some browsers, you'll need to divide this by the browser's
    value of `window.devicePixelRatio`
@@ -145,8 +145,8 @@ CSS code, and press "Save"; it applies to newly-loaded pages.
     (`chrome://flags/#enable-force-dark`) instead of using this CSS
     
     * If you can't use recent Chrome with dark mode then you might get
-      better results with other browsers---if Firefox is too much for
-      an old PC then try Midori
+      better results with other browsers.  If Firefox is too much for
+      an old PC then try Midori.
     
     * Or you could try running Chrome with
       [Web Adjuster](http://ssb22.user.srcf.net/adjuster/)
@@ -165,7 +165,7 @@ CSS code, and press "Save"; it applies to newly-loaded pages.
 
 **Midori:** Before version 0.0.20, use Edit / Preferences / Behaviour /
 User Stylesheet. In later versions, go to Tools / Extensions (or
-Preferences / Extensions), enable `User Addons', and save the .css
+Preferences / Extensions), enable ‘User Addons’, and save the .css
 file in `.local/share/midori/styles/`.
 Some versions of Midori do not have this functionality.
 

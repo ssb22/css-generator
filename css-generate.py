@@ -1,18 +1,20 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9928"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9929"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
 
-# This program is free software; you can redistribute it and/or modify 
-# it under the terms of the GNU General Public License as published by 
-# the Free Software Foundation; either version 3 of the License, or 
-# (at your option) any later version. 
-#
-# This program is distributed in the hope that it will be useful, 
-# but WITHOUT ANY WARRANTY; without even the implied warranty of 
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-# GNU General Public License for more details. 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # CHANGES
 # -------
@@ -669,6 +671,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for i in map(lambda x:exclude_ie_below_9+x,[":before",":after"]):
     css[i]=defaultStyle.copy() # (especially margin and padding)
     css[i]["background"]="transparent" # see above
+  # inheritDic may also be useful for common child elements of links, highlights etc:
+  for e in rubyElements:
+    css[e].update(inheritDic)
+    del printOverride[e]
 
   # CSS 2+ markup for viewing XML+CSS pages that don't use HTML.  Not perfect but should be better than nothing.
   xmlKey=":root:not(HTML):not(page):not(svg), :root:not(HTML):not(page):not(svg) :not(:empty)"
@@ -954,6 +960,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['devsite-code span.kwd'] = shl_keyword
   css['devsite-code span.typ'] = shl_varname
   css['devsite-code span.str'] = shl_string
+  css['div.code-view td.lines-code code span.nx'] = shl_varname
+  css['div.code-view td.lines-code code span.c1'] = shl_comment
+  css['div.code-view td.lines-code code span.kc'] = shl_keyword
+  css['div.code-view td.lines-code code span.k'] = shl_keyword
+  css['div.code-view td.lines-code code span.s'] = shl_string
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
@@ -1456,7 +1467,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['span.starRating-blank:empty:before']={'opacity':'0.5'} # Yellow Pages
 
   # Google's cookie-consent 2020-09 in 0.css with zoom is disorienting and requires scrolling down to the Accept button, potentially dozens of times per day unless you give up clearing cookies and let Google track you, or hide it like this:
-  css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, body#gsr iframe[src^="https://consent.google.com"]']={'**display':'none'}
+  css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, body#gsr iframe[src^="https://consent.google.com"], body#gsr div[aria-modal="true"]']={'**display':'none'}
   css['html']['overflow']='auto'
 
   # Glint employment surveys on size=unchanged: make checkboxes visible please
