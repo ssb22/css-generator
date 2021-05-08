@@ -998,6 +998,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map, div.googlemaps > div.mapsbord, div#divMapContainer.MapSingle > div#divMapTools.MapTools, div#divMapContainer.MapSingle > div#divMapTools.MapTools + div#divMap"]={"*display":"none"}
   css["div.rsltDetails > div.jsDivMoreInfo.hideObj"]={"*display":"block"} # not 'reveal address only when mouse-over' (which might be OK in conjunction with a map but...)
   
+  # css['agm-map div[style^="z-index: 3"]']={"**opacity":"0"} # Sopra UKVCAS 2021-05: stops total map occlusion (but still some)
+  css['agm-map div']={"**background":"transparent"} # stops more map occlusion, but markers become squares
+  
   # hacks for CAMCors 6, deconstructing some tables etc:
   if pixelSize:
     css['form[action^="/camcors/supervisor/reports"] div.reportBox > table,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr,form[action^="/camcors/supervisor/reports"] div.reportBox > table > tbody > tr > td']={"display":"block"} # doesn't work well as table
