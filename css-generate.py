@@ -1000,6 +1000,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   # css['agm-map div[style^="z-index: 3"]']={"**opacity":"0"} # Sopra UKVCAS 2021-05: stops total map occlusion (but still some)
   css['agm-map div']={"**background":"transparent"} # stops more map occlusion, but markers become squares
+
+  css['body > div#preso, body > div#preso div']={"**background":"transparent"} # Preso training courses
   
   # hacks for CAMCors 6, deconstructing some tables etc:
   if pixelSize:
