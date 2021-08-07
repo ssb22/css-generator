@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9929"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.993"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -747,6 +747,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['main']['*max-width']='100%' # work around too wide on some sites
   css['input']['*max-width']='100%'
+  css['select']['*max-width']='100%'
 
   # Begin site-specific hacks
 
