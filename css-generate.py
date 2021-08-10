@@ -1492,6 +1492,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['table.rc-imageselect-table-33 td.rc-imageselect-tile']={'*max-width':'33%'}
   # test on https://www.google.com/recaptcha/api2/demo
 
+  for t in ["checkbox","radio"]: css['article.survey-page div.'+t+'-button-container > input[type="'+t+'"]']={"**opacity":"1"} # surveymonkey 2021: DO show the radio buttons (overriding opacity even at size=unchanged), seeing as their substitute display is done by colours we don't show
+  
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
