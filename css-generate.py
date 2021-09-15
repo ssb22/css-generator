@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.993"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9931"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -1003,6 +1003,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['agm-map div']={"**background":"transparent"} # stops more map occlusion, but markers become squares
 
   css['body > div#preso, body > div#preso div']={"**background":"transparent"} # Preso training courses
+  css['body > div#ada-entry > div:empty']={"**background":"transparent"} # Zoom webinar registrations
   
   # hacks for CAMCors 6, deconstructing some tables etc:
   if pixelSize:
@@ -1676,7 +1677,9 @@ def outCss(css,outfile,debugStopAfter,pixelSize):
         ("transform","-o-transform"),
         ("opacity","-moz-opacity"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
-      if master in attribValDict.keys() and not alias in attribValDict.keys(): attribValDict[alias]=attribValDict[master]
+      if master in attribValDict.keys() and not alias in attribValDict.keys():
+        if (elem,alias)==("a:first-letter","-webkit-text-fill-color"): continue # work around Safari 14 visited-links bug
+        attribValDict[alias]=attribValDict[master]
     if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: none when -webkit-appearance is set for a checkbox etc
       if "-webkit-appearance" in attribValDict.keys() and not attribValDict["-webkit-appearance"]=='listbox': # (Firefox 74 forces white background if -moz-appearance listbox, must set -moz-appearance=none for that as done above, just not for checkboxes etc)
         if "-moz-appearance" in attribValDict["-webkit-appearance"]:
