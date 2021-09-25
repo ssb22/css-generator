@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Toggle user stylesheet and restart Firefox
-# Silas S. Brown 2011, public domain, no warranty
+# Silas S. Brown 2011,2021, public domain, no warranty
 
 # Where to find history:
 # on GitHub at https://github.com/ssb22/css-generator
@@ -16,7 +16,7 @@ if ! cd "$HOME/.mozilla/firefox"; then
 fi
 export Done=0
 for D in *.default; do
-  cd "$D/chrome"
+  cd "$D/chrome" || continue
   if test -e userContent.css; then
     mv userContent.css userContent.css-disabled
     export Done=1
