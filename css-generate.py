@@ -1496,6 +1496,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   for t in ["checkbox","radio"]: css['article.survey-page div.'+t+'-button-container > input[type="'+t+'"]']={"**opacity":"1"} # surveymonkey 2021: DO show the radio buttons (overriding opacity even at size=unchanged), seeing as their substitute display is done by colours we don't show
   
+  css['#stockSellApp .currency-symbol']={"**position":"static"} # not absolute (Fidelity NetBenefits stock-options form 2021-09: the currency symbol overprinted the first digit when using CSS at size=unchanged)
+  css['div.checkbox > input']={"**margin-left":"0px"} # please don't set negative margin to put it underneath some SVG whose state does not show in these colours
+  
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
