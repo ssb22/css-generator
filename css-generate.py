@@ -1498,6 +1498,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   css['#stockSellApp .currency-symbol']={"**position":"static"} # not absolute (Fidelity NetBenefits stock-options form 2021-09: the currency symbol overprinted the first digit when using CSS at size=unchanged)
   css['div.checkbox > input']={"**margin-left":"0px"} # please don't set negative margin to put it underneath some SVG whose state does not show in these colours
+
+  # Confluence diagrams
+  css["span.geDiagramContainer > svg div,span.geDiagramContainer > svg rect,span.geDiagramContainer > svg path,span.geDiagramContainer > svg ellipse"]={"background":"transparent","fill":"transparent","stroke":colour["text"]}
   
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
