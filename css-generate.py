@@ -1482,7 +1482,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Glint employment surveys on size=unchanged: make checkboxes visible please
   css['body.questionnairePage input[type="checkbox"].question']={'**opacity':'1','**position':'static','**width':'auto','**height':'auto'}
 
-  css['body#page-mod-wiki-view > svg#acc-colour-overlay:empty']={'**display':'none'} # Moodle at size=unchanged: overlay obscuring entire page when background set
+  css['body#page-mod-wiki-view > svg#acc-colour-overlay:empty,body#page-mod-wiki-edit > svg#acc-colour-overlay:empty']={'**display':'none'} # Moodle at size=unchanged: overlay obscuring entire page when background set
 
   # Recaptcha:
   css['iframe[title^="recaptcha"]']={'*height':'200em','overflow':'visible','*filter':'none','*opacity':'1'}
