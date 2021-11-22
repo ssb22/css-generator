@@ -1801,8 +1801,14 @@ var defaultSize=35; if(screen && screen.height) defaultSize=screen.height/(windo
       r = "var c="+hrefExpr+","+r[4:].replace(hrefExpr,"location.protocol=='https:'?'"+alternate_server_for_https_requests+r"'+c.slice(c.search(/[^/]*[.]css/))"+r2+":c",1)
     return r
   # (do NOT put that in a JS function, the 1st link must be self-contained.  and don't say link.click() it's too browser-specific)
-  if alternate_server_for_https_requests: exception = ""
-  else: exception = ", except for HTTPS sites in recent browsers which block \"mixed content\" (my site is not yet able to offer an HTTPS option), and" # TODO: implement 3rd alternative if primary server becomes HTTPS-capable
+  letsEncCheck = ""
+  if alternate_server_for_https_requests:
+    exception = ""
+    if alternate_server_is_letsEncrypt:
+      # Add warning.  See https://letsencrypt.org/docs/dst-root-ca-x3-expiration-september-2021/ (Firefox 45: SEC_ERROR_EXPIRED_ISSUER_CERTIFICATE; Mac OS 10.7, Chromium 49: NET::ERR_CERT_DATE_INVALID)
+      # (this is in a createTextNode so cannot use HTML or entities, unless we redo that part)
+      letsEncCheck=r'"+(function(){var n=navigator.userAgent;var f=n.match(/Firefox\/([1-9][0-9]*)/);if(f&&f[1]<50)return true;f=n.match(/Mac OS X 10[._]([0-9]+([._][0-9]+)?)/);return f&&f[1].replace("_",".")<12.1}()?" **Your old browser will no longer respond to this bookmarklet on https sites** unless you first visit the https version of *this* site and accept its '+"'expired' or 'invalid' certificate: this is due to a change made by the 'Let's Encrypt' certificate company at the end of September 2021."+r' ":"")+"'
+  else: exception = ", except for HTTPS sites in recent browsers which block 'mixed content' (my site is not yet able to offer an HTTPS option), and"
   print(r"""
 newDiv.appendChild(document.createElement('BR'));
 newDiv.appendChild(document.createTextNode('Then press '));
@@ -1817,7 +1823,7 @@ newDiv.appendChild(document.createTextNode(" or "));
 newDiv.appendChild(cssLink);
 newDiv.appendChild(document.createTextNode("."));
 newDiv.appendChild(document.createElement("BR"));
-newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page"""+exception+r""" provided the site does not use a Content-Security-Policy header to block third-party stylesheets (browsers are supposed to exempt 'bookmarklets' from this but many don't). Anyway, due both to this problem and to some sites' patchy use of CSS priorities, your override is likely to work better if set it as a user-supplied stylesheet "));
+newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page"""+exception+r""" provided the site does not use a Content-Security-Policy header to block third-party stylesheets (browsers are supposed to exempt 'bookmarklets' from this but many don't)."""+letsEncCheck+r""" Anyway, due both to this problem and to some sites' patchy use of CSS priorities, your override is likely to work better if set it as a user-supplied stylesheet "));
 e=document.createElement("A"); e.href="#inst"; e.className="ssbOk"; e.appendChild(document.createTextNode("as described below")); newDiv.appendChild(e);
 newDiv.appendChild(document.createTextNode("."));
 //newDiv.appendChild(document.createTextNode(" (which also means you won't have to press it each time and it will continue to work if this website moves, or becomes unavailable due to local firewall rules etc). The 'bookmarklet' approach is best for short-term use (public terminals etc) or testing."));
@@ -1841,6 +1847,7 @@ binary_chop_results = ""
 import sys, os
 alternate_server_for_https_requests = os.environ.get('CSS_HTTPS_SERVER',None) # for the bookmarklet, if you want to apply it on https pages (which means the CSS itself must be served from https) and your main website isn't on an HTTPS-capable server but there's a secondary (lower-bandwidth) one you can use just for that use-case
 alternate_server_needs_css_extension = os.environ.get('CSS_HTTPS_SERVER_USE_EXTENSION',False)
+alternate_server_is_letsEncrypt = os.environ.get('CSS_HTTPS_SERVER_IS_LETSENCRYPT',False)
 
 if "adjuster-config" in sys.argv:
   # print out configuration options for Web Adjuster
