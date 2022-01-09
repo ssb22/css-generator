@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-21.  Version 0.9931"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9932"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -1098,7 +1098,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("div#wrapper div#documentMenuButton > span.rubyIndicator > span.icon","Romanisation...",css,printOverride,colour,False)
   emptyLink("button#fontSizeSmaller > span.icon","smaller",css,printOverride,colour,False) # probably won't work if we're fixing the size in user CSS, but display anyway to avoid completely empty "Show..." sections if no other functions are shown
   emptyLink("button#fontSizeLarger > span.icon","bigger",css,printOverride,colour,False)
-  css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:after, div#regionHeader menu li#menuSynchronizeSwitch a:after, div#wrapper div#primaryNav ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after, div#wrapper div#toolbarFrame ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after"]={"content":'"Sync"',"text-transform":"none"}
+  css[exclude_ie_below_9+"div#header div#menuFrame ul.menu li#menuSynchronizeSwitch a span.icon:after, div#regionHeader menu li#menuSynchronizeSwitch a:after, div#wrapper div#primaryNav ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after, div#wrapper div#toolbarFrame ul.menu li#menuSynchronizeSwitch > a#linkSynchronizeSwitch > span.icon:empty:after, li#menuSynchronizeControls li#menuSynchronizeSwitch > a#linkSynchronizeSwitch:empty:after"]={"content":'"Sync"',"text-transform":"none"}
   css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a > span.icon:after"]=css[exclude_ie_below_9+"li#menuToolsPreferences.iconOnly > a:empty:after"]={"content":'"Preferences"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavLeft > a > span:after, div.jcarousel-container + div#slidePrevButton:empty:after"]={"content":'"<- Prev"',"text-transform":"none"}
   css[exclude_ie_below_9+"div.resultNavControls > ul > li.resultNavRight > a > span:after, div.jcarousel-container + div#slidePrevButton:empty + div#slideNextButton:empty:after"]={"content":'"Next ->"',"text-transform":"none"}
