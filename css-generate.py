@@ -1201,6 +1201,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[jjc+"nav div#documentNavigation div.navVerses ul.verses li.verse"]={"display":"inline","margin":"0 0.1ex"}
     css['a[data-book-id],a.chapter']={"display":"inline-block"}
     css['div#regionMain a[data-book-id] span.fullName + span.longAbbrName, div#regionMain a[data-book-id] span.fullName + span.longAbbrName + span.abbrName, div#regionMain a[data-book-id] > div.tocIcons']={"display":"none"}
+  else: css['div.bodyTxt span']={"position":"static"} # not absolute (otherwise can overprint)
   emptyLink(jjc+"a.hasAudio > span","Audio",css,printOverride,colour,False)
   emptyLink(jjc+"li.verseOutline a.outToggle > span","Outline",css,printOverride,colour,False) # TODO: why won't this match?
   emptyLink("a#jsGalleryNextBtn > div.nextArrow","Next",css,printOverride,colour,False)
