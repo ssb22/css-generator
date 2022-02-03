@@ -1236,6 +1236,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.js-suggester-container > div.write-content > div.suggester-container > div.js-suggester"]={"*position":"absolute","**background":colour["background"]}
   css["div.sidebar-wrapper ul.nav-links > li, div.nav-sidebar ul.nav > li"]={"*display":"inline"} # save a bit of vertical space (GitLab etc)
   css["div.issues-other-filters div.dropdown button.dropdown-menu-toggle span.dropdown-toggle-text svg,a#logo span.logo-text svg,body.ui-indigo div.nav-sidebar a div.nav-icon-container svg,body.ui-indigo a.toggle-sidebar-button svg,body.ui-indigo div.breadcrumbs-links svg.breadcrumbs-list-angle,body.ui-indigo svg.caret-down"]={"*display":"none"} # GitLab 2018
+  css['body.ui-indigo .custom-control-input']={"**opacity":"1"} # GitLab merge-request checkboxes: please be visible at size=unchanged
   css["a.note-emoji-button > svg.s16, button > svg.s16"]={"*height":"16px","*width":"16px"} # GitLab 2019
   css["form.new-note div.md-area a.zen-control"]={"*display":"none"} # GitLab 2019
   css["div.merge-request div.status-box svg + span.gl-display-none"]={"display":"inline","border":"purple solid"} # GitLab 2021 (be clearer about Open / Merged, not just a small SVG icon)
@@ -1376,6 +1377,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div#bounty-app > form#bounty-form div.secure-payment span.secure-payment__icon, body > div#bounty-app > form#bounty-form div.secure-payment svg']={'*display':'none'} # otherwise it overprints Tesco's entire payment form with a solid box (2019-07).  I actually sent them a video of this one, but I doubt it will make it as far as the developer team.  (To reproduce the video you'll need to get version 0.9873 of this code, e.g. from https://raw.githubusercontent.com/ssb22/css-generator/2253417d45173df2594d4e8c1bc51822613c3f07/css-generate.py as obviously I added the above 3 lines to work around those particular problems but I expect there will be more problems next time because it seems they keep coming up with new ones.)
 
   css['body.page-template header.site-header + div.all-site-wrap > div.page-wrap + aside.entry-unrelated']={'*display':'none'} # sorry css-tricks but it was making the article unreadable
+  css['div#primisPlayerContainerDiv div#primis_container_div']={'*display':'none'} # ditto video advertising on some sites (controls somehow end up covering the entire screen except at size=unchanged)
   
   css['div.xt_fixed_sidebar + div.g_modal.login_modal']={'*position':'absolute','*z-index':'151','border':'blue solid','padding':'1em',"**background":colour["background"]} # Tsinghua online course login
   css['body.question-page script + div.message-dismissable[style^="position: absolute"]']={'*position':'absolute','border':'blue solid','padding':'1em',"**background":colour["background"]} # StackExchange "insufficient reputation to comment" etc
@@ -1410,6 +1412,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # and if that doesn't work, try bringing in the icon font if it's there:
     css["a > i.fa:empty:before,button > i.fa:empty:before"]={"font-family":"FontAwesome, "+serif_fonts}
   emptyLink("a.overlay-close","Close",css,printOverride,colour)
+  emptyLink("div.bannerContent__closeButton","Close",css,printOverride,colour,False)
 
   css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"],li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/placeholder.png"],div.tooltip div.tooltipList li > a.cardContainer > div.cardThumbnail, div.tooltip div.tooltipList li > a.cardContainer > div.cardChevron']={"*display":"none"}
   css['div.tooltip > div.tooltipHeader > div']={"*display":"inline-block"}
