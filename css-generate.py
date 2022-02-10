@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9932"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9933"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -318,6 +318,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*min-width":"0px",
     "*text-decoration":"none",
     "text-shadow":"none",
+    "mix-blend-mode":"normal",
     "*text-align":"left", # not full justification
     "*margin":"0px",
     "*padding":"0px",
@@ -748,6 +749,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['main']['*max-width']='100%' # work around too wide on some sites
   css['input']['*max-width']='100%'
   css['select']['*max-width']='100%'
+  css['img div#image-overlay']={"opacity":"0"} # Safari 15 (can't select/copy it anyway, and its presence seems to hurt readability)
 
   # Begin site-specific hacks
 
