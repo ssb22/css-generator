@@ -1124,6 +1124,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
   css['nav ul.books > li.book > a span.name + span.abbreviation + span.official'] = {'*display':'none'}
   css["nav a > img.thumbnail"] = {"*max-height":"1em"}
+  css['div.billboard-media-image[style^="background-image"]:empty']={'min-height':'1em'} # (CSS has no way to say "background-image whatever the site set" as an exception: best we can do is make sure this doesn't take up the whole of the first screen in large print)
   # if pixelSize: css[exclude_ie_below_9+"script + div#wrapper > div#header > div#menuFrame > ul.menu > li:before"]={"content":"attr(id)","text-transform":"none","display":"inline"}
   css[".menu li a span.label"]={"display":"inline","text-transform":" none"} # not just 'if pixelSize', we need this anyway due to background overrides
   css["body > script + div#wrapper #content figure > img, div.lsrBannerImage img"]={"*max-width":"100%"}
