@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9933"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9934"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -749,7 +749,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['main']['*max-width']='100%' # work around too wide on some sites
   css['input']['*max-width']='100%'
   css['select']['*max-width']='100%'
-  css['img div#image-overlay']={"opacity":"0"} # Safari 15 (can't select/copy it anyway, and its presence seems to hurt readability)
 
   # Begin site-specific hacks
 
@@ -1694,8 +1693,13 @@ def outCss(css,outfile,debugStopAfter,pixelSize):
         ("opacity","-moz-opacity"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
       if master in attribValDict.keys() and not alias in attribValDict.keys():
-        if (elem,alias)==("a:first-letter","-webkit-text-fill-color"): continue # work around Safari 14 visited-links bug
-        attribValDict[alias]=attribValDict[master]
+        if alias=="-webkit-text-fill-color" and elem in [
+            "a:first-letter", # Safari 14 visited-links bug
+            ]: pass
+        elif alias=="-webkit-text-fill-color" and elem in [
+            "a:link","a","img","html","div","article","body", # Safari 15 "Live Text" in images
+            ]: attribValDict[alias]='initial'
+        else: attribValDict[alias]=attribValDict[master]
     if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: none when -webkit-appearance is set for a checkbox etc
       if "-webkit-appearance" in attribValDict.keys() and not attribValDict["-webkit-appearance"]=='listbox': # (Firefox 74 forces white background if -moz-appearance listbox, must set -moz-appearance=none for that as done above, just not for checkboxes etc)
         if "-moz-appearance" in attribValDict["-webkit-appearance"]:
