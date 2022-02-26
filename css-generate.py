@@ -1265,7 +1265,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("button.dropdown-toggle.btn > i","Toggle",css,printOverride,colour,False)
   # For Atlassan:
   css["span.aui-avatar img, img.jira-project-avatar-icon, img.jpo-team-field-avatar"]={"*width":"24px","*height":"24px"}
-  css["a.aui-sidebar-toggle > span.aui-icon:empty::before"]={'content':r'"\2B04"'}
+  css["a.aui-sidebar-toggle > span.aui-icon:empty:before"]={'content':r'"\2B04"'}
   css[".ghx-backlog-container .ghx-backlog-header"]={'position':'static'} # not sticky, even at pixelSize=0 + zoom
   css["body#jira > aui-dropdown-menu"]={"**max-height":"50%","**overflow":"scroll"} # works around having to use right-hand scrollbar to see all 'More' options when zoomed in
 
@@ -1510,6 +1510,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Confluence diagrams
   css["span.geDiagramContainer > svg div,span.geDiagramContainer > svg rect,span.geDiagramContainer > svg path,span.geDiagramContainer > svg ellipse"]={"background":"transparent","fill":"transparent","stroke":colour["text"]}
+  css['div.kix-scrollareadocumentplugin:empty:before']={'content':'"Low-vision stylesheets is not compatible with Google Docs"','border':'red solid','position':'relative','z-index':'999'} # it's a seemingly-empty div that ends up with our background setting but foreground invisible (or perhaps same as our background, whatever colour we set our background to), even if we disable sections of our CSS, and the text is nowhere in the DOM except in JS and meta description.  Tools / accessibility / turn on screen reader support = no change.  Javascript obfuscated too much and it's not at all obvious what they're doing; DOM Inspector on Chrome and Safari does not tell us.
   
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
