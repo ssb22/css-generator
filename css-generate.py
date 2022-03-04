@@ -1327,9 +1327,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.episode-playout div.smp iframe']={"overflow-y":"auto","height":"9em","*filter":"none","*opacity":"1"} # more space please so we can see the button
 
   # alternative to <wbr/> :
-  css['div#regionMain > div.wrapper #content div#article > article p span.wd.refID, div#regionMain > div.wrapper #content div#article > article h2 span.wd.refID, div#regionMain > div.wrapper #content div#article > article h3 span.wd.refID, body > div.ui-dialog div > p > span.wd.refID']={"display":"none"}
+  css['div#regionMain > div.wrapper #content article p span.refID, div#regionMain > div.wrapper #content article h2 span.refID, div#regionMain > div.wrapper #content article h3 span.refID, body > div.ui-dialog div > p > span.refID']={"display":"none"}
   # also use of 'q' adding duplicate quotes:
-  css['div#regionMain > div.wrapper #content div#article > article q.scrp:before, div#regionMain > div.wrapper #content div#article > article q.scrp:after']={'content':'""'}
+  css['div#regionMain > div.wrapper #content article q.scrp:before, div#regionMain > div.wrapper #content article q.scrp:after']={'content':'""'}
 
   css['div#menuHome > a:link > span.icon:empty:before']={'content':'"Home"'}
   css['#standardSearch .searchControlContainer .searchButton'] = {'*width':'auto'} # site was somehow overriding it to a pixel width on Safari 6, cutting off the larger text
