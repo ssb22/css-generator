@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9934"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9935"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -383,7 +383,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   if not pixelSize:
     # We want div's background to have some transparency, because some sites position <video> elements behind the div.  But we don't want it completely transparent (unless we can confirm it contains video), as we probably won't be able to catch all UI elements as exceptions.
-    css['div']['background'] = colour["translucent_background_compromise"]
+    for e in ['div','article']: css[e]['background'] = colour["translucent_background_compromise"]
     # Also do this for Firefox's PDF viewer:
     css["div.pdfViewer div.page > div.canvasWrapper + div.textLayer"]={"opacity":"1"}
 
@@ -1476,8 +1476,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   css['div#htmlContent > title + div.container div.page svg path']={'display':'none'} # Cambridge University Press page backgrounds in books (best at 0px with browser zoom?)
 
-  css['div.support-list li.stat-cell.n']={'border':'red solid'} # caniuse
-  css['div.support-list li.stat-cell.y']={'border':'green solid'}
+  css['div.stat-cell.n']={'border':'red solid'} # caniuse (TODO: why is text now black-on-black unless mouseover?)
+  css['div.stat-cell.y']={'border':'green solid'}
 
   css['div#pt_checkout_onepage input[type="checkbox"],div#pt_checkout_onepage input[type="radio"],body#SurveyEngineBody input[type="checkbox"],body#SurveyEngineBody input[type="radio"]']={'opacity':'1','position':'static'} # Claires checkout junk-signup checkbox + Qualtrics surveys: please make current state visible (don't just use colours that might be overridden or not seen)
   css['input.oo-ui-inputWidget-input[type="checkbox"]']={'opacity':'1'} # e.g. MediaWiki on Wenlin edit pages: please make current state more visible
@@ -1510,7 +1510,16 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Confluence diagrams
   css["span.geDiagramContainer > svg div,span.geDiagramContainer > svg rect,span.geDiagramContainer > svg path,span.geDiagramContainer > svg ellipse"]={"background":"transparent","fill":"transparent","stroke":colour["text"]}
-  css['div.kix-scrollareadocumentplugin:empty:before']={'content':'"Low-vision stylesheets is not compatible with Google Docs"','border':'red solid','position':'relative','z-index':'999'} # it's a seemingly-empty div that ends up with our background setting but foreground invisible (or perhaps same as our background, whatever colour we set our background to), even if we disable sections of our CSS, and the text is nowhere in the DOM except in JS and meta description.  Tools / accessibility / turn on screen reader support = no change.  Javascript obfuscated too much and it's not at all obvious what they're doing; DOM Inspector on Chrome and Safari does not tell us.
+
+  # Google Docs
+  gDocs='body.docs-gm[itemtype="http://schema.org/CreativeWork/DocumentObject"] '
+  css[gDocs+'div,'+gDocs+'svg']={'background':'transparent'} # avoid obscuring the canvas at size=unchanged
+  if not colour["text"]=="black": css[gDocs+'canvas']={'background':'white','filter':'invert(1)'} # because we can't override the black text except by an invert filter (let's assume any browser capable of running Google Docs is also capable of CSS filter effects)
+  
+  # Similarly for Oracle "Outside In Web View Export"
+  oiwve='div.oit-view-root.pages-view '
+  css[oiwve+'div,'+oiwve+'article']={'background':'transparent'}
+  if not colour["text"]=="black": css[oiwve+'canvas']={'background':'white','filter':'invert(1)'}
   
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
