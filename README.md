@@ -135,18 +135,23 @@ and set that file as a user-supplied stylesheet.
 **Safari:** Go to Safari / Preferences / Advanced / Style sheet,
 select Other, and select the file
 
-**Google Chrome:** You can use an extension like userScriptCSS.  In
-Tools/Extensions/userScriptCSS set the regexp to `.*`, paste in the
-CSS code, and press "Save"; it applies to newly-loaded pages.
+**Google Chrome:** Create a directory with the
+stylesheet saved as `userContent.css` and a file called
+`manifest.json` with the following content:
 
-  * If you use dark backgrounds, you might still have to put up with a
-    white background during page loads, unless you have a
-    recent-enough version of Chrome to use its own dark mode
-    (`chrome://flags/#enable-force-dark`) instead of using this CSS
-    
-    * If you can't use recent Chrome with dark mode then you might get
-      better results with other browsers.  If Firefox is too much for
-      an old PC then try Midori.
+    {"manifest_<wbr>version": 3,
+    "name": "Low-vision stylesheet",
+    "version": "1",
+    "content_scripts": [{
+       "matches": ["<all_urls>"],
+       "css": ["userContent.css"]}]}
+
+then go to `chrome://extensions` and with Developer Mode
+turned on "load unpacked extension" and point to this directory.
+
+  * On recent Chrome versions you can also try
+    `chrome://flags/#enable-force-dark` instead of using
+    this CSS for dark mode
     
     * Or you could try running Chrome with
       [Web Adjuster](http://ssb22.user.srcf.net/adjuster/)
@@ -162,6 +167,10 @@ CSS code, and press "Save"; it applies to newly-loaded pages.
         new tab screen etc (so you might want to set a homepage); when
         navigating _within_ sites it should happen rarely if ever. (If
         reloading already-visited pages, clear the cache.)
+        At any rate, Chrome is likely to cope less well
+        than other browsers with some sites' use of CSS
+        priorities, because the CSS we insert does not
+        have the extra privileges given it by other browsers.
 
 **Midori:** Before version 0.0.20, use Edit / Preferences / Behaviour /
 User Stylesheet. In later versions, go to Tools / Extensions (or
