@@ -1137,6 +1137,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div#react-root,div#react-root div"]={"**background":"transparent"} # e.g. Twitter video posts 2021 (dozens of nested divs with video positioned underneath)
   css["div.campl-row, div.campl-row > div.campl-wrap, div.campl-wrap > div#content, div#content > div.campl-content-container"]={"**background":"transparent"} # similarly for Panopto(?) lecture platform used by cl.cam
   css["body.player-v2.v2ui div, body > div.mwPlayerContainer, body > div.mwPlayerContainer div"]={"**background":"transparent"} # and Kaltura videos (used by Oracle)
+  css["div.video.wistia_embed, div.video.wistia_embed div"]={"**background":"transparent"}
   # some site JS adds modal boxes to the end of the document, try:
   if pixelSize:
     css["body.yesJS > div.ui-dialog.ui-widget.ui-draggable.ui-resizable, body.yesJS > div.fancybox-wrap[style]"]={"position":"absolute","border":"blue solid"}
