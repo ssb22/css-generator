@@ -1489,8 +1489,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, body#gsr iframe[src^="https://consent.google.com"], body#gsr div[aria-modal="true"]']={'**display':'none'}
   css['html']['overflow']='auto'
 
-  # Glint employment surveys on size=unchanged: make checkboxes visible please
-  css['body.questionnairePage input[type="checkbox"].question']={'**opacity':'1','**position':'static','**width':'auto','**height':'auto'}
+  # Glint employment surveys, and Oracle ADF generated pages, on size=unchanged: make checkboxes visible in 'dark mode' please
+  css['body.questionnairePage input[type="checkbox"].question, body.fusePlus-container input[type="checkbox"]']={'**opacity':'1','**position':'static','**width':'auto','**height':'auto'}
 
   css['body#page-mod-wiki-view > svg#acc-colour-overlay:empty,body#page-mod-wiki-edit > svg#acc-colour-overlay:empty']={'**display':'none'} # Moodle at size=unchanged: overlay obscuring entire page when background set
 
