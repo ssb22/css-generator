@@ -947,6 +947,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.FileContents .u-pre span.str'] = shl_string
   css['div.diff-content .line_content span.k'] = shl_keyword # GitLab merge-requests
   css['div.diff-content .line_content span.n'] = shl_varname
+  css['div.diff-content .line_content span.nv'] = shl_varname
   css['div.diff-content .line_content span.nt'] = shl_keyword
   css['div.diff-content .line_content span.ni'] = shl_preproc
   css['div.diff-content .line_content span.na'] = shl_varname
