@@ -1524,8 +1524,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[oiwve+'div,'+oiwve+'article']={'background':'transparent'}
   if not colour["text"]=="black": css[oiwve+'canvas']={'background':'white','filter':'invert(1)'}
   
+  # and for Feishu / Lark (an online office suite used in China)
+  css['div.app-main-container.is-suite div, body > div#root > div.et-container div']={'background':'transparent'}
+  if not colour["text"]=="black": css['div.app-main-container.is-suite canvas, body > div#root > div.et-container canvas']={'background':'white','filter':'invert(1)'}
+  # and shimo.im
+  if not colour["text"]=="black": css['body.lizard-one > div#root canvas']={'background':'white','filter':'invert(1)'}
+
   css ['button span.mat-button-wrapper + span.mat-ripple']={'**background':'transparent'} # privacymanager.io
-  
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
