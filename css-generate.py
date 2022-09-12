@@ -1529,7 +1529,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if not colour["text"]=="black": css['div.app-main-container.is-suite canvas, body > div#root > div.et-container canvas']={'background':'white','filter':'invert(1)'}
   # and shimo.im
   if not colour["text"]=="black": css['body.lizard-one > div#root canvas']={'background':'white','filter':'invert(1)'}
-
+  # and Grafana and Kabana
+  css['body.app-grafana.theme-dark *, body#kibana-body *']={'background':'transparent'}
+  
   css ['button span.mat-button-wrapper + span.mat-ripple']={'**background':'transparent'} # privacymanager.io
 
   # End site-specific hacks
