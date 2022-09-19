@@ -1532,7 +1532,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # and Grafana and Kabana
   css['body.app-grafana.theme-dark *, body#kibana-body *']={'background':'transparent'}
   
-  css ['button span.mat-button-wrapper + span.mat-ripple']={'**background':'transparent'} # privacymanager.io
+  css['button span.mat-button-wrapper + span.mat-ripple']={'**background':'transparent'} # privacymanager.io
+
+  # Chinese Words Separator extension:
+  css['X-P > X-S > X-Z']={'fill':'initial','-webkit-text-fill-color':'initial'} # so it can set its own colours via "color"
+  css['X-Z > X-H > X-B[g]']={'border-bottom':'thin blue solid'} # ambiguity notification
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
