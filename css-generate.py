@@ -25,7 +25,7 @@
 # and on GitLab at https://gitlab.com/ssb22/css-generator
 # and on BitBucket https://bitbucket.org/ssb22/css-generator
 # and at https://gitlab.developers.cam.ac.uk/ssb22/css-generator
-# and in China: git clone https://gitee.com/ssb22/css-generator
+# and in China: https://gitee.com/ssb22/css-generator
 # as of v0.9782.  Versions prior to that were not kept, but
 # some were captured by Internet Archive at
 # https://web.archive.org/web/*/http://people.pwf.cam.ac.uk/ssb22/css/css-generate.py
