@@ -1244,7 +1244,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.ui-indigo .custom-control-input']={"**opacity":"1"} # GitLab merge-request checkboxes: please be visible at size=unchanged
   css["a.note-emoji-button > svg.s16, button > svg.s16"]={"*height":"16px","*width":"16px"} # GitLab 2019
   css["form.new-note div.md-area a.zen-control"]={"*display":"none"} # GitLab 2019
-  css["div.merge-request div.status-box svg + span.gl-display-none"]={"display":"inline","border":"purple solid"} # GitLab 2021 (be clearer about Open / Merged, not just a small SVG icon)
+  css["div.merge-request div.status-box svg + span.gl-display-none,div.merge-request div.merge-request-details svg + span.gl-display-none"]={"display":"inline","border":"purple solid"} # GitLab 2021,2022 (be clearer about Open / Merged, not just a small SVG icon)
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css["div.issues-listing div.state.state-closed"]={'color':colour["coloured"],'border':'red solid','font-weight':'bold'} # GitHub: make it slightly more obvious if we're looking at a closed ticket
   css["summary > svg.icon-chevon-down-mktg, details > summary > svg[viewBox=\"0 0 14 8\"]"]={'*display':'none'} # sorry GitHub, it's way too big when in giant print (and don't know why doHeightWidth isn't fixing these)
