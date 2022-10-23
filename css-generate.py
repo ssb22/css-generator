@@ -1900,7 +1900,7 @@ if "adjuster-config" in sys.argv:
   for d,f,rest in colour_schemes_to_generate:
     cs.append(f+'='+d)
     ha.append('text="%s" bgcolor="%s" link="%s" vlink="%s" alink="%s"' % (rest['text'],rest['background'],rest['link'],rest['visited'],'red'))
-  print("adjuster.options.headAppendCSS="+repr('http://ssb22.user.srcf.net/css/%s%s.css;'+','.join(ps)+';'+','.join(cs)))
+  print("adjuster.options.headAppendCSS="+repr('http'+'://'+'ssb22.user.srcf.net/css/%s%s.css;'+','.join(ps)+';'+','.join(cs)))
   print("adjuster.options.cssHtmlAttrs="+repr(';'.join(ha)))
 elif "desperate-debug" in sys.argv:
   scheme,suffix,colour = colour_schemes_to_generate[0]
