@@ -1531,6 +1531,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if not colour["text"]=="black": css['body.lizard-one > div#root canvas']={'background':'white','filter':'invert(1)'}
   # and Grafana and Kabana
   css['body.app-grafana.theme-dark *, body#kibana-body *']={'background':'transparent'}
+  # and Internet Archive Wayback Machine 2022-11
+  css['div#react-wayback-search input + input.rbt-input-hint']={'background':'transparent'}
   
   css['button span.mat-button-wrapper + span.mat-ripple']={'**background':'transparent'} # privacymanager.io
 
