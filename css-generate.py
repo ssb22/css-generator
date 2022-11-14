@@ -1536,6 +1536,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   css['button span.mat-button-wrapper + span.mat-ripple']={'**background':'transparent'} # privacymanager.io
 
+  # some sites using BlueprintJS will "leak" DIVs into the DOM when 'toast' message text is cleared without removing its containing element; if these are left translucent, text gets fainter and fainter...
+  css['body > div.bp3-portal > div.bp3-toast-container:empty']={'**display':'none'}
+
   # Chinese Words Separator extension:
   css['X-P > X-S > X-Z']={'fill':'initial','-webkit-text-fill-color':'initial'} # so it can set its own colours via "color"
   css['X-Z > X-H > X-B[g]']={'border-bottom':'thin blue solid'} # ambiguity notification
