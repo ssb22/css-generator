@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-22.  Version 0.9935"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-23.  Version 0.9935"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -1538,6 +1538,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # some sites using BlueprintJS will "leak" DIVs into the DOM when 'toast' message text is cleared without removing its containing element; if these are left translucent, text gets fainter and fainter...
   css['body > div.bp3-portal > div.bp3-toast-container:empty']={'**display':'none'}
+
+  css['body > div#__next > div.App fieldset[aria-hidden]']={'**display':'none'} # groupleavingcards.com 2023-01 (can't fix their sliders but that's not important if you just write a message on a new page and choose a readable font)
 
   # Chinese Words Separator extension:
   css['X-P > X-S > X-Z']={'fill':'initial','-webkit-text-fill-color':'initial'} # so it can set its own colours via "color"
