@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-23.  Version 0.9935"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-23.  Version 0.9936"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -753,6 +753,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Begin site-specific hacks
 
+  if not pixelSize: css['div.icon:not(:empty)']={
+      # This might contain text for speech that's hidden from graphical browsers, but we want to show it anyway because the graphical icon probably won't show
+      "height":"auto","width":"auto","text-indent":"0px"} # not -1000px or whatever they did to put the text off-screen
+
   def emptyLink(lType,content,css,printOverride,colour,isRealLink=True,omitEmpty=False,isInsideRealLink=False,undo=False):
    assert not ',' in lType
    assert not (undo and content)
@@ -902,11 +906,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.highlight > pre span.n,div.highlight > pre span.nn']=shl_varname
   css['div.highlight > pre span.s1,div.highlight > pre span.s2,div.highlight > pre span.sd,div.highlight > pre span.si']=shl_string
   # TODO: p = punc (and do we differentiate sd=docstring, si=% formatter)
-  css['pre > code.hljs span.hljs-keyword'] = shl_keyword
-  css['pre > code.hljs span.hljs-built_in'] = shl_varname
-  css['pre > code.hljs span.hljs-string'] = shl_string
-  css['pre > code.hljs span.hljs-comment'] = shl_comment
-  css['pre > code.hljs span.hljs-number'] = shl_preproc
+  css['pre > code span.hljs-keyword'] = shl_keyword
+  css['pre > code span.hljs-built_in'] = shl_varname
+  css['pre > code span.hljs-string'] = shl_string
+  css['pre > code span.hljs-comment'] = shl_comment
+  css['pre > code span.hljs-number'] = shl_preproc
   css['pre.code > span.com'] = shl_comment
   css['pre.code > span.str'] = shl_string
   css['pre.code > span.kwd'] = shl_keyword
