@@ -1549,6 +1549,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Chinese Words Separator extension:
   css['X-P > X-S > X-Z']={'fill':'initial','-webkit-text-fill-color':'initial'} # so it can set its own colours via "color"
   css['X-Z > X-H > X-B[g]']={'border-bottom':'thin blue solid'} # ambiguity notification
+  css['div#outer > div#cub-monitor > img#cub-monitor-pic'],css['div#outer > div#cub-monitor > canvas#screen']={'display':'none'},{'z-index':'0','border':'grey solid'} # JSBeeb
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
