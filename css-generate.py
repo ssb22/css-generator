@@ -1541,6 +1541,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   css['button span.mat-button-wrapper + span.mat-ripple']={'**background':'transparent'} # privacymanager.io
 
+  css['div#app div.page-play div.container-main div#player div']={'**background':'transparent'} # m.v.qq.com
+
   # some sites using BlueprintJS will "leak" DIVs into the DOM when 'toast' message text is cleared without removing its containing element; if these are left translucent, text gets fainter and fainter...
   css['body > div.bp3-portal > div.bp3-toast-container:empty']={'**display':'none'}
 
