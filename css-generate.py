@@ -1198,6 +1198,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("div.iconOnly + span.share + span.buttonText",None,css,printOverride,colour,False,True)
   # emptyLink('div.toolbar > a.jsZoomIn.zoomIn',"Zoom in",css,printOverride,colour,False);emptyLink('div.toolbar > a.jsZoomOut.zoomOut',"Zoom out",css,printOverride,colour,False) # TODO: somehow let these work? (apparently it's all CSS tricks and we're overriding it)
   emptyLink('div.toolbar > a.jsCloseModal',"Close",css,printOverride,colour,False)
+  emptyLink('div.bili-mini-close-icon',"X",css,printOverride,colour,False)
   css["div.galleryCarouselItems"]={"*white-space":"normal"} # not 'nowrap'
   emptyLink('div.tabViews > div.tabControls > a.discoveryTab',"Discovery",css,printOverride,colour,True);emptyLink('div.tabViews > div.tabControls > a.comparisonTab',"Comparison",css,printOverride,colour,True);emptyLink('div.tabViews > div.tabControls > a.xRefTab',"xref",css,printOverride,colour,True) # has href="#" so True; NB these are more likely :blank than :empty, so might not work in all browsers (but don't want to risk removing :empty altogether)
   emptyLink("div.mejs-inner > div.mejs-controls > div.mejs-play > button",r"\21E8 Play",css,printOverride,colour,False)
