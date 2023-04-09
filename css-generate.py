@@ -1014,6 +1014,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div#ada-entry > div:empty']={"**background":"transparent"} # Zoom webinar registrations
   css['div#bilibili-player div']={"**background":"transparent"}
   css['div.close svg path']={'**stroke':colour["text"]}
+  css['div.bpx-player-video-area div']={"**background":"transparent"}
   
   # hacks for CAMCors 6, deconstructing some tables etc:
   if pixelSize:
