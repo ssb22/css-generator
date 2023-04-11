@@ -1833,6 +1833,10 @@ def main():
       elif i==len(colour_schemes_to_generate)-1: print(toPrn+"</li>")
       else: print(toPrn+",")
       do_one_stylesheet(pixelSize,colour,filename)
+    if not sys.stdout.isatty():
+      sys.stderr.write(str(pixelSize)+" ")
+      sys.stderr.flush() # Python 3
+  if not sys.stdout.isatty(): sys.stderr.write("done\n")
   if not outHTML: return
   print("</ul></div>")
   print("""<script><!--
