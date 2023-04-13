@@ -260,7 +260,9 @@ try: reduce # Python 2
 except: # Python 3
   from functools import reduce, cmp_to_key
   _builtin_sorted = sorted
-  def sorted(l,theCmp): return _builtin_sorted(l,key=cmp_to_key(theCmp))
+  def sorted(l,theCmp=None):
+    if theCmp: return _builtin_sorted(l,key=cmp_to_key(theCmp))
+    else: return _builtin_sorted(l)
   def cmp(a,b): return (a>b)-(a<b)
 try: bytes # Python 3 and newer Python 2
 except: bytes = str # older Python 2
@@ -1709,24 +1711,14 @@ try: from textwrap import fill
 except:
   def fill(x,*args,**kwargs): return x
 def outCss(css,outfile,debugStopAfter,pixelSize):
-  # Remove '*' as necessary
-  for el in list(css.keys()):
-    for prop,value in list(css[el].items()):
-      if prop.startswith("**"):
-        del css[el][prop]
-        if not pixelSize: css[el][prop[2:]] = value
-      elif prop.startswith("*"):
-        del css[el][prop]
-        if pixelSize: css[el][prop[1:]] = value
-    if css[el] == {}: del css[el]
-  # hack for MathJax (see comments above)
-  for k in list(css.keys()):
-    if k.find("div.MathJax_Display")>-1: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
-  # For each attrib:val find which elems share it & group them
-  rDic={} # maps (attrib,val) to a list of elements that have it
-  for elem,attribValDict in list(css.items()):
-    # add aliases before starting
-    for master,alias in [
+  remove_stars(css,pixelSize)
+  fix_MathJax(css)
+  attrib_val_elemList = get_rList(css)
+  if do_binary_chop: binary_chop(attrib_val_elemList)
+  return do_output(make_outList(attrib_val_elemList),outfile,debugStopAfter)
+
+def add_aliases(elem,attribValDict):
+    for main,alias in [
         ("background","background-color"),
         ("color","-webkit-text-fill-color"),
         ("color","fill"), # for SVG
@@ -1736,14 +1728,14 @@ def outCss(css,outfile,debugStopAfter,pixelSize):
         ("transform","-o-transform"),
         ("opacity","-moz-opacity"),
         ("flex","-webkit-flex"),("flex","-moz-flex"),("flex","-ms-flex")]:
-      if master in attribValDict.keys() and not alias in attribValDict.keys():
+      if main in attribValDict.keys() and not alias in attribValDict.keys():
         if alias=="-webkit-text-fill-color" and elem in [
             "a:first-letter", # Safari 14 visited-links bug
             ]: pass
         elif alias=="-webkit-text-fill-color" and elem in [
             "a:link","a","img","html","div","article","body", # Safari 15 "Live Text" in images
             ]: attribValDict[alias]='initial'
-        else: attribValDict[alias]=attribValDict[master]
+        else: attribValDict[alias]=attribValDict[main]
     if not browser_is_Firefox_73: # Firefox 74+ should NOT use -moz-appearance: none when -webkit-appearance is set for a checkbox etc
       if "-webkit-appearance" in attribValDict.keys() and not attribValDict["-webkit-appearance"]=='listbox': # (Firefox 74 forces white background if -moz-appearance listbox, must set -moz-appearance=none for that as done above, just not for checkboxes etc)
         if "-moz-appearance" in attribValDict["-webkit-appearance"]:
@@ -1753,14 +1745,28 @@ def outCss(css,outfile,debugStopAfter,pixelSize):
             del attribValDict["-moz-appearance"]
         else: # override 'none' coming from anywhere
           attribValDict["-moz-appearance"]=attribValDict["-webkit-appearance"]
-    # end of adding aliases
+def remove_stars(css,pixelSize):
+  for el in list(css.keys()):
+    for prop,value in list(css[el].items()):
+      if prop.startswith("**"):
+        del css[el][prop]
+        if not pixelSize: css[el][prop[2:]] = value
+      elif prop.startswith("*"):
+        del css[el][prop]
+        if pixelSize: css[el][prop[1:]] = value
+    if css[el] == {}: del css[el]
+def fix_MathJax(css): # (see comments above)
+  for k in list(css.keys()):
+    if k.find("div.MathJax_Display")>-1: css[k.replace("div.MathJax_Display",".MathJax span.math")]=css[k]
+def get_rList(css):
+  # For each attrib:val find which elems share it & group them
+  rDic={} # maps (attrib,val) to a list of elements that have it
+  for elem,attribValDict in list(css.items()):
+    add_aliases(elem,attribValDict)
     for i in list(attribValDict.items()):
       rDic.setdefault(i,[]).append(elem.strip())
-  del css # won't use that any more this function
-  attrib_val_elemList = list(rDic.items())
-  # Browser debugging by binary chop:
-  attrib_val_elemList.sort() # (makes it easier to think about)
-  if do_binary_chop:
+  return sorted(list(rDic.items()))
+def binary_chop(attrib_val_elemList):
     global binary_chop_results
     disable_start,disable_end,binary_chop_results = debug_binary_chop(attrib_val_elemList,binary_chop_results)
     if binary_chop_results:
@@ -1773,6 +1779,7 @@ def outCss(css,outfile,debugStopAfter,pixelSize):
     else:
       print("Binary chop: Disabling these attributes: "+"; ".join([("%s=%s"%(k,v)) for (k,v),e in attrib_val_elemList[disable_start:disable_end]]))
       del attrib_val_elemList[disable_start:disable_end]
+def make_outList(attrib_val_elemList):
   # If any element groups are identical, merge contents, but beware to keep some things separate:
   outDic = {}
   for (k,v),elemList in attrib_val_elemList:
@@ -1791,9 +1798,11 @@ def outCss(css,outfile,debugStopAfter,pixelSize):
       if not eList: continue
       eList.sort()
       outDic.setdefault(tuple(eList),{})[k]=v
-  # Now ready for output
-  def lenOfShortestElem(elemList): return (min([len(e) for e in elemList if len(e)]),elemList) # (elemList is already alphabetically sorted, so have that as secondary sort)
-  for elemList,style in sorted(outDic.items(),lambda x,y,lenOfShortestElem=lenOfShortestElem:cmp(lenOfShortestElem(x[0]),lenOfShortestElem(y[0]))):
+  return sorted(outDic.items(),lambda x,y,lenOfShortestElem=lenOfShortestElem:cmp(lenOfShortestElem(x[0]),lenOfShortestElem(y[0])))
+def lenOfShortestElem(elemList): return (min([len(e) for e in elemList if len(e)]),elemList) # (elemList is already alphabetically sorted, so have that as secondary sort)
+
+def do_output(outList,outfile,debugStopAfter):
+  for elemList,style in outList:
     if debugStopAfter:
       # for pedantic debugging, write each rule separately
       for e in elemList:
