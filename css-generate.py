@@ -1516,6 +1516,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # test on https://www.google.com/recaptcha/api2/demo
 
   for t in ["checkbox","radio"]: css['article.survey-page div.'+t+'-button-container > input[type="'+t+'"]']={"**opacity":"1"} # surveymonkey 2021: DO show the radio buttons (overriding opacity even at size=unchanged), seeing as their substitute display is done by colours we don't show
+  for t in ["checkbox","radio"]: css['body.ballots form#new_ballot div.question td input[type="'+t+'"]']={"**width":"auto","**height":"auto","**position":"static","**opacity":"1"} # ACCU AGM 2023 (electionbuddy.com)
   
   css['#stockSellApp .currency-symbol']={"**position":"static"} # not absolute (Fidelity NetBenefits stock-options form 2021-09: the currency symbol overprinted the first digit when using CSS at size=unchanged)
   css['div.checkbox > input']={"**margin-left":"0px"} # please don't set negative margin to put it underneath some SVG whose state does not show in these colours
