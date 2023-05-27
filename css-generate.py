@@ -1011,6 +1011,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   
   # css['agm-map div[style^="z-index: 3"]']={"**opacity":"0"} # Sopra UKVCAS 2021-05: stops total map occlusion (but still some)
   css['agm-map div']={"**background":"transparent"} # stops more map occlusion, but markers become squares
+  css['div#splash-screen + div img']={'**z-index':'9'} # Instagram previews (in Private/Incognito mode: not tried creating an account or anything: beware it's a Facebook property)
 
   css['body > div#preso, body > div#preso div']={"**background":"transparent"} # Preso training courses
   css['body > div#ada-entry > div:empty']={"**background":"transparent"} # Zoom webinar registrations
