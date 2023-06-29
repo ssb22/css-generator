@@ -1484,6 +1484,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     # Slack app-login with size=unchanged: please don't make the "Launch in Slack" buttons invisible due to badly-coded(?) :after CSS:
     css['.c-button--primary:after']={'visibility':'hidden'}
     css['div > index, div > move, div > interrupt'] = defaultStyle.copy() # LiChess move list
+    css['cg-container > svg.cg-custom-svgs']={'background':'transparent'} # LiChess 2023
     css['a.js-user-link > span.note-header-author-name']={"word-wrap":"normal"} # not break-word (Gitlab line comments on pull requests)
   
   css['div[role="checkbox"]']={"border":"thin blue solid","width":"1em"} # airtable
