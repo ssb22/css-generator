@@ -1429,6 +1429,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["a > i.fa:empty:before,button > i.fa:empty:before"]={"font-family":"FontAwesome, "+serif_fonts}
   emptyLink("a.overlay-close","Close",css,printOverride,colour)
   emptyLink("div.bannerContent__closeButton","Close",css,printOverride,colour,False)
+  emptyLink("div.bcCloseWrapper > div.bcClose > div:only-child","Close",css,printOverride,colour,False)
 
   css['li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/publication.png"],li.tooltipListItem a.lnk div.card img.thumbnail[src="/img/placeholder.png"],div.tooltip div.tooltipList li > a.cardContainer > div.cardThumbnail, div.tooltip div.tooltipList li > a.cardContainer > div.cardChevron']={"*display":"none"}
   css['div.tooltip > div.tooltipHeader > div']={"*display":"inline-block"}
