@@ -1563,6 +1563,11 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#outer > div#cub-monitor > img#cub-monitor-pic'],css['div#outer > div#cub-monitor > canvas#screen']={'display':'none'},{'z-index':'0','border':'grey solid'} # JSBeeb
   css['button.open > svg:only-child']={'border':colour['link']} # johnian used this in 2023, possibly from a template: adding a border was only way to make menu button visible at all
 
+  ao3_warnings = "div#main > ol.work ul.required-tags"
+  css[ao3_warnings]={'**border':'thin blue solid','**overflow':'auto'}
+  css[ao3_warnings+" span"]={'**word-break':'break-all'}
+  for R in "rating-explicit rating-mature rating-notrated warning-yes".split(): css[ao3_warnings+" span."+R]={'**border':'thin red solid'}
+
   css['span.MuiTouchRipple-root,div.MuiBox-root']={'**background':'transparent'} # some React sites
 
   # End site-specific hacks
