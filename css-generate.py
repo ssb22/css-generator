@@ -1568,6 +1568,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[ao3_warnings+" span"]={'**word-break':'break-all'}
   for R in "rating-explicit rating-mature rating-notrated warning-yes".split(): css[ao3_warnings+" span."+R]={'**border':'thin red solid'}
 
+  css['body > div.blink-sdk-widget-container']={'**background':'transparent'}
+
   css['span.MuiTouchRipple-root,div.MuiBox-root']={'**background':'transparent'} # some React sites
 
   # End site-specific hacks
