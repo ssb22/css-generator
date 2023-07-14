@@ -1571,6 +1571,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.blink-sdk-widget-container']={'**background':'transparent'}
 
   css['span.MuiTouchRipple-root,div.MuiBox-root']={'**background':'transparent'} # some React sites
+  css['body[itemtype="http://schema.org/CreativeWork/DocumentObject"] div[role="main"] div']={'**background':'transparent'} # Google Drive PDF viewer 2023
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
