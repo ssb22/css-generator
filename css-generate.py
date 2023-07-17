@@ -759,12 +759,14 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
       # This might contain text for speech that's hidden from graphical browsers, but we want to show it anyway because the graphical icon probably won't show
       "height":"auto","width":"auto","text-indent":"0px"} # not -1000px or whatever they did to put the text off-screen
 
-  def emptyLink(lType,content,css,printOverride,colour,isRealLink=True,omitEmpty=False,isInsideRealLink=False,undo=False):
+  def emptyLink(lType,content,css,printOverride,colour,isRealLink=True,omitEmpty=False,isInsideRealLink=False,undo=False,unchangedSizeOnly=False):
    assert not ',' in lType
    assert not (undo and content)
    if isInsideRealLink: isRealLink = False # overrides
    if omitEmpty: eList = [""]
    else: eList = [":empty",":blank",":-moz-only-whitespace"]
+   if unchangedSizeOnly: prefix="**"
+   else: prefix=""
    for empty in eList:
     # Fill in the text of an empty link according to
     # context (making up for the fact that we're not
@@ -774,37 +776,36 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if isRealLink: key = lType+":link"+empty
     else: key = lType+empty
     if undo: css[key+":before"],css[key+":after"]={},{}
-    else: css[key+":after"]={"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
+    else: css[key+":after"]={prefix+"color":colour["link"]} # (better make sure the colour is right, as it might be in the middle of a load of other stuff)
     if content:
-      if isInsideRealLink: css[key+":after"]["content"]='"'+content+'"'
-      else: css[key+":after"]["content"]='"'+content+']"' # overriding "]"
+      if isInsideRealLink: css[key+":after"][prefix+"content"]='"'+content+'"'
+      else: css[key+":after"][prefix+"content"]='"'+content+']"' # overriding "]"
     elif not isInsideRealLink:
-      if undo: css[key+":after"]["content"]='""'
-      else: css[key+":after"]["content"]='"]"'
+      if undo: css[key+":after"][prefix+"content"]='""'
+      else: css[key+":after"][prefix+"content"]='"]"'
     if not undo:
-      printOverride[key+":after"]={"color":"#000080"}
-      css[key+":before"]={"color":colour["link"]}
-      printOverride[key+":before"]={"color":"#000080"}
+      printOverride[key+":after"]={prefix+"color":"#000080"}
+      css[key+":before"]={prefix+"color":colour["link"]}
+      printOverride[key+":before"]={prefix+"color":"#000080"}
     if isRealLink:
       key = key.replace(":link",":visited")
       if not undo:
-        css[key+":after"]={"color":colour["visited"]}
-        printOverride[key+":after"]={"color":"#000080"}
-        css[key+":before"]={"color":colour["visited"]}
-        printOverride[key+":before"]={"color":"#000080"}
+        css[key+":after"]={prefix+"color":colour["visited"]}
+        printOverride[key+":after"]={prefix+"color":"#000080"}
+        css[key+":before"]={prefix+"color":colour["visited"]}
+        printOverride[key+":before"]={prefix+"color":"#000080"}
     else: # not isRealLink
       if not isInsideRealLink:
-        if undo: css[key+":before"]["content"] = '""'
-        else: css[key+":before"]["content"] = '"["'
-      if undo:
-        css[key]={"text-decoration":"none","cursor":"auto","color":colour["text"]}
+        if undo: css[key+":before"][prefix+"content"] = '""'
+        else: css[key+":before"][prefix+"content"] = '"["'
+      if undo: css[key]={prefix+"text-decoration":"none",prefix+"cursor":"auto",prefix+"color":colour["text"]}
       else:
-        css[key]={"text-decoration":"underline","cursor":"pointer","display":"inline","margin":"0px 1ex 0px 1ex","color":colour["link"]}
-        css[key+":before"]["cursor"] = css[key+":after"]["cursor"] = "pointer"
+        css[key]={prefix+"text-decoration":"underline",prefix+"cursor":"pointer",prefix+"display":"inline",prefix+"margin":"0px 1ex 0px 1ex",prefix+"color":colour["link"]}
+        css[key+":before"][prefix+"cursor"] = css[key+":after"][prefix+"cursor"] = "pointer"
       for ll in ["",":before",":after"]:
-        if undo: css[exclude_ie_below_9+key+":hover"+ll]={"background":"transparent"}
-        else: css[exclude_ie_below_9+key+":hover"+ll]={"background":colour["hover-bkg"]}
-      printOverride[key] = {"color":"#000080"}
+        if undo: css[exclude_ie_below_9+key+":hover"+ll]={prefix+"background":"transparent"}
+        else: css[exclude_ie_below_9+key+":hover"+ll]={prefix+"background":colour["hover-bkg"]}
+      printOverride[key] = {prefix+"color":"#000080"}
 
   css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
 
@@ -1349,6 +1350,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['#standardSearch .searchControlContainer .searchButton'] = {'*width':'auto'} # site was somehow overriding it to a pixel width on Safari 6, cutting off the larger text
   emptyLink("#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,colour,False)
   emptyLink("#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,colour,False)
+  emptyLink("nav > div#vector-main-menu-dropdown","Menu",css,printOverride,colour,False,unchangedSizeOnly=True) # Wikipedia 2023
+  css['input.cdx-checkbox__input']={'**opacity':'1'}
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
   
@@ -1661,7 +1664,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
       assert attr in css[k].keys(), attr+" was in printOverride["+k+"] but not css"
       if screen_ReOverride[k][attr] == css[k][attr]: del screen_ReOverride[k][attr] # don't need to re-iterate an identical attribute
       else:
-        assert attr in ['color','background','background-color','*font-size'], attr+" not identical in "+k
+        assert attr.replace('*','') in ['color','background','background-color','font-size'], attr+" not identical in "+k
         screen_ReOverride[k][attr] = css[k][attr]
     if not screen_ReOverride[k]: del screen_ReOverride[k]
   for k in list(css.keys()):
