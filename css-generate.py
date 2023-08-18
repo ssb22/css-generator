@@ -1572,6 +1572,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for R in "rating-explicit rating-mature rating-notrated warning-yes".split(): css[ao3_warnings+" span."+R]={'**border':'thin red solid'}
   css["body.route-storyReading div.left-rail.affixed,body.route-storyReading div.left-rail.affixed div"]={"**border":"none","**background":"transparent"} # Wattpad 'share' button bar
   css["body.route-storyReading div.new-comment-field textarea"]={"**border":"thin blue solid"} # make it more obvious
+  css["shreddit-post a.absolute"]={"**background":"transparent","**opacity":"0.2"}
 
   css['body > div.blink-sdk-widget-container']={'**background':'transparent'}
 
