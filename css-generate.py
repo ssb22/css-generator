@@ -1334,6 +1334,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['div.radioplayer-emp-container > div#empv3[style="width: 1px; height: 1px;"]']={"height":"0px","overflow":"hidden"} # so that player controls are higher up (don't say display:none or it won't play in some browsers)
     css['button.twite__share-button,button.twite__share-button + div.twite__panel,a.twite__share-button']={"display":"none"} # BBC 2016/17: users of social networks already know how to share things; don't need icons that take up whole screen when page is put into large print
     css['form[action^="https://ssl.bbc.co.uk"] > button.p-f-button']={'display':'none'} # doesn't work very well anyway and takes up too much room
+  css['span[aria-checked="true"],div[aria-checked="true"],span.cf-gb-single__scale-item[aria-checked="true"]'],css['span.cf-gb-single__scale-item']={'border':'green dotted'},{'border':colour['button-bkg']} # newvista surveys (used by BBC complaints 2023)
   css['div[style^="background-image"] + img']={'**opacity':'1'} # Twitter embedded tweets with images at size=unchanged
   css['body#schedules-day div.programmes-page li#on-now']={"border":"blue solid"}
   css['button.smp__blocklink div.smp__overlay div.smp__message div.smp__cta span.smp__messagetext']={"background":colour["button-bkg"],"border":"red solid","margin":"1em"} # 2018 "listen now" button (easy to miss)
