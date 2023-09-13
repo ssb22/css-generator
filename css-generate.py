@@ -1582,6 +1582,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body.video.displayCover.embed div']={'**background':'transparent'} # BBC Ideas videos 2023
 
+  # quotev quizzes 2023
+  css['div#quiz_questions div.selected']={'border':'blue solid'}
+  css['div#quizResArea span#resPieChart']={'display':'none'}
+  css['div#quiz_questions div.opt[style^="background-color:rgba(0,2"]']={'border':'green solid'}
+  css['div#quiz_questions div.opt[style^="background-color:rgba(2"]']={'border':'red solid'}
+  css['div#quiz_questions div.q']={'border':'thin grey solid'}
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
