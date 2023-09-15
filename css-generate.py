@@ -1589,6 +1589,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#quiz_questions div.opt[style^="background-color:rgba(2"]']={'border':'red solid'}
   css['div#quiz_questions div.q']={'border':'thin grey solid'}
 
+  css['body.mainWindow div.conductorContent div._lvv_w:not(._lvv_y)']={'**border':'thick blue groove'} # unread emails on sites that use Outlook on the Web (OWA) 2023-09 (not tested except at size=unchanged, hence **'d)
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
