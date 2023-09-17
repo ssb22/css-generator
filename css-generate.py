@@ -1352,6 +1352,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   emptyLink("#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,colour,False)
   emptyLink("#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,colour,False)
   emptyLink("nav > div#vector-main-menu-dropdown","Menu",css,printOverride,colour,False,unchangedSizeOnly=True) # Wikipedia 2023
+  css['body.mediawiki div.mw-notification-area-overlay']={'**background':'transparent'} # + editing
   css['input.cdx-checkbox__input']={'**opacity':'1'}
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
