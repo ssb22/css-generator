@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-23.  Version 0.9936"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-23.  Version 0.9937"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -537,6 +537,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[i].update(css[i+" span,"+i+" kbd"])
   css["acronym"]["color"]=colour["bold"]
   css["abbr"]["color"]=colour["bold"]
+  css["ins"]["color"]=colour["italic"]
+  css["del"]["color"]=colour["italic"]
+  css["del"]["text-decoration"]="line-through"
   # Some browsers might start styling abbr by default but not acronym.  Some older browsers might understand acronym title= but not abbr title=, so some sites might try to use acronym= for backward compatibility, but given that this must be for nonessential information anyway (as many simpler browsers don't support either) it probably makes sense to prefer abbr now (if it might be displayed by default on a greater number of modern browsers) unless the webmaster wants to emulate the browser in CSS.
   css["acronym"]["border-bottom"]="1px dotted"
   css["abbr"]["border-bottom"]="1px dotted"
@@ -752,7 +755,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['main']['*max-width']='100%' # work around too wide on some sites
   css['input']['*max-width']='100%'
   css['select']['*max-width']='100%'
-
+  
   # Begin site-specific hacks
 
   if not pixelSize: css['div.icon:not(:empty)']={
