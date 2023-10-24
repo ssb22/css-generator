@@ -1359,7 +1359,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['input.cdx-checkbox__input']={'**opacity':'1'}
   # HomeSwapper etc:
   css['iframe[style^="display: none"]']={"*display":"none"}
-  
+
   # sites created at wix.com must have this or their JS will crash on load and not display any content:
   css['div#ReflowTestContainer[style^="width: 1px"]']={"*width":"1px","*height":"1px","*overflow":"hidden"}
   css['div#ReflowTestContainer[style^="width: 1px"] > div#ReflowTestNode']={"*width":"200px"}
@@ -1585,6 +1585,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body[itemtype="http://schema.org/CreativeWork/DocumentObject"] div[role="main"] div']={'**background':'transparent'} # Google Drive PDF viewer 2023
 
   css['body.video.displayCover.embed div']={'**background':'transparent'} # BBC Ideas videos 2023
+  css['div#bilibiliPlayer div,shreddit-post div,vds-media div']={'**background':'transparent'} # more videos
 
   # quotev quizzes 2023
   css['div#quiz_questions div.selected']={'border':'blue solid'}
