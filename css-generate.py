@@ -692,8 +692,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   del css[xmlKey]["*text-decoration"] # because this CSS won't be able to put it back in for links (since it doesn't know which elements ARE links in arbitrary XML)
   # Exception to above for Mozilla scrollbars:
   css[":root:not(HTML):not(page):not(svg) slider:not(:empty)"]={"background":"#301090"}
-  # and Firefox icons:
-  css[":root:not(HTML) *"]={"-moz-context-properties":"fill,fill-opacity","fill":colour["link"],"fill-opacity":"1"}
+  # and Firefox icons: (TODO: this may need re-testing on affected versions of Firefox; needed to add :not(svg) or get link-coloured parts in object-embedded SVG files in Safari)
+  css[":root:not(HTML):not(svg) *"]={"-moz-context-properties":"fill,fill-opacity","fill":colour["link"],"fill-opacity":"1"}
 
   checkbox_scale = int(pixelSize/16)
   for iType in ["checkbox","radio"]:
@@ -1540,6 +1540,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   gDocs='body.docs-gm[itemtype="http://schema.org/CreativeWork/DocumentObject"] '
   css[gDocs+'div,'+gDocs+'svg']={'background':'transparent'} # avoid obscuring the canvas at size=unchanged
   if not colour["text"]=="black": css[gDocs+'canvas']={'background':'white','filter':'invert(1)'} # because we can't override the black text except by an invert filter (let's assume any browser capable of running Google Docs is also capable of CSS filter effects)
+  css['object']['filter']='none' # override site invert if we've also overridden SVG foreground and background
   
   # Similarly for Oracle "Outside In Web View Export"
   oiwve='div.oit-view-root.pages-view '
