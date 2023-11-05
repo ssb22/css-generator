@@ -1392,6 +1392,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.secondary-nav__left-section > ul.secondary-nav__list'] = { '*display':'block'} # Tesco strikes again.  In 2017-11 their web design department apparently decided anyone with a narrow window (e.g. due to screen magnification) is not allowed to see their Clubcard vouchers on request.  Every little helps... to frustrate our browsing :-(
   css['.header--sticky .primary-nav__item__panel, .header--sticky .utility-nav .utility-nav__list']={"*display":"block"}; css['div[dojotype="dojox.widget.AutoRotator"]'] = {"*display":"none"} # Not that Sainsbury's web developers were any more helpful.  This fixes their broken scrolling 2016-10.
   css['iframe[src^="https://pp.ephapay.net"]']={'*height':'15em'} # Sainsbury's payment card details (they make it non-scrollable)
+  css['iframe[src^="http://127.0.0.1:7396/"]']={'*height':'20em'} # Folding@Home client similar (2023)
   css['div.headerContainer > div#searchResultsDidNotFind:before']={"*content":'""'} # more Tesco image madness
   css['body#delivery div#homeDelivery div#deliverySlots td.reserved div.slotDescription']={"border":"thick solid green"} # (and try to make that a bit clearer)
   css['div.tabs > ul.tabs-header-container > li.tabheader.active > a h2, div.tabs > ul.tabs-header-container > li.tabheader.active > a span']={'color':colour["text"]} # Tesco 2018-02 again (confusing non-functional link as current tab)
