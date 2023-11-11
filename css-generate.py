@@ -1603,6 +1603,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['article.oit-overlay div.oit-svg-layer svg']={'**background':'transparent'} # OraDocs occlusion
   css['div.body-layout div.navigation-drawer-container']={'**background':'transparent'}
 
+  css['body#kt-body div.chapter-editor .checkbox > input']={'**position':'static','**opacity':'1'} # RR 2023-11
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
