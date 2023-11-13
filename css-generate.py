@@ -1504,9 +1504,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.stat-cell.n']={'border':'red solid'} # caniuse (TODO: why is text now black-on-black unless mouseover?)
   css['div.stat-cell.y']={'border':'green solid'}
 
-  css['div#pt_checkout_onepage input[type="checkbox"],div#pt_checkout_onepage input[type="radio"],body#SurveyEngineBody input[type="checkbox"],body#SurveyEngineBody input[type="radio"]']={'opacity':'1','position':'static'} # Claires checkout junk-signup checkbox + Qualtrics surveys: please make current state visible (don't just use colours that might be overridden or not seen)
-  css['input.oo-ui-inputWidget-input[type="checkbox"]']={'opacity':'1'} # e.g. MediaWiki on Wenlin edit pages: please make current state more visible
-  css['div.gl-display-flex input[type="checkbox"]']={'opacity':'1'} # GitLab had the same problem
+  css['div#pt_checkout_onepage input[type="checkbox"],div#pt_checkout_onepage input[type="radio"],body#SurveyEngineBody input[type="checkbox"],body#SurveyEngineBody input[type="radio"]']={'**opacity':'1','position':'static'} # Claires checkout junk-signup checkbox + Qualtrics surveys: please make current state visible (don't just use colours that might be overridden or not seen)
+  css['input.oo-ui-inputWidget-input[type="checkbox"]']={'**opacity':'1'} # e.g. MediaWiki on Wenlin edit pages: please make current state more visible
+  css['div.gl-display-flex input[type="checkbox"],div.gl-form-checkbox input[type="checkbox"]']={'**opacity':'1'} # GitLab had the same problem
 
   css['span.starRating-blank:empty:before']={'opacity':'0.5'} # Yellow Pages
 
