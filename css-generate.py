@@ -1602,6 +1602,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.oit-section > div.oit-svg:first-child > div.oit-svg-layer:first-child > svg']={'**display':'none'} # OraDocs white page
   css['article.oit-overlay div.oit-svg-layer svg']={'**background':'transparent'} # OraDocs occlusion
   css['div.body-layout div.navigation-drawer-container']={'**background':'transparent'}
+  css['form[action^="/hcmUI"] div']={'**background':'transparent'}
 
   css['body#kt-body div.chapter-editor .checkbox > input']={'**position':'static','**opacity':'1'} # RR 2023-11
 
