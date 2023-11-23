@@ -1554,6 +1554,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if not colour["text"]=="black": css['div.app-main-container.is-suite canvas, body > div#root > div.et-container canvas']={'background':'white','filter':'invert(1)'}
   # and shimo.im
   if not colour["text"]=="black": css['body.lizard-one > div#root canvas']={'background':'white','filter':'invert(1)'}
+  # and vis.js
+  if not colour["text"]=="black": css['div.vis-network > canvas']={'background':'white','filter':'invert(1)'}
   # and Grafana and Kabana
   css['body.app-grafana.theme-dark *, body#kibana-body *']={'background':'transparent'}
   # and Internet Archive Wayback Machine 2022-11
@@ -1571,6 +1573,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # Chinese Words Separator extension:
   css['X-P > X-S > X-Z']={'fill':'initial','-webkit-text-fill-color':'initial'} # so it can set its own colours via "color"
   css['X-Z > X-H > X-B[g]']={'border-bottom':'thin blue solid'} # ambiguity notification
+  
   css['div#outer > div#cub-monitor > img#cub-monitor-pic'],css['div#outer > div#cub-monitor > canvas#screen']={'display':'none'},{'z-index':'0','border':'grey solid'} # JSBeeb
   css['button.open > svg:only-child']={'border':colour['link']} # johnian used this in 2023, possibly from a template: adding a border was only way to make menu button visible at all
 
