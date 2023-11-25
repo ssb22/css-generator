@@ -1609,6 +1609,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body#kt-body div.chapter-editor .checkbox > input']={'**position':'static','**opacity':'1'} # RR 2023-11
 
+  css['div[aria-checked="true"]:empty:before'],css['div[aria-checked="false"]:empty:before'],css['div[aria-disabled="true"]:empty:before']={"content":r'"\2705"'},{"content":r'"\274C"'},{"opacity":"0.5"} # oj-switch (in Oracle Jet)
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
