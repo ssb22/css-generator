@@ -1148,7 +1148,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a:empty:hover"]={"**opacity":"0.5"}
   css["body > div#default-acx-overlay-container, html.hcfe body > div.modal-backdrop, body > div.content-background:empty"]={"**background":"transparent"} # Google Play Console
   css['div.videocontrols[role="none"], div.videocontrols[role="none"] div#controlsContainer, div.videocontrols[role="none"] div#controlsContainer div']={"**background":"transparent"} # Firefox e.g. v85 (see toolkit/content/widgets/videocontrols.js, hidden by DOM Inspector)
-  css["div#react-root,div#react-root div"]={"**background":"transparent"} # e.g. Twitter video posts 2021 (dozens of nested divs with video positioned underneath)
+  css['body > div#react-root main div,body > div#app article > a[href^="https://twitter.com/"]:first-child:empty ~ * div, body.videoEmbedBody div']={"**background":"transparent"} # Twitter video posts (dozens of nested divs with video positioned underneath) + other embedded videos
   css["div.campl-row, div.campl-row > div.campl-wrap, div.campl-wrap > div#content, div#content > div.campl-content-container"]={"**background":"transparent"} # similarly for Panopto(?) lecture platform used by cl.cam
   css["body.player-v2.v2ui div, body > div.mwPlayerContainer, body > div.mwPlayerContainer div"]={"**background":"transparent"} # and Kaltura videos (used by Oracle)
   css["div.video.wistia_embed, div.video.wistia_embed div"]={"**background":"transparent"}
