@@ -882,6 +882,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.mediawiki div.chess-board > div > a.image:before, body.mediawiki div.chess-board > div > a.image:after']={"content":'""'} # overriding our [..]
   css['a:link div']["*padding"]="0px" # WikiMedia some site notices (the div is set to display inline, and adding padding to inline elements can cause overprinting)
   css['body.mediawiki div#mw-navigation > div#mw-panel']={'**height':'100%','**overflow-y':'auto'} # for Wikimedia at size=unchanged: otherwise, when zoomed in, may get trouble with 2 scrollbars 2020-09 (because body is fixed at height 100% but excludes mw-panel, and bottom border of body is not clear so situation is difficult to distinguish from that of a rendering-as-blank EU cookie-consent popup obscuring much of the page)
+  css['body.mediawiki div#vector-page-titlebar-toc']={'**display':'none'} # it gets in the way of the text on small windows
   
   # Syntax highlighting of code on various platforms:
   shl_keyword = {"color":colour["italic"]}
