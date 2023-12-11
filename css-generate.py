@@ -1610,6 +1610,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div#__next ~ div[portal-container] span']={'**background':'transparent'} # ChatGPT 2023-11
   css['body > div#__next main.relative > div.h-full > div.w-full']={"**border":"thin blue solid"}
   css['div[jsshadow] span']={'**background':'transparent'} # Google Accounts verification 2023-12
+  css['div[jscontroller] ~ iframe + div div[role="document"] div']={'**background':'transparent'} # Google Docs PDF viewer 2023-12
 
   css['body#kt-body div.chapter-editor .checkbox > input']={'**position':'static','**opacity':'1'} # RR 2023-11
 
