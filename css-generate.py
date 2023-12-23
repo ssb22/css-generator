@@ -1616,6 +1616,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['div[aria-checked="true"]:empty:before'],css['div[aria-checked="false"]:empty:before'],css['div[aria-disabled="true"]:empty:before']={"content":r'"\2705"'},{"content":r'"\274C"'},{"opacity":"0.5"} # oj-switch (in Oracle Jet)
 
+  css['body > div.c-sky-toast-container div,div.c-search-result__wrapper + a:last-child'],css['div.ui-datepicker-header > a.ui-datepicker-prev > span, div.ui-datepicker-header > a.ui-datepicker-next > span'],css['div.ui-datepicker-header > a.ui-datepicker-prev:after'],css['div.ui-datepicker-header > a.ui-datepicker-next:before']={'**background':'transparent'},{'**display':'none'},{'**color':colour['link'],'**content':r'"\2190"'},{'**color':colour['link'],'**content':r'"\2192"'} # Benevity 2023-12
+
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
   css["input[type=text],input[type=password],input[type=search]"]={"border":"1px solid grey"} # TODO what if background is close to grey?
