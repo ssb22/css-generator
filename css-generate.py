@@ -1619,6 +1619,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div.c-sky-toast-container div,div.c-search-result__wrapper + a:last-child'],css['div.ui-datepicker-header > a.ui-datepicker-prev > span, div.ui-datepicker-header > a.ui-datepicker-next > span'],css['div.ui-datepicker-header > a.ui-datepicker-prev:after'],css['div.ui-datepicker-header > a.ui-datepicker-next:before']={'**background':'transparent'},{'**display':'none'},{'**color':colour['link'],'**content':r'"\2190"'},{'**color':colour['link'],'**content':r'"\2192"'} # Benevity 2023-12
 
   css['section#l-main-content > div.l-ad,section#l-main-content > div.l-ad div']={'**background':'transparent'} # Business Insider
+  css['html.bc-iframe video-js div,div[data-pagelet="WatchPermalinkVideo"] div']={'**background':'transparent'}
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
