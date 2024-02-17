@@ -1620,6 +1620,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['section#l-main-content > div.l-ad,section#l-main-content > div.l-ad div']={'**background':'transparent'} # Business Insider
   css['html.bc-iframe video-js div,div[data-pagelet="WatchPermalinkVideo"] div']={'**background':'transparent'}
+  css['div.from-other div.conversation-message']={'border':'green solid'}
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
