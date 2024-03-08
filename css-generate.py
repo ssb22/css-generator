@@ -1376,6 +1376,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['svg[viewBox="0 0 32 32"]']={'*height':'32px','*width':'32px'}
   css['svg[viewBox="0 0 36 36"]']={'*height':'36px','*width':'36px'}
   css['div#streamingAudio.jsAudioPlayer']={"*display":"block"} # please don't change it to display:none in Firefox when it scrolls out of view: doing this causes 'jumpy scrolling'
+  css['section > main > div > div > article div']={'**background':'transparent'} # Instagram 2024-01 (no account so not tried logging in, but some videos are visible from Google search results in private mode)
   
   # Chrome view source (you can activate a CSS bookmarklet on it), and Firefox view source:
   css['body > div.line-gutter-backdrop + table span.html-tag, body#viewsource span.start-tag, body#viewsource span.end-tag']={"color":colour["headings"]}
