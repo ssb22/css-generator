@@ -1241,6 +1241,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a > span.iconHelp:empty:after"]={"content":'"Help"'}
   css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child:before"]={"content":'"Play/pause button: "'} ; css["div.jwplayer span.jwcontrols > span.jwcontrolbar span.jwplay > span:first-child > button"]={"width":'2em'} # (CSS can't put a text label into that button itself, but we can at least put one before it.  Original is done with background graphics etc.  Incidentally, button:empty doesn't work because it does have some whitespace.)
   css["div.jwplayer span.jwcontrolbar,div.jwplayer span.jwcontrols"]={"display":"inline"} # don't hide controls when mouse is not over video (seeing as they're being repositioned outside it)
+  css['div#jwplayer > div > div']={'**background':'transparent'}
   css['div.rp__controls__playback[aria-label="Play"]:empty:before']={"content":'"Play/pause"'} # e.g. ABC Classic FM
   css['div.audio > div.play[rv-on-click]:empty:before']={'content':'"\21E8 Play"'}
   css['div.audio > div.pause[rv-on-click]:empty:before']={'content':'"Pause"'}
