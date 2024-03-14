@@ -1132,7 +1132,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     'border':'thin blue solid'}
   css['#content > div#pubListResults > div#pubsViewResults > div.publication'] = {'border':'thin blue solid'}
   css[jjc+"span.pageNum[data-no]"]={'display':'none'}
-  css['div.ui-dialog,div[style^="position: fixed"],div.js-sticky,div.tooltip']={'**background':colour["background"],'**border':'blue solid'} # these can be opaque
+  css['div.ui-dialog,div[style^="position: fixed"]:not(style~="width: 0%;"),div.js-sticky,div.tooltip']={'**background':colour["background"],'**border':'blue solid'} # these can be opaque (but omit width 0% as some sites use it for not-visible-yet shopping-cart popups)
   css['#content > div#videoPlayerInstance, #content > div#videoPlayerInstance div, div.video-js > div,div.video-js > div.vjs-text-track-display > div:empty']={'**background':'transparent'} # for 0.css
   css['div#regionMain div.tooltip > ul.tooltipList > li.tooltipListItem > div.header > a > span.source + span.title:before']={'content':r'"\2014"'}
   css['div#materialNav > nav > h1 + ul.directory > li > a span.title + span.details,nav ul.books > li.book > a span.name + span.abbreviation'] = {'*float':'right'}
