@@ -1161,6 +1161,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div.youtube5top-overlay,div.youtube5bottom-overlay,div.youtube5info,div.youtube5info-button,div.youtube5controls"]={"background":"transparent"}
     css["div#yt-masthead > div.yt-masthead-logo-container, div#yt-masthead-content > form#masthead-search > button.yt-uix-button.yt-uix-button-default"]={"display":"none"}
     css['div.guide-item-container > ul.guide-user-links.yt-box > li[role="menuitem"], div.guide-channels-content > ul#guide-channels > li[role="menuitem"]']={"display":"inline-block"}
+  css['div#player.ytd-watch-flexy div']={'**background':'transparent'} # YouTube itself 2024 (but seek-previews still don't show)
   emptyLink("div.welcome-wrapper > nav > div.container > div.navbar-header > button.navbar-toggle > span:first-child","Toggle navigation",css,printOverride,colour,False)
   emptyLink("div.btn-group > button#hideNames > i.fa-eye-slash","Hide names",css,printOverride,colour,False)
   emptyLink("div.btn-group > button#showNames > i.fa-eye","Show names",css,printOverride,colour,False)
