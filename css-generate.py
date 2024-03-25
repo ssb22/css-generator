@@ -834,6 +834,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
   css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; emptyLink('table.diff-table button[aria-label="Add line comment"]','C',css,printOverride,colour,False,True) # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
   css['svg[aria-label="status_success"]'],css['svg[aria-label="status_failed"]'] = {'stroke':'green'}, {'stroke':'red'} # GitLab pipelines (otherwise can get both being yellow on white, since it seems we're not overriding the white)
+  css['div.web-ide-promo-popover']={'**display':'none'} # GitLab 2024: sorry but when a screen magnifier is in use, the effective window size is much smaller than what your designers imagined, and that non-dismissable IDE promotion actually blocks us from using your entire site, so let's remove it (at size=unchanged; at other sizes the layout is changed anyway)
   css['button.more-actions-toggle > span.icon > svg']={'width':'1em','height':'1em'}
   # and media players:
   css["div.mwPlayerContainer div.play-btn span.ui-icon-play:empty:after"]={"content":r'"\21E8 Play"'}
