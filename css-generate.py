@@ -1034,6 +1034,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['body.camcors-small input.gwt-TextBox'] = {"width":"2em"} # otherwise they are too wide and affect the whole div
     css['body.camcors-small div.span12 > div > table > tbody > tr > td > div > div > table > tbody > tr > td[align="right"] > div > div.gwt-Label'] = {"display":"none"} # otherwise the "non-supervision hours disabled by college" message can get too wide which affects the whole div
   make_like_link = ["a.gwt-Anchor"] # CamCORS (and other sites that use the same toolkit)
+  css["casc-crsid"]={"background":colour["background"]} # CamCORS 7
   # (CamCORS hacks end here)
   make_like_link += ["ul.sidebar-navigation > li.sidebar-navigation-item > div.sidebar-navigation-item-header > div.columns:not(:empty)",'a[data-target]'] # ott.cl.cam.ac.uk
   css[','.join(make_like_link)] = css["a:link "] ; css[','.join([(x+":hover") for x in make_like_link])] = css["a:link:hover "]
