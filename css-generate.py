@@ -640,6 +640,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # The following cause text selection visibility problems in Webkit / Safari 5/6 (cannot be worked around with :first-letter::selection)
   # (added 'caption' 2022: causing selection issues in Safari 15)
   # (+ Chrome 12 bug - OL/LI:first-letter ends up being default size rather than css size; harmless if have default size set similarly anyway)
+    "main", # Safari 17.3
     "label","address","p","ol","ul","li","pre","code","body","html","h1","h2","h3","h4","h5","h6","form","th","tr","td","dl","dt","dd","b","blockquote","section","header","footer","center","article","span","aside","figure","caption","figcaption","time","em"
   ]
   firstLetterBugs_msie=["a"]
