@@ -1608,6 +1608,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#quiz_questions div.q']={'border':'thin grey solid'}
 
   css['body.mainWindow div.conductorContent div._lvv_w:not(._lvv_y)']={'**border':'thick blue groove'} # unread emails on sites that use Outlook on the Web (OWA) 2023-09 (not tested except at size=unchanged, hence **'d)
+  css['div[aria-label^="Scheduling assistant"] div[style~="background-color: rgb(247, 247, 247);"]:empty, div.calendarTentative:empty, div.calendarBusy:empty']={'**border':'thick red solid','**z-index':'1'} # OWA 2024-02
+  css['div[aria-label^="Scheduling assistant"] div.ms-border-color-neutralLight:empty']={'**border':'none'} # no half-hour lines please: it gives phantom arrays to nystagmus patients
+  css['div.peekPopup abbr.monthPickerCurrentDay,div.peekPopup div[role="row"] span.ms-bg-color-themeLight[role="gridcell"]']={'**border':'grey solid','**z-index':'1'}
   css['div.oui-savant__viewstack__container__dashboards,div.oui-savant__viewstack__container']={'**background':'transparent'} # Oracle OCI dashboard 2023-09
   css['div.oit-section > div.oit-svg:first-child > div.oit-svg-layer:first-child > svg']={'**display':'none'} # OraDocs white page
   css['article.oit-overlay div.oit-svg-layer svg']={'**background':'transparent'} # OraDocs occlusion
