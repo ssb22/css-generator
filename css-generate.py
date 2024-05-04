@@ -1612,6 +1612,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div[aria-label^="Scheduling assistant"] div.ms-border-color-neutralLight:empty']={'**border':'none'} # no half-hour lines please: it gives phantom arrays to nystagmus patients
   css['div.peekPopup abbr.monthPickerCurrentDay,div.peekPopup div[role="row"] span.ms-bg-color-themeLight[role="gridcell"]']={'**border':'grey solid','**z-index':'1'}
   css['div.oui-savant__viewstack__container__dashboards,div.oui-savant__viewstack__container']={'**background':'transparent'} # Oracle OCI dashboard 2023-09
+  css['div#appRoot div.oneplayer-root div.video-engine-container,div#appRoot div.oneplayer-root div.critical-playback-container,div#appRoot div.oneplayer-root div.fluent-critical-ui-container,div#appRoot div.oneplayer-root div.onePlayer-overlay,div#appRoot div.oneplayer-root div.onePlayer-overlay div,div#appRoot div.oneplayer-root div.captions-region']={'**background':'transparent'} # SharePoint videos 2024-02
   css['div.oit-section > div.oit-svg:first-child > div.oit-svg-layer:first-child > svg']={'**display':'none'} # OraDocs white page
   css['article.oit-overlay div.oit-svg-layer svg']={'**background':'transparent'} # OraDocs occlusion
   css['div.body-layout div.navigation-drawer-container']={'**background':'transparent'}
