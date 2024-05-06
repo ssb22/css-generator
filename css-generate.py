@@ -329,7 +329,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     "*cursor":"auto",
     "*overflow":"visible", # the default.  NOT "auto" - it may put the scroll bar of a table off-screen at the bottom.  If (e.g.) "pre" overflows, we want the whole window to be scrollable to see it.
     
-    "*filter":"none","*-webkit-filter":"none","*-moz-filter":"none","*-o-filter":"none","*-ms-filter":"none",
+    "filter":"none","-webkit-filter":"none","-moz-filter":"none","-o-filter":"none","-ms-filter":"none", # don't allow 'invert' etc unless we say
     "*opacity":"1",
     "*mask-image":"none","*-webkit-mask-image":"none",
     
@@ -588,7 +588,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if not colour["background"]=="white": css["body.mediawiki img.tex"]["border"]="white solid 3px" # to make sure letters near the edge are readable if the rest of the page has a dark background
   
   if "image_opacity" in colour.keys():
-    del css["img"]["*opacity"],css["img"]["*filter"]
+    del css["img"]["*opacity"],css["img"]["filter"]
     css["img"]["opacity"]="%g" % colour["image_opacity"]
     css["img"]["filter"]="alpha(opacity=%d)" % int(colour["image_opacity"]*100) # for IE8 and below
     if colour["image_opacity"]<0.9: css["img:hover"] = css["a:hover img"]={"opacity":"0.9","filter":"alpha(opacity=90)"}
