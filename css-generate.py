@@ -868,8 +868,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     else: c = r'\%04X' % asc
     webkitGeckoScreenOverride[k+":after"]={"content":'"'+c+'"'}
   # Hack for unedited links on WP/MediaWiki and other wikis:
-  css["a:link.new, a:link.new i,a:link.new b, div#main-content div#main-entry div#main-article a:link.createlink"]={"color":colour["coloured"] } # (TODO use a different colour?)
-  printOverride["a:link.new, a:link.new i,a:link.new b, div#main-content div#main-entry div#main-article a:link.createlink"]={"color":"black" } # TODO: shade of grey?
+  css["a:link.new, a:link.new i,a:link.new b, div#main-content #main-entry div#main-article a:link.createlink"]={"color":colour["coloured"] } # (TODO use a different colour?)
+  printOverride["a:link.new, a:link.new i,a:link.new b, div#main-content #main-entry div#main-article a:link.createlink"]={"color":"black" } # TODO: shade of grey?
   # and the navpopup extension: (also adding ul.ui-autocomplete to this, used on some sites)
   css['body.mediawiki > div.navpopup,body.mediawiki .referencetooltip,body.mediawiki .rt-tooltip, ul.ui-autocomplete, body.mediawiki div.mwe-popups']={"*position":"absolute","border":"blue solid","**background":colour["background"]}
   css["body.mediawiki > div.ui-dialog"]={"*position":"relative","border":"blue solid"} # some media 'popups'
