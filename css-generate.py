@@ -1498,7 +1498,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['cg-container > svg.cg-custom-svgs']={'background':'transparent'} # LiChess 2023
     css['a.js-user-link > span.note-header-author-name']={"word-wrap":"normal"} # not break-word (Gitlab line comments on pull requests)
   
-  css['div[role="checkbox"]']={"border":"thin blue solid","width":"1em"} # airtable
+  css['div[role="checkbox"]']={"border":"thin blue solid","min-width":"1em"}
   
   css['div#htmlContent > title + div.container div.page svg path']={'display':'none'} # Cambridge University Press page backgrounds in books (best at 0px with browser zoom?)
 
@@ -1619,6 +1619,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body#kt-body div.chapter-editor .checkbox > input']={'**position':'static','**opacity':'1'} # RR 2023-11
 
   css['div[aria-checked="true"]:empty:before'],css['div[aria-checked="false"]:empty:before'],css['div[aria-disabled="true"]:empty:before']={"content":r'"\2705"'},{"content":r'"\274C"'},{"opacity":"0.5"} # oj-switch (in Oracle Jet)
+  css['form.x1g1 input[type="checkbox"]']={'**opacity':'1','**z-index':'99'}
 
   css['body > div.c-sky-toast-container div,div.c-search-result__wrapper + a:last-child'],css['div.ui-datepicker-header > a.ui-datepicker-prev > span, div.ui-datepicker-header > a.ui-datepicker-next > span'],css['div.ui-datepicker-header > a.ui-datepicker-prev:after'],css['div.ui-datepicker-header > a.ui-datepicker-next:before']={'**background':'transparent'},{'**display':'none'},{'**color':colour['link'],'**content':r'"\2190"'},{'**color':colour['link'],'**content':r'"\2192"'} # Benevity 2023-12
 
