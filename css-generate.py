@@ -1992,7 +1992,9 @@ alternate_server_for_https_requests = os.environ.get('CSS_HTTPS_SERVER',None) # 
 alternate_server_needs_css_extension = os.environ.get('CSS_HTTPS_SERVER_USE_EXTENSION',False)
 alternate_server_is_letsEncrypt = os.environ.get('CSS_HTTPS_SERVER_IS_LETSENCRYPT',False)
 
-if "adjuster-config" in sys.argv:
+if "version" in sys.argv or "--version" in sys.argv:
+  print (__doc__+"\nLicensed under the Apache License, Version 2.0")
+elif "adjuster-config" in sys.argv:
   # print out configuration options for Web Adjuster
   # e.g. large-print-websites.appspot.com
   ps = [] ; cs = [] ; ha = []
