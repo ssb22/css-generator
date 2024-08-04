@@ -1620,6 +1620,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['div[aria-checked="true"]:empty:before'],css['div[aria-checked="false"]:empty:before'],css['div[aria-disabled="true"]:empty:before']={"content":r'"\2705"'},{"content":r'"\274C"'},{"opacity":"0.5"} # oj-switch (in Oracle Jet)
   css['form.x1g1 input[type="checkbox"]']={'**opacity':'1','**z-index':'99'}
+  css['div#confirmTariff input#checkbox-tandc']={'**position':'static','**width':'auto','**height':'auto'}
 
   css['body > div.c-sky-toast-container div,div.c-search-result__wrapper + a:last-child'],css['div.ui-datepicker-header > a.ui-datepicker-prev > span, div.ui-datepicker-header > a.ui-datepicker-next > span'],css['div.ui-datepicker-header > a.ui-datepicker-prev:after'],css['div.ui-datepicker-header > a.ui-datepicker-next:before']={'**background':'transparent'},{'**display':'none'},{'**color':colour['link'],'**content':r'"\2190"'},{'**color':colour['link'],'**content':r'"\2192"'} # Benevity 2023-12
 
