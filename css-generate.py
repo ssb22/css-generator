@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-24.  Version 0.9937"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-24.  Version 0.9938"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -384,8 +384,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   for e in rubyElements: del css[e]["*text-align"]
 
   if not pixelSize:
-    # We want div's background to have some transparency, because some sites position <video> elements behind the div.  But we don't want it completely transparent (unless we can confirm it contains video), as we probably won't be able to catch all UI elements as exceptions.
-    for e in ['div','article']: css[e]['background'] = colour["translucent_background_compromise"]
+    # Size = unchanged, much-reduced layout changes.  But a LOT of "modern" sites assume they can stack elements (DIV, A, etc) with some transparency.  This can result in obscuring text if we have solid colour backgrounds.  But we don't want it completely transparent (unless we can confirm that's correct for a site-specific hack) as we probably won't be able to catch all UI elements as exceptions.
+    for e in css.keys():
+      if 'background' in css[e] and not e in ['html','body']: css[e]['background'] = colour["translucent_background_compromise"]
     # Also do this for Firefox's PDF viewer:
     css["div.pdfViewer div.page > div.canvasWrapper + div.textLayer"]={"opacity":"1"}
 
@@ -577,7 +578,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   # Images and buttons:
   css["img:not(.emoji)"]={"background":colour["image_transparency_compromise"]} # see WhatsApp exception above
-  css["object"]["background"]=colour["image_transparency_compromise"] # for SVG via object tag (treated as separate document and we can't always change currentColor from black e.g. if CSS not fully installed)
   
   # Exception needed for MediaWiki TeX images
   # (they tend to be transparent but with antialiasing that
