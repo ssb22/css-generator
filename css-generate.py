@@ -1016,6 +1016,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["ul.profile-icons li span"]={"*display":"inline"}
   # hack for embedded Google Maps. 2012-07 Google Maps iframe with certain settings + Safari + CSS = consume all RAM and hang; many sites use GM to embed a "how to find us" map which isn't always the main point of the page, so turn these off until we can fix them properly; in the meantime if you want to see Google Maps you have to turn off this stylesheet (which you'd have to do ANYWAY even without this hack if you want to get any sense out of the maps, unless we can figure out how to give them enough layout exceptions)
   css["body.kui > div#main > div#inner > div#infoarea + div#page > /*div#le-container + div +*/ div#main_map, div.googlemaps > div.mapsbord, div#divMapContainer.MapSingle > div#divMapTools.MapTools, div#divMapContainer.MapSingle > div#divMapTools.MapTools + div#divMap"]={"*display":"none"}
+  css["div#mapDiv div"]={"**background":"transparent"}
   css["div.rsltDetails > div.jsDivMoreInfo.hideObj"]={"*display":"block"} # not 'reveal address only when mouse-over' (which might be OK in conjunction with a map but...)
   
   # css['agm-map div[style^="z-index: 3"]']={"**opacity":"0"} # Sopra UKVCAS 2021-05: stops total map occlusion (but still some)
