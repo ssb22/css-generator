@@ -1630,6 +1630,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['html.bc-iframe video-js div,div[data-pagelet="WatchPermalinkVideo"] div']={'**background':'transparent'}
   css['body > div.cdk-overlay-container']={'**background':'transparent'} # AngularJS
   css['body > aside.up-unity-panel-overlay']={'**background':'transparent'}
+  css['div#pinnedBottomCenter > div, div#pinnedMiddleLeft > div, div#pinnedTopRight > div']={'**background':'transparent'} # Planet Computers 2024-08 (still needs too-large window at unchanged layout)
+  css['div[class^="MediaWrapper"]:empty']={'**background':'transparent'} # Typescript forms (could do with catching its surrounding div also; at least we get only 50% loss of brightness)
   css['.topic-list .main-link a.title']={'**padding':'0px'} # otherwise multiline topics suffer background overwrite on Discourse forums
 
   # End site-specific hacks
