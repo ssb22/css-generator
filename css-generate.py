@@ -956,6 +956,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre > span.variable'] = shl_varname
   css['pre > span.string'] = shl_string
   css['pre > span.ln'] = shl_preproc
+  css['div.react-file-line > span.pl-c'] = shl_comment
+  css['div.react-file-line > span.pl-k'] = shl_keyword
+  css['div.react-file-line > span.pl-v'] = shl_varname
+  css['div.react-file-line > span.pl-en'] = shl_varname
+  css['div.react-file-line > span.pl-s'] = shl_string
+  css['div.react-file-line > span.pl-c1'] = shl_preproc
+  css['div#copilot-button-positioner textarea.react-blob-textarea[aria-readonly="true"]']={'**z-index':'-9'} # allow syntax-highlighted version to show through
   css['.FileContents .u-pre span.com'] = shl_comment
   css['.FileContents .u-pre span.kwd'] = shl_keyword
   css['.FileContents .u-pre span.typ'] = shl_varname
