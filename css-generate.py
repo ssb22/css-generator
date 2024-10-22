@@ -993,6 +993,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.code-view td.lines-code code span.kc'] = shl_keyword
   css['div.code-view td.lines-code code span.k'] = shl_keyword
   css['div.code-view td.lines-code code span.s'] = shl_string
+  css['.mw-geshi span.kw4'] = shl_keyword
+  css['.mw-geshi span.kw1'] = shl_varname
+  css['.mw-geshi span.co1'] = shl_comment
+  css['.mw-geshi span.coMULTI'] = shl_comment
+  css['.mw-geshi span.co2'] = shl_preproc
+  css['.mw-geshi span.st0'] = shl_string
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
