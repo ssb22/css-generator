@@ -1485,8 +1485,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
     css['span[aria-label~="Delivered"] > svg']={"opacity":"0.5"}
     css['span[aria-label~="Read"] > svg']={"border":"thin blue solid"}
-    css['div.js_message_bubble']={"border":"thin solid green"} # WeChat
-    css['pre#editArea']={"border":"thin solid white"} # WeChat
     # Confluence:
     css['body#com-atlassian-confluence span.inline-comment-marker']={"color":colour["coloured"]}
     css['body#com-atlassian-confluence span.diff-html-added,body#com-atlassian-confluence span.diff-html-removed,body#com-atlassian-confluence span.diff-html-changed']={"color":colour["italic"]}
