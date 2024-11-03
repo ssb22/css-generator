@@ -828,8 +828,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#mngb > div#gb > div.gb_Sb,body#gsr.srp > div#mngb']={"*display":"none"} # other graphical clutter they added 2014-09 and 2014-10
   css['div#gbqfbw > button#gbqfb > span.gbqfi:empty']={'*display':'none'} # 2549-pixel high image on Android shop that messes up scrolling 2016-08
   css['div.kv > cite + div.action-menu.ab_ctl > a[aria-label="Result details"]'] = {'*display':'none'} # it's supposed to just reveal the "Cached" or "Similar" options, but these should be displayed anyway with our CSS so it's a non-functional unlabelled link: save confusion
-  # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi, .diff-*) and GitHub (code-deletion, code-addition) and CGit
-  k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem, table.diff-table td.blob-code-deletion span, table.diff-table td.blob-code-addition span, body > div.cgit .diff .del, body > div.cgit .diff .add"
+  # Hack for Wikipedia/MediaWiki diffs (diffchange) and Assembla diffs (was, now) and Sourceforge (vc_, gd, gi, .diff-*) and GitHub (code-deletion, code-addition, diff-line-row) and CGit
+  k = ".diffchange, .was, .now, .vc_diff_change, .vc_diff_remove, .vc_diff_add, .wDiffHtmlDelete, .wDiffHtmlInsert, pre > span.gd, pre > span.gi, .diff-chg, .diff-add, .diff-rem, table.diff-table td.blob-code-deletion span, table.diff-table td.blob-code-addition span, tr.diff-line-row code.deletion span, tr.diff-line-row code.addition span, body > div.cgit .diff .del, body > div.cgit .diff .add"
   css[k] = {"color":colour["italic"]}
   printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
@@ -947,6 +947,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['td.blob-code > span.pl-c, td.blob-code > span.pl-c > span, div.highlight > pre > span.pl-c, div.highlight > pre > span.pl-c > span'] = shl_comment
   css['td.blob-code > span.pl-v,td.blob-code > span.pl-smi, div.highlight > pre > span.pl-v, div.highlight > pre > span.pl-smi'] = shl_varname
   css['td.blob-code > span.pl-s, div.highlight > pre > span.pl-s'] = shl_string
+  css['code.syntax-highlighted-line span.pl-k'] = shl_keyword
+  css['code.syntax-highlighted-line span.pl-c, code.syntax-highlighted-line span.pl-c > span'] = shl_comment
+  css['code.syntax-highlighted-line span.pl-v,code.syntax-highlighted-line span.pl-smi,code.syntax-highlighted-line span.pl-en'] = shl_varname
+  css['code.syntax-highlighted-line span.pl-s'] = shl_string
   css['pre > span.enscript-comment'] = shl_comment
   css['pre > span.enscript-reference'] = shl_preproc
   css['pre > span.enscript-string'] = shl_string
