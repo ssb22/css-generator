@@ -1654,6 +1654,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div[class^="MediaWrapper"]:empty']={'**background':'transparent'} # Typescript forms (could do with catching its surrounding div also; at least we get only 50% loss of brightness)
   css['.topic-list .main-link a.title']={'**padding':'0px'} # otherwise multiline topics suffer background overwrite on Discourse forums
   css['html[data-rh] > body > div#app-mount div, html[data-rh] > body > div#app-mount div canvas']={'**background':'transparent'} # Discord
+  css['body > div#__next > div[data-overlay-container] > main div']={'**background':'transparent'} # c.ai
 
   css['html.non-touch-device body > div#wrapper:first-child']={'**z-index':'9'} # greenhouse.io scheduler: prevent it appearing behind the body and dimmed out
   css['.full-calendar .fc-body .fc-content-col .fc-bgevent-container .fc-bgevent']={'**border':'blue solid','**opacity':'0.9'} # not 0.3 we can hardly see it
