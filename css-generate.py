@@ -1653,7 +1653,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#pinnedBottomCenter > div, div#pinnedMiddleLeft > div, div#pinnedTopRight > div']={'**background':'transparent'} # Planet Computers 2024-08 (still needs too-large window at unchanged layout)
   css['div[class^="MediaWrapper"]:empty']={'**background':'transparent'} # Typescript forms (could do with catching its surrounding div also; at least we get only 50% loss of brightness)
   css['.topic-list .main-link a.title']={'**padding':'0px'} # otherwise multiline topics suffer background overwrite on Discourse forums
-  css['html[data-rh] > body > div#app-mount div, html[data-rh] > body > div#app-mount div canvas']={'**background':'transparent'} # Discord
+  css['html[data-rh] > body > div#app-mount div, html[data-rh] > body > div#app-mount div canvas'],css['html[data-rh] > body > div#app-mount div[role="Menu"]']={'**background':'transparent'},{'**background':colour["background"],'**border':'thin blue solid'} # Discord
   css['body > div#__next > div[data-overlay-container] > main div']={'**background':'transparent'} # c.ai
 
   css['html.non-touch-device body > div#wrapper:first-child']={'**z-index':'9'} # greenhouse.io scheduler: prevent it appearing behind the body and dimmed out
