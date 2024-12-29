@@ -1007,6 +1007,15 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['.mw-geshi span.coMULTI'] = shl_comment
   css['.mw-geshi span.co2'] = shl_preproc
   css['.mw-geshi span.st0'] = shl_string
+  css['code.text-sm > span.token[style="color: rgb(106, 153, 85);"]'] = shl_comment
+  css['code.text-sm > span.token[style="color: rgb(86, 156, 214);"]'] = shl_keyword
+  css['code.text-sm > span.token[style="color: rgb(220, 220, 170);"]'] = shl_varname
+  css['code.text-sm > span.token[style="color: rgb(206, 145, 120);"]'] = shl_string
+  css['code span.token.macro'] = shl_preproc
+  css['code span.token[style="color: rgb(92, 99, 112); font-style: italic;"]'] = shl_comment
+  css['code span.token[style="color: rgb(198, 120, 221);"]'] = shl_keyword
+  css['code span.token[style="color: rgb(97, 175, 239);"]'] = shl_varname
+  css['code span.token[style="color: rgb(152, 195, 121);"]'] = shl_string
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
