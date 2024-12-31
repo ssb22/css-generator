@@ -1016,6 +1016,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['code span.token[style="color: rgb(198, 120, 221);"]'] = shl_keyword
   css['code span.token[style="color: rgb(97, 175, 239);"]'] = shl_varname
   css['code span.token[style="color: rgb(152, 195, 121);"]'] = shl_string
+  css['code span.hljs-keyword,code span.hljs-type'] = shl_keyword
+  css['code span.hljs-title,code span.hljs-built_in'] = shl_varname
+  css['code span.hljs-string'] = shl_string
+  css['code span.hljs-comment'] = shl_comment
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
@@ -1058,6 +1062,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#bilibili-player div']={"**background":"transparent"}
   css['div.close svg path']={'**stroke':colour["text"]}
   css['div.bpx-player-video-area div']={"**background":"transparent"}
+  css['body > span.pointer-events-none.fixed:empty']={"**background":"transparent"}
   
   make_like_link = ["a.gwt-Anchor"]
   css["casc-crsid"]={"background":colour["background"]} # CamCORS 7
