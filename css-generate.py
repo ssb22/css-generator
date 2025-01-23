@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-24.  Version 0.9939"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.9939"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -924,6 +924,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre > code span.hljs-string'] = shl_string
   css['pre > code span.hljs-comment'] = shl_comment
   css['pre > code span.hljs-number'] = shl_preproc
+  css['pre > code span.hljs-meta'] = shl_preproc
   css['pre.code > span.com'] = shl_comment
   css['pre.code > span.str'] = shl_string
   css['pre.code > span.kwd'] = shl_keyword
@@ -1016,6 +1017,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['code span.token[style="color: rgb(198, 120, 221);"]'] = shl_keyword
   css['code span.token[style="color: rgb(97, 175, 239);"]'] = shl_varname
   css['code span.token[style="color: rgb(152, 195, 121);"]'] = shl_string
+  css['code span.token.keyword'] = shl_keyword
+  css['code span.token.function'] = shl_varname
+  css['code span.token.string'] = shl_string
+  css['code span.token.comment'] = shl_comment
   css['code span.hljs-keyword,code span.hljs-type'] = shl_keyword
   css['code span.hljs-title,code span.hljs-built_in'] = shl_varname
   css['code span.hljs-string'] = shl_string
