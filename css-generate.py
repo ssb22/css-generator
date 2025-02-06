@@ -1677,6 +1677,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['html[data-rh] > body > div#app-mount div, html[data-rh] > body > div#app-mount div canvas'],css['html[data-rh] > body > div#app-mount div[role="Menu"]']={'**background':'transparent'},{'**background':colour["background"],'**border':'thin blue solid'} # Discord
   css['body > div#__next > div[data-overlay-container] > main div']={'**background':'transparent'} # c.ai
   css['body > div.flex > nav, body > div.flex > nav div, body > div > ol:empty, div.flex div.sticky div, div[style="width: 0px;"] div']={'**background':'transparent'} # Claude
+  css['body > div#root main#main-content[data-testid="main-content"] div,div[aria-live="polite"][style^="position: absolute"],div[aria-live="polite"][style^="position: absolute"] div']={'**background':'transparent'} # BBC
+  css['smp-plugin']={'display':'none'} # sorry BBC, too much confusion with Shadow DOMs interfering with video visibility in Firefox so we're dropping your "watch next" links
 
   css['html.non-touch-device body > div#wrapper:first-child']={'**z-index':'9'} # greenhouse.io scheduler: prevent it appearing behind the body and dimmed out
   css['.full-calendar .fc-body .fc-content-col .fc-bgevent-container .fc-bgevent']={'**border':'blue solid','**opacity':'0.9'} # not 0.3 we can hardly see it
@@ -2020,6 +2022,7 @@ newDiv.appendChild(cssLink);
 newDiv.appendChild(document.createTextNode("."));
 newDiv.appendChild(document.createElement("BR"));
 newDiv.appendChild(document.createTextNode("You may be able to drag the 'try stylesheet' link to your browser's Bookmarks toolbar and later press it to re-style any web page"""+exception+r""" provided the site does not use a Content-Security-Policy header to block third-party stylesheets (browsers are supposed to exempt 'bookmarklets' from this but many don't)."""+letsEncCheck+r""" Anyway, due both to this problem and to some sites' patchy use of CSS priorities, your override is likely to work better if set it as a user-supplied stylesheet "));
+/* (we could create a bookmarklet that injects the CSS by value, but then there would be issues with updating if not allowed to XMLHttpRequest from 3rd party and have to carry the whole value in the bookmarklet, and would still have priorities issue) */
 e=document.createElement("A"); e.href="#inst"; e.className="ssbOk"; e.appendChild(document.createTextNode("as described below")); newDiv.appendChild(e);
 newDiv.appendChild(document.createTextNode("."));
 //newDiv.appendChild(document.createTextNode(" (which also means you won't have to press it each time and it will continue to work if this website moves, or becomes unavailable due to local firewall rules etc). The 'bookmarklet' approach is best for short-term use (public terminals etc) or testing."));
