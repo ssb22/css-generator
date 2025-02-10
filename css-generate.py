@@ -1677,6 +1677,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['html[data-rh] > body > div#app-mount div, html[data-rh] > body > div#app-mount div canvas'],css['html[data-rh] > body > div#app-mount div[role="Menu"]']={'**background':'transparent'},{'**background':colour["background"],'**border':'thin blue solid'} # Discord
   css['body > div#__next > div[data-overlay-container] > main div']={'**background':'transparent'} # c.ai
   css['body > div.flex > nav, body > div.flex > nav div, body > div > ol:empty, div.flex div.sticky div, div[style="width: 0px;"] div']={'**background':'transparent'} # Claude
+  css['body.dark > div#root div:empty'],css['div.ds-button--filled[style^="--ds-button-color: rgba"]']={'**background':'transparent'},{'border':'thick orange solid'} # DeepSeek
   css['body > div#root main#main-content[data-testid="main-content"] div,div[aria-live="polite"][style^="position: absolute"],div[aria-live="polite"][style^="position: absolute"] div']={'**background':'transparent'} # BBC
   css['smp-plugin']={'display':'none'} # sorry BBC, too much confusion with Shadow DOMs interfering with video visibility in Firefox so we're dropping your "watch next" links
 
