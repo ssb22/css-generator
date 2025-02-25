@@ -1682,6 +1682,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div#root main#main-content[data-testid="main-content"] div,div[aria-live="polite"][style^="position: absolute"],div[aria-live="polite"][style^="position: absolute"] div']={'**background':'transparent'} # BBC
   css['smp-plugin']={'display':'none'} # sorry BBC, too much confusion with Shadow DOMs interfering with video visibility in Firefox so we're dropping your "watch next" links
 
+  css['lite-youtube[style^="background-image"]']={"background-image":"attr(background-image)"} # YouTube embedded videos (I'm not sure why this works on Firefox 134 since the attribute setting is not obvious; does not work with generic div)
+  css['lite-youtube[style^="background-image"] > button']={'**background':'transparent'}
+
   css['html.non-touch-device body > div#wrapper:first-child']={'**z-index':'9'} # greenhouse.io scheduler: prevent it appearing behind the body and dimmed out
   css['.full-calendar .fc-body .fc-content-col .fc-bgevent-container .fc-bgevent']={'**border':'blue solid','**opacity':'0.9'} # not 0.3 we can hardly see it
   css['.full-calendar .fc-body .fc-content-col .fc-time-grid-event']={'**border':'green solid'}
