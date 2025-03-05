@@ -1636,6 +1636,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   css['body.video.displayCover.embed div']={'**background':'transparent'} # BBC Ideas videos 2023
   css['div#bilibiliPlayer div,shreddit-post div,vds-media div']={'**background':'transparent'} # more videos
+  css['faceplate-partial + div.grid-container div.masthead *'],css['faceplate-partial + div.grid-container div.masthead div.community-banner:empty']={'**background':'transparent'},{'**background-image':'var(--original-banner)','background-position':'top center','background-size':'contain','background-repeat':'no-repeat'}
 
   # quotev quizzes 2023
   css['div#quiz_questions div.selected']={'border':'blue solid'}
