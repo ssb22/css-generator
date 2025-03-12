@@ -1655,7 +1655,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['article.oit-overlay div.oit-svg-layer svg']={'**background':'transparent'} # OraDocs occlusion
   css['div.body-layout div.navigation-drawer-container']={'**background':'transparent'}
   css['form[action^="/hcmUI"] div']={'**background':'transparent'}
-  css['body > div#__next ~ div[portal-container] span']={'**background':'transparent'} # ChatGPT 2023-11
   css['body > div#__next main.relative > div.h-full > div.w-full']={"**border":"thin blue solid"}
   css['div[jsshadow] span']={'**background':'transparent'} # Google Accounts verification 2023-12
   css['div[jscontroller] ~ iframe + div div[role="document"] div']={'**background':'transparent'} # Google Docs PDF viewer 2023-12
@@ -1678,8 +1677,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['html[data-rh] > body > div#app-mount div, html[data-rh] > body > div#app-mount div canvas'],css['html[data-rh] > body > div#app-mount div[role="Menu"],html[data-rh] > body > div#app-mount div[role="menu"],html[data-rh] > body > div#app-mount div[class^="autocomplete"],html[data-rh] > body > div#app-mount div[class^="reactionTooltip"]']={'**background':'transparent'},{'**background':colour["background"],'**border':'thin blue solid'} # Discord
   css['body > div#__next > div[data-overlay-container] > main div']={'**background':'transparent'} # c.ai
   css['body > div.flex > nav, body > div.flex > nav div, body > div > ol:empty, div.flex div.sticky div, div[style="width: 0px;"] div']={'**background':'transparent'} # Claude
-  css['body.dark > div#root div:empty'],css['div.ds-button--filled[style^="--ds-button-color: rgba"]']={'**background':'transparent'},{'border':'thick orange solid'} # DeepSeek
-  css['div#app-container div#chat-container button.text-purple-500']={'border':'thick orange solid'} # Qwen
+  css['body.dark > div#root div:empty,body > div#__next ~ div[portal-container] span, body > span.pointer-events-none.fixed:empty'],css['div.ds-button--filled[style^="--ds-button-color: rgba"],div#app-container div#chat-container button.text-purple-500,div#composer-background button[aria-pressed="true"]']={'**background':'transparent'},{'border':'thick orange solid'} # DeepSeek,Qwen,ChatGPT
   css['body > div#root main#main-content[data-testid="main-content"] div,div[aria-live="polite"][style^="position: absolute"],div[aria-live="polite"][style^="position: absolute"] div']={'**background':'transparent'} # BBC
   css['smp-plugin']={'display':'none'} # sorry BBC, too much confusion with Shadow DOMs interfering with video visibility in Firefox so we're dropping your "watch next" links
 
