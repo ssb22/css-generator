@@ -1202,7 +1202,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div#content.ytd-app div']={'**background':'transparent'} # YouTube 'shorts'
   css['div.OnePlayer-container div']={'**background':'transparent'}
   css['div[id^="ModalFocusTrapZone"],div[class^="OneUpViewer"] div,div.ms-Overlay']={'**background':'transparent'}
-  if not colour["text"]=="black": css['div[class^="pdfContent_"] canvas']={'background':'white','filter':'invert(1)'}
+  if not colour["text"]=="black": css['div[class^="pdfContent_"] canvas, canvas.pdf-page']={'background':'white','filter':'invert(1)'}
   emptyLink("div.welcome-wrapper > nav > div.container > div.navbar-header > button.navbar-toggle > span:first-child","Toggle navigation",css,printOverride,colour,False)
   emptyLink("div.btn-group > button#hideNames > i.fa-eye-slash","Hide names",css,printOverride,colour,False)
   emptyLink("div.btn-group > button#showNames > i.fa-eye","Show names",css,printOverride,colour,False)
