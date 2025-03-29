@@ -1306,7 +1306,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['#calendar td.fc-widget-content.day-available']={'border':'green solid'}
   css["div.issues-listing div.state.state-closed"]={'color':colour["coloured"],'border':'red solid','font-weight':'bold'} # GitHub: make it slightly more obvious if we're looking at a closed ticket
   css["summary > svg.icon-chevon-down-mktg, details > summary > svg[viewBox=\"0 0 14 8\"]"]={'*display':'none'} # sorry GitHub, it's way too big when in giant print (and don't know why doHeightWidth isn't fixing these)
-  for n in range(6): css['div.ContributionCalendar td[data-level="%d"]' % n] = {'background-color':'var(--color-calendar-graph-day-L%d-bg)' % n} # GitHub contributions graphs changed to using background-color ~2023-03 and we don't want to override it all
+  for n in range(6): css['div.ContributionCalendar td[data-level="%d"]' % n] = {'background-color':'var(--contribution-default-bgColor-%d)' % n} # GitHub contributions graphs changed to using background-color ~2023-03 and we don't want to override it all (var updated 2025-03)
   # For Hatjitsu (team estimation):
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards"]={"*border":"thin red solid"}
   css["div.bg > div.container > div.content > div.ng-scope > section.cardPanel > div.cards > div.card"]={"border":"green solid","*padding":"1em"}
