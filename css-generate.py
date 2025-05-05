@@ -1555,7 +1555,13 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['span.starRating-blank:empty:before']={'opacity':'0.5'} # Yellow Pages
 
   # Google's cookie-consent 2020-09 in 0.css with zoom is disorienting and requires scrolling down to the Accept button, potentially dozens of times per day unless you give up clearing cookies and let Google track you, or hide it like this:
-  css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, body#gsr iframe[src^="https://consent.google.com"], body#gsr div[aria-modal="true"]']={'**display':'none'}
+  css['body#gsr div#main div#cnsw, body#gsr div#main div#lb div[aria-hidden="true"]:empty, body#gsr div#main div#lb div[aria-hidden="true"]:empty + div, body#gsr iframe[src^="https://consent.google.com"]']={'**display':'none'}
+  # css['body#gsr div[aria-modal="true"]']={'**display':'none'} # This works OK for normal search results but can prevent interaction with other features like suggested corrections.  Try allowing the box to remain but making it smaller:
+  css['body#gsr div[aria-modal="true"],body#gsr div[aria-modal="true"] > div']={'**background':'transparent'}
+  css['body#gsr div[aria-modal="true"] > div:first-child']={'**display':'none'} # don't capture clicks on SERP links
+  css['body#gsr div[aria-modal="true"] > div + div + div']={'**max-width':'14em','**position':'fixed','**left':'initial','**top':'initial','**right':'0px','**bottom':'0px'} # float:right doesn't seem to work here
+  css['body#gsr div[aria-modal="true"] span > div']={'**max-width':'14em','**border-left':'thin blue solid'}
+  css['body#gsr div[aria-modal="true"] span > div button + button']={'**position':'absolute','**top':'0px','**right':'0px'} # the Accept button.  Web designers forget that what may be half a screen of text on their box is 5 screens of text for a low vision user and no we don't want to scroll right to the bottom of it to accept cookies for the thousandth time this year.
   css['html']['overflow']='auto'
 
   # Glint employment surveys, and Oracle ADF generated pages, on size=unchanged: make checkboxes visible in 'dark mode' please
