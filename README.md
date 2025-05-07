@@ -106,12 +106,20 @@ your profile directory (if no `chrome` subdirectory exists, create it).
     compensate. (E.g. Firefox 3+ on Windows, and more recent versions
     of Firefox on GNOME 3 with text-scaling-factor set.)
   
-  * If you use dark backgrounds, some versions of Firefox 2 on Windows
+  * If you use dark backgrounds, some versions of Firefox on Windows
     display a white background around the page (so any overspill text
     that is not dark will become unreadable) unless you go into high
     contrast mode. However if you then come out of high contrast mode,
     the fix will persist. (High contrast mode is a nice idea but it
     does break a lot of applications.)
+
+  * If you are using these stylesheets merely to get a dark background
+    at size "unchanged" then you might also want set Firefox's
+    "Settings / General / Language and Appearance / Web site
+    appearance" to "Dark" and remove lines containing
+    Ffx&shy;Dark&shy;Mode&shy;Exceptions CSS to allow websites known
+    to have their own automatic "dark modes" to work, but this can
+    result in a brief white flash while the site is loading.
 
 **Internet Explorer:** Go to Tools / Internet Options / Accessibility
 and set that file as a user-supplied stylesheet.

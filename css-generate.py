@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.9939"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.994" # (9941 next, if minor)
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -1738,9 +1738,35 @@ to true.
 */
 
 /* Note that this stylesheet uses absolute point sizes in a
-number of different places.  This is not good coding, but it
-is necessary with some browsers, to avoid problems when
+number of different places.  This is not good coding, but
+it is necessary with some browsers, to avoid problems when
 interacting with author-supplied stylesheets. */""")
+  elif not colour["text"]=="black": outfile.write("""
+
+/* In Firefox 61+ remove all lines containing the word
+  "FfxDarkModeExceptions"
+  if you want sites known to have their own auto-applied
+  'dark mode' to be given exceptions from this CSS.  This
+  can improve interaction on those sites if our 'dark mode'
+  isn't fully caught up with all features of the site, but
+  beware it can sometimes result in a brief white flash
+  while the site is loading. You also need to set Firefox's
+  "Settings - General - Language and Appearance -
+  Web site appearance" to "Dark". */
+
+/* FfxDarkModeExceptions
+@-moz-document regexp("^(?!https?://("""+"|".join([
+  x.replace(".",r"\.") for x in """
+  bsky.app character.ai chat.deepseek.com chatgpt.com
+  claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
+  libbyapp.com lichess.org octopus.energy
+  ssb22.user.srcf.net www.instagram.com www.itv.com
+  www.jw.org www.newscientist.com www.quotev.com
+  www.reddit.com www.tiktok.com www.tumblr.com
+  www.twitch.tv www.youtube.com x.com
+""".strip().split()])+""")).*") {
+FfxDarkModeExceptions */
+""")
   outfile.write("""
 
 /* Some versions of IE ignore the first entry so: */
@@ -1815,7 +1841,10 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
         outfile.write("::-webkit-input-placeholder { -webkit-text-fill-color: "+colour["form_disabled"]+" !important; }\n") # bug workaround for Safari 10's Webkit (not present on Safari 6 etc): -webkit-text-fill-color in a DIV element overrides that in ::-webkit-input-placeholder, so better re-specify here (making sure it's at the end)
         doneWebkit=1
   outfile.write("}\n")
-
+  if not pixelSize and not colour["text"]=="black": outfile.write("""/* FfxDarkModeExceptions
+}
+FfxDarkModeExceptions */
+""")
   return ret
 
 # Selector prefixes to exclude certain browsers from trying to implement a rule:
