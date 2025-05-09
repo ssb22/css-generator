@@ -1394,7 +1394,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   # also use of 'q' adding duplicate quotes:
   css['div#regionMain > div.wrapper #content article q.scrp:before, div#regionMain > div.wrapper #content article q.scrp:after']={'content':'""'}
 
-  css['div#menuHome > a:link > span.icon:empty:before']={'content':'"Home"'}
   css['#standardSearch .searchControlContainer .searchButton'] = {'*width':'auto'} # site was somehow overriding it to a pixel width on Safari 6, cutting off the larger text
   emptyLink("#content > div#banner span.bannerDismissible > span.icon","X",css,printOverride,colour,False)
   emptyLink("#content a.documentMenuActivator > span.documentMenuIcon > span.icon","Document Menu",css,printOverride,colour,False)
