@@ -1761,7 +1761,7 @@ interacting with author-supplied stylesheets. */""")
   libbyapp.com lichess.org octopus.energy
   ssb22.user.srcf.net www.instagram.com www.itv.com
   www.jw.org www.newscientist.com www.quotev.com
-  www.reddit.com www.tiktok.com www.tumblr.com
+  www.reddit.com www.tiktok.com
   www.twitch.tv www.youtube.com x.com
 """.strip().split()])+""")).*") {
 FfxDarkModeExceptions */
