@@ -1025,6 +1025,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['code span.hljs-title,code span.hljs-built_in'] = shl_varname
   css['code span.hljs-string'] = shl_string
   css['code span.hljs-comment'] = shl_comment
+  css['div.ace_line > span.ace_keyword'] = shl_keyword
+  css['div.ace_line > span.ace_identifier'] = shl_varname
+  css['div.ace_line > span.ace_comment'] = shl_comment
+  css['div.ace_line > span.ace_string'] = shl_string
   
   # Hack for Vodafone UK's login 2012 (stop their mousein/mouseout events going crazy with our layout)
   css["ul#MUmyAccountOptions"]={"*display":"block"}
@@ -1185,6 +1189,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["a:empty"]={"**background":"transparent"} # might be position:absolute over the top of something
   css["a:empty:hover"]={"**opacity":"0.5"}
   css["body > div#default-acx-overlay-container, html.hcfe body > div.modal-backdrop, body > div.content-background:empty"]={"**background":"transparent"} # Google Play Console
+  css['div.ace_layer']={"**background":"transparent"} # Amazon Alexa code editor
   css['div.videocontrols[role="none"], div.videocontrols[role="none"] div#controlsContainer, div.videocontrols[role="none"] div#controlsContainer div']={"**background":"transparent"} # Firefox e.g. v85 (see toolkit/content/widgets/videocontrols.js, hidden by DOM Inspector)
   css['body > div#react-root main div,body > div#app article > a[href^="https://twitter.com/"]:first-child:empty ~ * div, body.videoEmbedBody div']={"**background":"transparent"} # Twitter video posts (dozens of nested divs with video positioned underneath) + other embedded videos
   css["div.campl-row, div.campl-row > div.campl-wrap, div.campl-wrap > div#content, div#content > div.campl-content-container"]={"**background":"transparent"} # similarly for Panopto(?) lecture platform used by cl.cam
