@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.994" # (9941 next, if minor)
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.994"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -702,6 +702,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     if checkbox_scale > 1: css[iKey]={"transform":"scale(%d,%d)" % (checkbox_scale,checkbox_scale),"margin":"%dpx"%(checkbox_scale*6)} # margin not padding (browser problems)
     else: css[iKey]={}
     css[iKey]['-webkit-appearance']=iType
+    if not pixelSize: css[iKey]['width']=css[iKey]['height']='auto' # (this override shouldn't be needed if non-unchanged sizes have overridden it anyway, but override even at size=unchanged in case sites use width=height=0 to hide these controls and use image-only versions that don't work in our colour scheme)
     if browser_is_Firefox_73: css[iKey]['-webkit-appearance'] += ' !important; -moz-appearance: none'
   if pixelSize:
     # In many versions of firefox, a <P ALIGN=center> with an <IFRAME> inside it will result in the iframe being positioned over the top of the main text if the P's text-align is overridden to "left".  But missing out text-align could allow websites to do full justification.  However it seems OK if we override iframe's display to "block" (this may make some layouts slightly less brief, but iframes usually need a line of their own anyway)
