@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.994"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.9941"
 # Works on either Python 2 or Python 3
 
 # Website: http://ssb22.user.srcf.net/css/
@@ -38,6 +38,9 @@
 # file called css_generate_config.py and edit it there
 # (which should make it easier to update the code
 # independently of your configuration).
+# You can also put a css_generate_config.py into your
+# ~/.local/lib/python3*/site-packages or wherever
+# else your Python is configured to get its modules.
 
 # Where to put the output CSS files: default is current directory,
 # but you might want to put them in a subdirectory, or set
@@ -183,6 +186,12 @@ colour_schemes_to_generate = [
 # Some other options you might want to change:
 separate_adjacent_links_at_size_0 = False # sometimes interferes with layouts
 separate_adjacent_links_at_other_sizes = True
+preapply_FfxDarkModeExceptions = False
+override_output_filename=None # or "/path/to/file.css"
+# - if override_output_filename is set, only the first of
+# colour_schemes_to_generate and pixel_sizes_to_generate
+# will apply, and will go to *that* file, implying outHTML=False
+# (you can use this to directly update a Firefox profile etc)
 
 # Fonts: (cjk_fonts is listed first so it can be used in both serif_fonts and sans_serif_fonts)
 cjk_fonts = "Lantinghei SC, AppleGothic"
@@ -274,7 +283,9 @@ if type(colour_schemes_to_generate) in (str,unicode):
   colour_schemes_to_generate = reduce(lambda x,y:x+eval(open(y).read()), glob.glob(colour_schemes_to_generate), [])
 
 def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
-  outfile = open(outputDir+os.sep+filename,"w")
+  if filename.startswith(os.sep): fn=filename # e.g. override_output_filename
+  else: fn=outputDir+os.sep+filename
+  outfile = open(fn,"w")
   smallestHeadingSize = pixelSize*5.0/6.0
   largestHeadingSize = pixelSize*10.0/6.0
 
@@ -1746,7 +1757,8 @@ to true.
 number of different places.  This is not good coding, but
 it is necessary with some browsers, to avoid problems when
 interacting with author-supplied stylesheets. */""")
-  elif not colour["text"]=="black": outfile.write("""
+  elif not colour["text"]=="black":
+    if not preapply_FfxDarkModeExceptions: outfile.write("""
 
 /* In Firefox 61+ remove all lines containing the word
   "FfxDarkModeExceptions"
@@ -1759,8 +1771,8 @@ interacting with author-supplied stylesheets. */""")
   "Settings - General - Language and Appearance -
   Web site appearance" to "Dark". */
 
-/* FfxDarkModeExceptions
-@-moz-document regexp("^(?!https?://("""+"|".join([
+/* FfxDarkModeExceptions""")
+    outfile.write('\n@-moz-document regexp("^(?!https?://('+"|".join([
   x.replace(".",r"\.") for x in """
   bsky.app character.ai chat.deepseek.com chatgpt.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
@@ -1769,9 +1781,8 @@ interacting with author-supplied stylesheets. */""")
   www.jw.org www.newscientist.com www.quotev.com
   www.reddit.com www.tiktok.com
   www.twitch.tv www.youtube.com x.com
-""".strip().split()])+""")).*") {
-FfxDarkModeExceptions */
-""")
+""".strip().split()])+')).*") {')
+    if not preapply_FfxDarkModeExceptions: outfile.write('\nFfxDarkModeExceptions */')
   outfile.write("""
 
 /* Some versions of IE ignore the first entry so: */
@@ -1846,7 +1857,9 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
         outfile.write("::-webkit-input-placeholder { -webkit-text-fill-color: "+colour["form_disabled"]+" !important; }\n") # bug workaround for Safari 10's Webkit (not present on Safari 6 etc): -webkit-text-fill-color in a DIV element overrides that in ::-webkit-input-placeholder, so better re-specify here (making sure it's at the end)
         doneWebkit=1
   outfile.write("}\n")
-  if not pixelSize and not colour["text"]=="black": outfile.write("""/* FfxDarkModeExceptions
+  if not pixelSize and not colour["text"]=="black":
+    if preapply_FfxDarkModeExceptions: outfile.write("}\n")
+    else: outfile.write("""/* FfxDarkModeExceptions
 }
 FfxDarkModeExceptions */
 """)
@@ -1996,13 +2009,16 @@ def do_output(outList,outfile,debugStopAfter):
   return debugStopAfter
 
 def main():
+  global outHTML
+  if override_output_filename: outHTML=False
   if outHTML: print("<div id=pregen_download><h3>Download pre-generated low-vision stylesheets</h3><noscript>(If you switch on Javascript, there will be an interactive chooser here.&nbsp; Otherwise you can still choose manually from the links below.)</noscript><script><!-- \ndocument.write('Although Javascript is on, for some reason the interactive chooser failed to run on your particular browser. Falling back to the list below.'); //--></script><br><ul>")
   # (HTML5 defaults script type to text/javascript, as do all pre-HTML5 browsers including NN2's 'script language="javascript"' thing, so we might as well save a few bytes)
   for pixelSize in pixel_sizes_to_generate:
     saidPixels = False
     for i in range(len(colour_schemes_to_generate)):
       scheme,suffix,colour = colour_schemes_to_generate[i]
-      filename="%d%s.css" % (pixelSize,suffix)
+      filename = override_output_filename
+      if not filename: filename="%d%s.css" % (pixelSize,suffix)
       if pixelSize:
         if saidPixels: pxDesc = "%dpx" % pixelSize # not "" as there's a chance the googlebot will mistake all those duplicate-text links for some kind of attack
         else:
@@ -2014,10 +2030,16 @@ def main():
       elif i==len(colour_schemes_to_generate)-1: print(toPrn+"</li>")
       else: print(toPrn+",")
       do_one_stylesheet(pixelSize,colour,filename)
-    if not sys.stdout.isatty():
-      sys.stderr.write(str(pixelSize)+" ")
-      sys.stderr.flush() # Python 3
-  if not sys.stdout.isatty(): sys.stderr.write("done\n")
+      if override_output_filename: break
+    if not sys.stdout.isatty() or not outHTML:
+      if override_output_filename:
+        sys.stderr.write("Wrote "+override_output_filename+"\n")
+      else:
+        sys.stderr.write(str(pixelSize)+" ")
+        sys.stderr.flush() # Python 3
+    if override_output_filename: break
+  if (not sys.stdout.isatty() or not outHTML) and not override_output_filename:
+    sys.stderr.write("done\n")
   if not outHTML: return
   print("</ul></div>")
   print("""<script><!--
