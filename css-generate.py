@@ -1520,10 +1520,10 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.play > div.input > textarea.code']={'*height':'15em','*margin-left':'1em'} # golang package examples
 
   if not pixelSize:
-    if not colour["background"]=="white": css["body.web div#app div.landing-window div.landing-main div[data-ref], body.web div#app div.landing-window div.landing-main canvas"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
-    css["body.web div#app div.two > div:first-child + div"]={"display":"none"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
-    css["body.web div#app div.message-in"],css["body.web div#app div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
-    css['body.web div#app div[class*="color-"], body.web div#app div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
+    if not colour["background"]=="white": css["html#whatsapp-web div[data-ref], html#whatsapp-web canvas"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
+    css["html#whatsapp-web header + div, html#whatsapp-web header + div div, html#whatsapp-web header + div span"]={"background":"transparent"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
+    css["html#whatsapp-web div.message-in"],css["html#whatsapp-web div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
+    css['html#whatsapp-web div[class*="color-"], html#whatsapp-web div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
     css['span[aria-label~="Delivered"] > svg']={"opacity":"0.5"}
     css['span[aria-label~="Read"] > svg']={"border":"thin blue solid"}
     # Confluence:
@@ -1779,7 +1779,7 @@ interacting with author-supplied stylesheets. */""")
   libbyapp.com lichess.org octopus.energy
   ssb22.user.srcf.net www.instagram.com www.itv.com
   www.jw.org www.newscientist.com www.quotev.com
-  www.reddit.com www.tiktok.com
+  www.reddit.com www.tiktok.com web.whatsapp.com
   www.twitch.tv www.youtube.com x.com
 """.strip().split()])+')).*") {')
     if not preapply_FfxDarkModeExceptions: outfile.write('\nFfxDarkModeExceptions */')
