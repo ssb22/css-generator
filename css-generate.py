@@ -1703,6 +1703,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body.dark > div#root div:empty,body > div#__next ~ div[portal-container] span, body > span.pointer-events-none.fixed:empty'],css['div.ds-button--filled[style^="--ds-button-color: rgba"],div#app-container div#chat-container button.text-purple-500,div#composer-background button[aria-pressed="true"]']={'**background':'transparent'},{'border':'thick orange solid'} # DeepSeek,Qwen,ChatGPT
   css['body > div#root main#main-content[data-testid="main-content"] div,div[aria-live="polite"][style^="position: absolute"],div[aria-live="polite"][style^="position: absolute"] div']={'**background':'transparent'} # BBC
   css['smp-plugin']={'display':'none'} # sorry BBC, too much confusion with Shadow DOMs interfering with video visibility in Firefox so we're dropping your "watch next" links
+  css['body > div#app > div#bolt div']={'**background':'transparent'}
 
   css['lite-youtube[style^="background-image"]']={"background-image":"attr(background-image)"} # YouTube embedded videos (I'm not sure why this works on Firefox 134 since the attribute setting is not obvious; does not work with generic div)
   css['lite-youtube[style^="background-image"] > button']={'**background':'transparent'}
