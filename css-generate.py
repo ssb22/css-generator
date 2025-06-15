@@ -828,6 +828,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css["div.standardModal-content > div.itemImage:first-child > img"]={"*display":"none"} # 'logo bigger than browser' syndrome
 
   # Hack for Google search results:
+  css['body#gsr.srp a[href] > h3']={"**z-index":"1"}
   css["g-img"]={"*display":"inline","*position":"static"}
   css["g-inner-card"]={"background":colour["background"]}
   css["span.vshid"]={"*display":"inline"} # TODO: rm * ?
