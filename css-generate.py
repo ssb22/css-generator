@@ -186,7 +186,7 @@ colour_schemes_to_generate = [
 # Some other options you might want to change:
 separate_adjacent_links_at_size_0 = False # sometimes interferes with layouts
 separate_adjacent_links_at_other_sizes = True
-preapply_FfxDarkModeExceptions = False
+preapply_FfxDarkModeExceptions = False # or True, or a list of extra domains to which you want to apply them (e.g. internal sites)
 override_output_filename=None # or "/path/to/file.css"
 # - if override_output_filename is set, only the first of
 # colour_schemes_to_generate and pixel_sizes_to_generate
@@ -1774,6 +1774,8 @@ interacting with author-supplied stylesheets. */""")
   Web site appearance" to "Dark". */
 
 /* FfxDarkModeExceptions""")
+    if type(preapply_FfxDarkModeExceptions)==list: pfdmxExtra = preapply_FfxDarkModeExceptions
+    else: pfdmxExtra = []
     outfile.write('\n@-moz-document regexp("^(?!https?://('+"|".join([
   x.replace(".",r"\.") for x in """
   bsky.app character.ai chat.deepseek.com chatgpt.com
@@ -1783,7 +1785,7 @@ interacting with author-supplied stylesheets. */""")
   www.jw.org www.newscientist.com www.quotev.com
   www.reddit.com www.tiktok.com web.whatsapp.com
   www.twitch.tv www.youtube.com x.com
-""".strip().split()])+')).*") {')
+""".strip().split()]+pfdmxExtra)+')).*") {')
     if not preapply_FfxDarkModeExceptions: outfile.write('\nFfxDarkModeExceptions */')
   outfile.write("""
 
