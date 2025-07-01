@@ -1780,6 +1780,7 @@ interacting with author-supplied stylesheets. */""")
   x.replace(".",r"\.") for x in """
   bsky.app character.ai chat.deepseek.com chatgpt.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
+  learn.microsoft.com security.microsoft.com outlook.office365.com
   libbyapp.com lichess.org octopus.energy
   ssb22.user.srcf.net www.instagram.com www.itv.com
   www.jw.org www.newscientist.com www.quotev.com
