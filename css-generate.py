@@ -1785,7 +1785,7 @@ interacting with author-supplied stylesheets. */""")
   ssb22.user.srcf.net www.instagram.com www.itv.com www.channel4.com
   www.jw.org www.newscientist.com www.quotev.com
   www.reddit.com www.tiktok.com web.whatsapp.com
-  www.twitch.tv www.youtube.com x.com
+  www.twitch.tv www.youtube.com x.com gitlab.com
 """.strip().split()]+pfdmxExtra)+')).*") {')
     if not preapply_FfxDarkModeExceptions: outfile.write('\nFfxDarkModeExceptions */')
   outfile.write("""
