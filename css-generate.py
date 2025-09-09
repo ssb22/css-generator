@@ -1777,7 +1777,7 @@ interacting with author-supplied stylesheets. */""")
     else: pfdmxExtra = []
     outfile.write('\n@-moz-document regexp("^(?!https?://('+"|".join([
   x.replace(".",r"\.") for x in """
-  bsky.app character.ai chat.deepseek.com chatgpt.com
+  bsky.app character.ai chat.deepseek.com chatgpt.com www.kimi.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
   learn.microsoft.com security.microsoft.com outlook.office365.com
   libbyapp.com lichess.org octopus.energy huggingface.co
