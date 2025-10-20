@@ -1522,7 +1522,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.play > div.input > textarea.code']={'*height':'15em','*margin-left':'1em'} # golang package examples
 
   if not pixelSize:
-    if not colour["background"]=="white": css["html#whatsapp-web div[data-ref], html#whatsapp-web canvas"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it
+    if not colour["background"]=="white": css["html#whatsapp-web div[data-ref], html#whatsapp-web canvas, img.qrcode-img"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it, ditto RedNote
     css["html#whatsapp-web header + div, html#whatsapp-web header + div div, html#whatsapp-web header + div span"]={"background":"transparent"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
     css["html#whatsapp-web div.message-in"],css["html#whatsapp-web div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
     css['html#whatsapp-web div[class*="color-"], html#whatsapp-web div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
