@@ -205,6 +205,8 @@ pinyin_fonts = "FreeSerif, Lucida Sans Unicode, Times New Roman, DejaVu Sans, se
 
 browser_is_Firefox_73 = False # set this to True ONLY if you are using Firefox 73, to work around bug 1616243.  Do NOT set it to True on Firefox 74+ as it will make checkboxes unreadable.
 
+extra_CSS = "" # so you can add more in css_generate_config.py
+
 # ---- End of options (but read on for debugging) ----
 
 # DEBUGGING BY BINARY CHOP: If a complex stylesheet exhibits
@@ -1869,6 +1871,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 }
 FfxDarkModeExceptions */
 """)
+  if extra_CSS: outfile.write(extra_CSS)
   return ret
 
 # Selector prefixes to exclude certain browsers from trying to implement a rule:
