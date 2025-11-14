@@ -2,7 +2,7 @@
 "Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.9942"
 # Works on either Python 2 or Python 3
 
-# Website: http://ssb22.user.srcf.net/css/
+# Website: https://ssb22.user.srcf.net/css/
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
