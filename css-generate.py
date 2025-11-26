@@ -1786,7 +1786,7 @@ interacting with author-supplied stylesheets. */""")
   libbyapp.com lichess.org octopus.energy huggingface.co modelscope.cn
   ssb22.user.srcf.net www.instagram.com www.itv.com www.channel4.com
   www.jw.org hub.jw.org www.newscientist.com www.quotev.com chat.qwen.ai
-  www.reddit.com www.tiktok.com web.whatsapp.com
+  www.reddit.com www.tiktok.com
   www.twitch.tv www.youtube.com x.com gitlab.com gitee.com
   forum.moonshot.ai
 """.strip().split()]+pfdmxExtra)+')).*") {')
