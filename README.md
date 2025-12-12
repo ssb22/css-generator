@@ -1,7 +1,6 @@
 # css-generator
 Low-vision stylesheet generator from https://ssb22.user.srcf.net/css/
-
-(also mirrored at https://ssb22.gitlab.io/css/ just in case)
+(also [mirrored on GitLab Pages](https://ssb22.gitlab.io/css/) just in case)
 
 Many modern Web browsers allow users to set their own CSS
 stylesheets for accessibility purposes. It can be difficult to write a comprehensive
@@ -21,7 +20,7 @@ Size "unchanged" lacks size-related layout changes; this can be useful
 if you do not need large print, or your monitor is big enough for the
 browser's built-in zoom controls to be enough, but you still need to
 change the colours (see
-[advantages of dark backgrounds](https://ssb22.user.srcf.net/css/dark.html)).
+[advantages of dark backgrounds](dark.md)).
 
 What is the best pixel size?
 ----------------------------
