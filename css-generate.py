@@ -1613,12 +1613,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   if not colour["text"]=="black": css[gDocs+'canvas']={'background':'white','filter':'invert(1)'} # because we can't override the black text except by an invert filter (let's assume any browser capable of running Google Docs is also capable of CSS filter effects)
   css['object']['filter']='none' # override site invert if we've also overridden SVG foreground and background
   
-  # Similarly for Oracle "Outside In Web View Export"
-  oiwve='div.oit-view-root.pages-view '
-  css[oiwve+'div,'+oiwve+'article']={'background':'transparent'}
-  if not colour["text"]=="black": css[oiwve+'canvas']={'background':'white','filter':'invert(1)'}
-  
-  # and for Feishu / Lark (an online office suite used in China)
+  # Similarly for Feishu / Lark (an online office suite used in China)
   css['div.app-main-container.is-suite div, body > div#root > div.et-container div']={'background':'transparent'}
   if not colour["text"]=="black": css['div.app-main-container.is-suite canvas, body > div#root > div.et-container canvas']={'background':'white','filter':'invert(1)'}
   # and shimo.im
@@ -1676,8 +1671,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.peekPopup abbr.monthPickerCurrentDay,div.peekPopup div[role="row"] span.ms-bg-color-themeLight[role="gridcell"]']={'**border':'grey solid','**z-index':'1'}
   css['div.oui-savant__viewstack__container__dashboards,div.oui-savant__viewstack__container']={'**background':'transparent'} # Oracle OCI dashboard 2023-09
   css['div#appRoot div.oneplayer-root div.video-engine-container,div#appRoot div.oneplayer-root div.critical-playback-container,div#appRoot div.oneplayer-root div.fluent-critical-ui-container,div#appRoot div.oneplayer-root div.onePlayer-overlay,div#appRoot div.oneplayer-root div.onePlayer-overlay div,div#appRoot div.oneplayer-root div.captions-region']={'**background':'transparent'} # SharePoint videos 2024-02
-  css['div.oit-section > div.oit-svg:first-child > div.oit-svg-layer:first-child > svg']={'**display':'none'} # OraDocs white page
-  css['article.oit-overlay div.oit-svg-layer svg']={'**background':'transparent'} # OraDocs occlusion
   css['div.body-layout div.navigation-drawer-container']={'**background':'transparent'}
   css['form[action^="/hcmUI"] div']={'**background':'transparent'}
   css['body > div#__next main.relative > div.h-full > div.w-full']={"**border":"thin blue solid"}
