@@ -1776,11 +1776,11 @@ interacting with author-supplied stylesheets. */""")
   bsky.app character.ai chat.deepseek.com chatgpt.com www.kimi.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
   learn.microsoft.com security.microsoft.com outlook.office365.com
-  libbyapp.com lichess.org octopus.energy huggingface.co modelscope.cn
+  libbyapp.com lichess.org octopus.energy huggingface.co
   ssb22.user.srcf.net www.instagram.com www.itv.com www.channel4.com
   www.jw.org hub.jw.org www.newscientist.com www.quotev.com chat.qwen.ai
   www.reddit.com www.tiktok.com
-  www.twitch.tv www.youtube.com x.com gitlab.com gitee.com
+  www.twitch.tv www.youtube.com x.com gitlab.com
   forum.moonshot.ai
 """.strip().split()]+pfdmxExtra)+')).*") {')
     if not preapply_FfxDarkModeExceptions: outfile.write('\nFfxDarkModeExceptions */')
