@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-25.  Version 0.9942"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-26.  Version 0.9942"
 # Works on either Python 2 or Python 3
 
 # Website: https://ssb22.user.srcf.net/css/
@@ -1697,6 +1697,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div#__next > div[data-overlay-container] > main div']={'**background':'transparent'} # c.ai
   css['body > div.flex > nav, body > div.flex > nav div, body > div > ol:empty, div.flex div.sticky div, div[style="width: 0px;"] div']={'**background':'transparent'} # Claude
   css['body.dark > div#root div:empty,body > div#__next ~ div[portal-container] span, body > span.pointer-events-none.fixed:empty'],css['div.ds-button--filled[style^="--ds-button-color: rgba"],div#app-container div#chat-container button.text-purple-500,div#composer-background button[aria-pressed="true"]']={'**background':'transparent'},{'border':'thick orange solid'} # DeepSeek,Qwen,ChatGPT
+  css['div#chat-container div.transparent, div#chat-container div.absolute.pointer-events-none'],css['div#chat-container nav.sticky']={'**background':'transparent'},{'border':'thin solid blue','padding':'0px'} # z.ai
   css['body > div#root main#main-content[data-testid="main-content"] div,div[aria-live="polite"][style^="position: absolute"],div[aria-live="polite"][style^="position: absolute"] div']={'**background':'transparent'} # BBC
   css['smp-plugin']={'display':'none'} # sorry BBC, too much confusion with Shadow DOMs interfering with video visibility in Firefox so we're dropping your "watch next" links
   css['body > div#app > div#bolt div']={'**background':'transparent'}
