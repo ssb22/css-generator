@@ -1604,8 +1604,8 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['#stockSellApp .currency-symbol']={"**position":"static"} # not absolute (Fidelity NetBenefits stock-options form 2021-09: the currency symbol overprinted the first digit when using CSS at size=unchanged)
   css['div.checkbox > input']={"**margin-left":"0px"} # please don't set negative margin to put it underneath some SVG whose state does not show in these colours
 
-  # Confluence diagrams
-  css["span.geDiagramContainer > svg div,span.geDiagramContainer > svg rect,span.geDiagramContainer > svg path,span.geDiagramContainer > svg ellipse"]={"background":"transparent","fill":"transparent","stroke":colour["text"]}
+  # Confluence diagrams, MDN etc
+  css["svg div,svg rect,svg path,svg ellipse"]={"background":"transparent","fill":"transparent","stroke":colour["text"]}
 
   # Google Docs
   gDocs='body.docs-gm[itemtype="http://schema.org/CreativeWork/DocumentObject"] '
