@@ -1,0 +1,18 @@
+# -*- mode: Makefile -*-
+all: test check-if-css-generate-version-is-changing
+test:
+	@if python3 css-generate.py --version|grep 'Version [1-9][^.]*[.][0-9][0-9][0-9][0-9][0-9]'; then echo "5+ decimal digits in version number will now need another -e 's/[.][0-9][0-9][0-9][0-9]$$/&0/' in Makefile.pypi's sed expression"; false; fi
+check-if-css-generate-version-is-changing:
+	if (git diff;git diff --staged)|grep 'Version [0-9.]*"*$$'; then make -f Makefile.pypi update-css-generate-pypi; else true; fi
+update-css-generate-pypi:
+	mkdir css_generate
+	echo '"""css-generate is an application, not a library.  You can run it with "python -m css_generate" to see the options."""'> css_generate/__init__.py
+	sed -e 's/python css-generate.py/python -m css_generate/g' < css-generate.py > css_generate/__main__.py
+	echo "from setuptools import setup, find_packages;setup(name='css_generate',version='$$(python3 css-generate.py --version|grep Version|sed -e 's/.*Version //' -e 's/[.]$$//' -e 's/[.][1-9]$$/&0/' -e 's/[.][0-9][0-9]$$/&0/' -e 's/[.][0-9][0-9][0-9]$$/&0/'|head -1)',entry_points={'console_scripts':['css-generate=css_generate.__main__:main']},license='Apache 2',platforms='any',url='https://ssb22.user.srcf.net/css',author='Silas S. Brown',author_email='ssb$$(echo 22@ca)m.ac.uk',description='Low-vision stylesheet generator',long_description=r'''$$(sed -e 's/.the Python code..css-generate.py./the Python code/' -e 's,dark.md,https://ssb22.user.srcf.net/css/dark.html,g' -e 's,togglecss.sh,https://ssb22.user.srcf.net/css/togglecss.sh,g' < README.md)''',long_description_content_type='text/markdown',packages=find_packages(),classifiers=['Programming Language :: Python :: 2','Programming Language :: Python :: 3','License :: OSI Approved :: Apache Software License','Operating System :: OS Independent'],python_requires='>=2.0')" > setup.py
+	mv README.md .. # or it'll override our altered version
+	python3 setup.py sdist
+	twine upload dist/*
+	mv ../README.md .
+	rm -r css_generate.egg-info dist css_generate setup.py
+.PHONY: check-if-css-generate-version-is-changing
+.PHONY: update-css-generate-pypi all test

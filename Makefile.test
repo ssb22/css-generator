@@ -5,6 +5,7 @@
 test:
 	make -f Makefile.test -j 2 check-2 check-3
 	diff -ur 2 3
+	make -f Makefile.pypi test
 check-2:
 	mkdir -p 2
 	cd 2 && python2.7 ../css-generate.py > list
