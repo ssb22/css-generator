@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-26.  Version 0.9942"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-26.  Version 0.9943"
 # Works on either Python 2 or Python 3
 
 # Website: https://ssb22.user.srcf.net/css/
@@ -773,6 +773,19 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['select']['*max-width']='100%'
   css['details']['border-left']=colour["form_disabled"]+" solid"
   css['details > summary']={'background':colour["button-bkg"]}
+
+  # SVG (including Firefox controls etc)
+  css["svg div,svg rect,svg circle,svg line,svg polyline,svg polygon,svg path,svg ellipse"]={"background":"transparent","fill":"transparent"}
+  css['svg rect[fill="currentColor"],svg circle[fill="currentColor"],svg polygon[fill="currentColor"],svg path[fill="currentColor"],svg ellipse[fill="currentColor"]']={"fill":colour["text"]}
+  css["svg rect[stroke],svg circle[stroke],svg line,svg polyline,svg polygon[stroke],svg path,svg ellipse[stroke]"]={"stroke":colour["text"],"stroke-width":"1px","vector-effect":"non-scaling-stroke"}
+  css["svg:root"]={"background":colour["background"]}
+
+  # Firefox about:config
+  if not preapply_FfxDarkModeExceptions:
+    css['table#prefs button.button-toggle:empty:before']={'content':r'"\23FC"'}
+    css['table#prefs button.button-reset:empty:before']={'content':r'"\23FB"'}
+    css['table#prefs button.button-edit:empty:before']={'content':r'"\270E"'}
+    css['table#prefs button.button-add:empty:before']={'content':r'"+"'}
   
   # Begin site-specific hacks
 
@@ -852,7 +865,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   printOverride[k] = {"color":"black"} # TODO: shade of grey?
   css[".wDiffHtmlDelete"]={"*text-decoration":"line-through"}
   css['button[aria-label="Add line comment"] > svg.octicon-plus']={"display":"none"} ; emptyLink('table.diff-table button[aria-label="Add line comment"]','C',css,printOverride,colour,False,True) # GitLab: making those buttons look like "+" just to the left of the diff's "-" and "+" is confusing
-  css['svg[aria-label="status_success"]'],css['svg[aria-label="status_failed"]'] = {'stroke':'green'}, {'stroke':'red'} # GitLab pipelines (otherwise can get both being yellow on white, since it seems we're not overriding the white)
+  css['svg[aria-label="status_success"]'],css['svg[aria-label="status_failed"]'] = {'border':'green solid'}, {'border':'red solid'} # GitLab pipelines
   css['div.web-ide-promo-popover']={'**display':'none'} # GitLab 2024: sorry but when a screen magnifier is in use, the effective window size is much smaller than what your designers imagined, and that non-dismissable IDE promotion actually blocks us from using your entire site, so let's remove it (at size=unchanged; at other sizes the layout is changed anyway)
   css['button.more-actions-toggle > span.icon > svg']={'width':'1em','height':'1em'}
   # and media players:
@@ -1085,7 +1098,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['body > div#preso, body > div#preso div']={"**background":"transparent"} # Preso training courses
   css['body > div#ada-entry > div:empty']={"**background":"transparent"} # Zoom webinar registrations
   css['div#bilibili-player div']={"**background":"transparent"}
-  css['div.close svg path']={'**stroke':colour["text"]}
   css['div.bpx-player-video-area div']={"**background":"transparent"}
   css['body > span.pointer-events-none.fixed:empty']={"**background":"transparent"}
   
@@ -1604,9 +1616,6 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['#stockSellApp .currency-symbol']={"**position":"static"} # not absolute (Fidelity NetBenefits stock-options form 2021-09: the currency symbol overprinted the first digit when using CSS at size=unchanged)
   css['div.checkbox > input']={"**margin-left":"0px"} # please don't set negative margin to put it underneath some SVG whose state does not show in these colours
 
-  # Confluence diagrams, MDN etc
-  css["svg div,svg rect,svg path,svg ellipse"]={"background":"transparent","fill":"transparent","stroke":colour["text"]}
-
   # Google Docs
   gDocs='body.docs-gm[itemtype="http://schema.org/CreativeWork/DocumentObject"] '
   css[gDocs+'div,'+gDocs+'svg']={'background':'transparent'} # avoid obscuring the canvas at size=unchanged
@@ -1772,17 +1781,17 @@ interacting with author-supplied stylesheets. */""")
 /* FfxDarkModeExceptions""")
     if type(preapply_FfxDarkModeExceptions)==list: pfdmxExtra = preapply_FfxDarkModeExceptions
     else: pfdmxExtra = []
-    outfile.write('\n@-moz-document regexp("^(?!https?://('+"|".join([
+    outfile.write('\n@-moz-document regexp("^(?!about:|chrome:|https?://('+"|".join([
   x.replace(".",r"\.") for x in """
   bsky.app character.ai chat.deepseek.com chatgpt.com www.kimi.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
   learn.microsoft.com security.microsoft.com outlook.office365.com
   libbyapp.com lichess.org octopus.energy huggingface.co
   ssb22.user.srcf.net www.instagram.com www.itv.com www.channel4.com
-  www.jw.org hub.jw.org www.newscientist.com www.quotev.com chat.qwen.ai
-  www.reddit.com www.tiktok.com
-  www.twitch.tv www.youtube.com x.com gitlab.com
-  forum.moonshot.ai
+  www.jw.org hub.jw.org assetsnffrgf-a.akamaihd.net
+  www.newscientist.com www.quotev.com chat.qwen.ai
+  www.reddit.com www.tiktok.com www.twitch.tv www.youtube.com x.com
+  gitlab.com forum.moonshot.ai
 """.strip().split()]+pfdmxExtra)+')).*") {')
     if not preapply_FfxDarkModeExceptions: outfile.write('\nFfxDarkModeExceptions */')
   outfile.write("""
@@ -1865,7 +1874,7 @@ img[alt]:after { content: attr(alt) !important; color: #FF00FF !important; }
 }
 FfxDarkModeExceptions */
 """)
-  if extra_CSS: outfile.write(extra_CSS)
+  if extra_CSS: outfile.write("/* extra_CSS: */\n"+extra_CSS)
   return ret
 
 # Selector prefixes to exclude certain browsers from trying to implement a rule:

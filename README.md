@@ -1,4 +1,4 @@
-# css-generator
+# css-generate
 Low-vision stylesheet generator from https://ssb22.user.srcf.net/css/
 (also [mirrored on GitLab Pages](https://ssb22.gitlab.io/css/) just in case)
 
@@ -9,8 +9,10 @@ want to work around browser bugs and the
 difficulties posed by complex websites. So I made this program to
 generate long CSS files with workarounds for many problems.
 
-You can adjust [the Python code](css-generate.py) to your needs
-(it works in both Python 2 and Python 3).
+You can adjust [the Python code](css-generate.py) to your needs:
+it works in both Python 2 and Python 3, and is
+also available as a PyPI module so you can use
+`pip install css-generate` or `pipx run css-generate`.
 Alternatively, you can try one of the presets on the
 [web page](https://ssb22.user.srcf.net/css/)
 (which, if you have Javascript, has an interactive chooser: the code
@@ -222,7 +224,7 @@ OLPC's screen is 1200x900 and 7.5 inches.)
 For other setups (including some mobiles) you can try
 [Web Adjuster](https://ssb22.user.srcf.net/adjuster/);
 for demonstration purposes there is an installation of Web Adjuster
-with these stylesheets at `large-print-websites.appspot.com/`
+with these stylesheets at `large-print-websites.appspot.com`
 
 All material (c) Silas S. Brown unless otherwise stated.
 Android is a trademark of Google LLC.
