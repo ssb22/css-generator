@@ -1791,7 +1791,7 @@ interacting with author-supplied stylesheets. */""")
   www.jw.org hub.jw.org assetsnffrgf-a.akamaihd.net
   www.newscientist.com www.quotev.com chat.qwen.ai
   www.reddit.com www.tiktok.com www.twitch.tv www.youtube.com x.com
-  gitlab.com forum.moonshot.ai
+  gitlab.com codeberg.org forum.moonshot.ai
 """.strip().split()]+pfdmxExtra)+')).*") {')
     if not preapply_FfxDarkModeExceptions: outfile.write('\nFfxDarkModeExceptions */')
   outfile.write("""

@@ -148,7 +148,7 @@ select Other, and select the file
 stylesheet saved as `userContent.css` and a file called
 `manifest.json` with the following content:
 
-    {"manifest_<wbr>version": 3,
+    {"manifest_version": 3,
     "name": "Low-vision stylesheet",
     "version": "1",
     "content_scripts": [{
@@ -215,6 +215,11 @@ Opera menu / Settings / Preferences / Advanced / Content / Style options / My st
 **Otter:** Go to Tools / Preferences / Advanced / Content / User style sheet
 and type in the full path or Browse to it.
 Not yet working if you're using the newer QtWebEngine instead of QtWebKit.
+
+**Falkon:** Go to the 3-line menu (top right), then Preferences /
+Other / User Style Sheet.  At least some versions of Falkon fail
+to apply the stylesheet until the page is loaded, which can result
+ in a brief white flash before any dark stylesheet takes effect.
 
 **OLPC browser:**
 Save the file as `~/.sugar/default/gecko/user-stylesheet.css` and
