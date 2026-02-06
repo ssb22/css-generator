@@ -1358,7 +1358,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     for t in ["Previous","Next"]:
       emptyLink("button#"+n+t+"PageButton.btn > span",t+" page",css,printOverride,colour,False)
   emptyLink("button.dropdown-toggle.btn > i","Toggle",css,printOverride,colour,False)
-  # For Atlassan:
+  # For Atlassian:
   css["span.aui-avatar img, img.jira-project-avatar-icon, img.jpo-team-field-avatar"]={"*width":"24px","*height":"24px"}
   css["a.aui-sidebar-toggle > span.aui-icon:empty:before"]={'content':r'"\2B04"'}
   css[".ghx-backlog-container .ghx-backlog-header"]={'position':'static'} # not sticky, even at pixelSize=0 + zoom
@@ -1717,6 +1717,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['html.non-touch-device body > div#wrapper:first-child']={'**z-index':'9'} # greenhouse.io scheduler: prevent it appearing behind the body and dimmed out
   css['.full-calendar .fc-body .fc-content-col .fc-bgevent-container .fc-bgevent']={'**border':'blue solid','**opacity':'0.9'} # not 0.3 we can hardly see it
   css['.full-calendar .fc-body .fc-content-col .fc-time-grid-event']={'**border':'green solid'}
+  css['body > div#ccc > button#ccc-icon']={'**display':'none'} # cookie-control used by multiple sites: don't need continual reminder that these can be changed taking up large percentage of screen at high zoom; we can clear cookies in browser preferences thank you Brussels
 
   # End site-specific hacks
   css[":root:not(html) svg *"]={"color":colour["text"],"background":colour["background"]} # needed for some UI controls on Firefox 62
