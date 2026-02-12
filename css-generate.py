@@ -1787,7 +1787,7 @@ interacting with author-supplied stylesheets. */""")
   bsky.app character.ai chat.deepseek.com chatgpt.com www.kimi.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
   learn.microsoft.com security.microsoft.com outlook.office365.com
-  libbyapp.com lichess.org octopus.energy huggingface.co
+  libbyapp.com lichess.org lichess1.org octopus.energy huggingface.co
   ssb22.user.srcf.net www.instagram.com www.itv.com www.channel4.com
   www.jw.org hub.jw.org assetsnffrgf-a.akamaihd.net
   www.newscientist.com www.quotev.com chat.qwen.ai
