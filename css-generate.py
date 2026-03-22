@@ -590,7 +590,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css[el]["*margin"]="0px 0px 0px %.1fpx" % indent
 
   # Images and buttons:
-  css["img:not(.emoji)"]={"background":colour["image_transparency_compromise"]} # see WhatsApp exception above
+  css["img:not(.emoji)"+("" if pixelSize else ":not([data-xpm-latex])")]={"background":colour["image_transparency_compromise"]} # see WhatsApp exception above
   
   # Exception needed for MediaWiki TeX images
   # (they tend to be transparent but with antialiasing that
