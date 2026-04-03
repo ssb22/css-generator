@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"Accessibility CSS Generator, (c) Silas S. Brown 2006-26.  Version 0.9944"
+"Accessibility CSS Generator, (c) Silas S. Brown 2006-26.  Version 0.9945"
 # Works on either Python 2 or Python 3
 
 # Website: https://ssb22.user.srcf.net/css/
@@ -419,7 +419,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
 
   for w in ["*width","*height"]: del css["svg"][w] # 'auto' is very often wrong for svg, and some browsers' understanding of specificity results in our viewBox overrides not working if auto is set here
 
-  css["body"].update({"overflow":"auto","overflow-y":"auto","overflow-x":"auto","height":"auto","scrollbar-width":"auto"}) # even if size=unchanged: it might still be being used zoomed in and too many Tailwind sites fail to test zoomed in.  scrollbar-width required for keyboard scrolling on some sites.
+  css["body"].update({"overflow":"auto","overflow-y":"auto","overflow-x":"auto","scrollbar-width":"auto"}) # even if size=unchanged: it might still be being used zoomed in and too many Tailwind sites fail to test zoomed in.  scrollbar-width required for keyboard scrolling on some sites.  (But do not override body height to auto at size=unchanged: this can break some flex/percentage layouts e.g. MS Exchange)
   for t in ["textarea","html","input"]:
     css[t]["*overflow"] = "auto"
   # 'html' is there for IE7.  But Firefox needs it to be 'visible'.  See hack at end.
