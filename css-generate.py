@@ -1783,7 +1783,7 @@ interacting with author-supplied stylesheets. */""")
 /* FfxDarkModeExceptions""")
     if type(preapply_FfxDarkModeExceptions)==list: pfdmxExtra = preapply_FfxDarkModeExceptions
     else: pfdmxExtra = []
-    outfile.write('\n@-moz-document regexp("^(?!about:|chrome:|https?://('+"|".join([
+    outfile.write('\n@-moz-document regexp("^(?!about:[^b]|chrome:|https?://('+"|".join([ # [^b] added because sites like Wordpress can populate their cookie-consent iframes from about:blank and we don't want those to go into light mode
   x.replace(".",r"\.") for x in """
   bsky.app character.ai chat.deepseek.com chatgpt.com www.kimi.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
