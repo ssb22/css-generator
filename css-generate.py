@@ -960,12 +960,12 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['pre.code > span.kwd'] = shl_keyword
   css['pre.code > span.pln'] = shl_varname
   css['pre > code span.c'] = shl_comment # GitLab issue tracker 2018-10
-  css['pre > code span.c1'] = shl_comment
-  css['pre > code span.s'] = shl_string
-  css['pre > code span.s2'] = shl_string
-  css['pre > code span.k'] = shl_keyword
-  css['pre > code span.n'] = shl_varname
-  css['pre > code span.na'] = shl_varname
+  css['pre > code span.c1, td > code > span.c1'] = shl_comment
+  css['pre > code span.s, td > code > span.s'] = shl_string
+  css['pre > code span.s2, td > code > span.s2'] = shl_string
+  css['pre > code span.k, td > code > span.k'] = shl_keyword
+  css['pre > code span.n, td > code > span.n'] = shl_varname
+  css['pre > code span.na, td > code > span.na']=shl_varname
   css['pre > code span.syntax-keyword'] = shl_keyword # XCode docs
   css['pre > code span.syntax-string'] = shl_string
   css['pre > code span.syntax-comment'] = shl_comment
@@ -1078,11 +1078,9 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
     css["div#container div#result tt > i"]={"display":"table-header-group","text-align":"center"}
     css["div#container div#result tt > b, div#container div#result tt > acronym"]={"display":"table-row-group","text-align":"center"}
   # hack for messages on some sites
-  css["tr.new td,tr td.new"]={"border-left":"thick solid "+colour["coloured"]}
-  css["tr.new td,tr td.new"]={"border-right":"thick solid "+colour["coloured"]}
+  css["tr.new td,tr td.new"]={"border-left":"thick solid "+colour["coloured"],"border-right":"thick solid "+colour["coloured"]}
   # and as that also matches GitLab diffs:
-  css["tr.old td,tr td.old"]={"border-left":"thin solid "+colour["coloured"]}
-  css["tr.old td,tr td.old"]={"border-right":"thin solid "+colour["coloured"]}
+  css["tr.old td,tr td.old"]={"border-left":"thin solid "+colour["coloured"],"border-right":"thin solid "+colour["coloured"]}
   # and while we're at it:
   css['div.diff-content .line_content span.idiff'] = {"color":colour["coloured"]}
   # hack for (some versions of) phpBB
