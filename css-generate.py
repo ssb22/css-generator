@@ -1787,8 +1787,9 @@ interacting with author-supplied stylesheets. */""")
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
   learn.microsoft.com security.microsoft.com outlook.office365.com
   libbyapp.com lichess.org lichess1.org octopus.energy huggingface.co
+  www.openstreetmap.org
   ssb22.user.srcf.net www.instagram.com www.itv.com www.channel4.com
-  www.jw.org hub.jw.org docs.jw.org assetsnffrgf-a.akamaihd.net
+  www.jw.org hub.jw.org docs.jw.org stream.jw.org assetsnffrgf-a.akamaihd.net
   www.newscientist.com www.quotev.com chat.qwen.ai
   www.reddit.com www.tiktok.com www.twitch.tv www.youtube.com x.com
   gitlab.com codeberg.org forum.moonshot.ai
