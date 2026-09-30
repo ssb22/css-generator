@@ -1535,7 +1535,7 @@ def do_one_stylesheet(pixelSize,colour,filename,debugStopAfter=0):
   css['div.play > div.input > textarea.code']={'*height':'15em','*margin-left':'1em'} # golang package examples
 
   if not pixelSize:
-    if not colour["background"]=="white": css["html#whatsapp-web div[data-ref], html#whatsapp-web canvas, img.qrcode-img"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it, ditto RedNote
+    if not colour["background"]=="white": css["html#whatsapp-web div[data-ref], html#whatsapp-web canvas, img.qrcode-img"]={"border":"thick solid white"} # Whatsapp Web QR code needs white border for phone app to scan it, ditto RedNote.  Whatsapp Web does have its own dark mode but not for login.  When used with this CSS, you may have to right-click on the central Whatsapp logo and delete its div before the QR will scan.  Alternatively you can add web.whatsapp.com to preapply_FfxDarkModeExceptions after login (or before login and take one bright-screen pain hit)
     css["html#whatsapp-web header + div, html#whatsapp-web header + div div, html#whatsapp-web header + div span"]={"background":"transparent"} # WhatsApp (especially in size=unchanged) supposed to be a translucent overlay or something but ends up blanking out the entire page
     css["html#whatsapp-web div.message-in"],css["html#whatsapp-web div.message-out"]={"border":"thin solid cyan"},{"border":"thin solid green"} # WhatsApp message boundaries
     css['html#whatsapp-web div[class*="color-"], html#whatsapp-web div[class*="color-"] span']={"color":colour["headings"]} # WhatsApp person name in group chat
@@ -1783,7 +1783,7 @@ interacting with author-supplied stylesheets. */""")
     else: pfdmxExtra = []
     outfile.write('\n@-moz-document regexp("^(?!about:[^b]|chrome:|https?://('+"|".join([ # [^b] added because sites like Wordpress can populate their cookie-consent iframes from about:blank and we don't want those to go into light mode
   x.replace(".",r"\.") for x in """
-  bsky.app character.ai chat.deepseek.com chatgpt.com www.kimi.com
+  bsky.app character.ai chat.deepseek.com chatgpt.com www.kimi.ai www.kimi.com
   claude.ai discord.com duckduckgo.com github.com grid.iamkate.com
   learn.microsoft.com security.microsoft.com outlook.office365.com
   libbyapp.com lichess.org lichess1.org octopus.energy huggingface.co
